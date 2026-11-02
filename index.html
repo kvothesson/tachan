@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tachán</title>
+<meta name="description" content="Compartís algo en el celu y aparece en la compu, por tu wifi y sin pasar por ningún servidor.">
+<link rel="canonical" href="https://kvothesson.com/tachan/">
+<meta property="og:title" content="Tachán">
+<meta property="og:description" content="Compartís algo en el celu y aparece en la compu.">
+<meta property="og:url" content="https://kvothesson.com/tachan/">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="marca.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 400 17px/1.45 var(--font-sans); }
+  main { max-width: 980px; margin: 0 auto; padding: var(--space-5) max(var(--space-3), env(safe-area-inset-right)) var(--space-5) max(var(--space-3), env(safe-area-inset-left)); display: grid; gap: var(--space-5); }
+  html:lang(es) [lang="en"], html:lang(en) [lang="es"] { display: none; }
+  .cabeza { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: var(--space-5); align-items: center; }
+  h1 { margin: 0; font: 800 clamp(64px, 12vw, 120px)/.95 var(--font-display); }
+  .frase { margin: var(--space-3) 0 var(--space-4); font: 700 clamp(22px, 3vw, 28px)/1.2 var(--font-display); text-wrap: balance; }
+  .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .bajar { display: inline-flex; align-items: center; min-height: 48px; padding: 0 var(--space-4); border-radius: var(--radius-m); background: var(--accent); color: var(--on-accent); font-weight: 600; text-decoration: none; }
+  .alcelu { display: flex; align-items: center; gap: var(--space-3); margin: var(--space-3) 0 0; color: var(--muted); font-size: 15px; }
+  .alcelu img { flex: none; border-radius: var(--radius-s); background: #fff; }
+  .bajar.otra { background: var(--surface-raised); color: var(--ink); }
+  .pronto { margin: var(--space-2) 0 0; color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+  .pasos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
+  .pasos b { display: block; margin-bottom: var(--space-1); font: 700 20px/1.15 var(--font-display); }
+  .pasos i { font-style: normal; color: var(--accent); }
+  .pasos li > span { color: var(--muted); }
+  .pasos small { display: block; margin-top: var(--space-2); color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+  .vincular { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-4); border: 1px solid var(--accent); border-radius: var(--radius-m); }
+  .vincular[hidden] { display: none; }
+  .alcelu[hidden] { display: none; }
+  .vincular h2, .vincular p { margin: 0; }
+  h2 { margin: 0 0 var(--space-3); font: 800 28px/1.1 var(--font-display); }
+  .escena { position: relative; min-height: 340px; overflow: hidden; display: flex; align-items: flex-end; justify-content: flex-end; padding: var(--space-3); border: 1px solid var(--line-strong); border-radius: var(--radius-m); background: var(--surface-raised); }
+  .escena > span { position: absolute; left: var(--space-3); top: var(--space-3); color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+  .aviso { width: min(280px, 100%); overflow: hidden; border-radius: var(--radius-m); background: var(--surface); box-shadow: 0 14px 40px rgba(0, 0, 0, .45); }
+  .foto { height: 170px; background: linear-gradient(160deg, #ffb347, #ff5a6e 62%, #04080d); }
+  .barra { display: flex; gap: var(--space-2); padding: var(--space-2) 12px; color: var(--muted); }
+  .barra svg { width: 18px; height: 18px; }
+  .barra svg:first-child { margin-right: auto; color: var(--ok); }
+  .puntos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
+  .puntos b { display: block; margin-bottom: var(--space-1); font: 700 20px/1.15 var(--font-display); }
+  .puntos li > span { color: var(--muted); }
+  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); padding-top: var(--space-3); border-top: 1px solid var(--line); color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+  footer a { color: inherit; }
+  .firma { display: inline-flex; align-items: center; gap: var(--space-2); }
+  .firma svg { width: 16px; height: 16px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 700px) { .cabeza, .puntos, .pasos { grid-template-columns: minmax(0, 1fr); } }
+</style>
+<script>if (!/^es/i.test(navigator.language || "es")) document.documentElement.lang = "en";</script>
+</head>
+<body>
+<main>
+  <section class="vincular" id="vincular" hidden>
+    <h2><span lang="es">Vinculá tu celu</span><span lang="en">Link your phone</span></h2>
+    <p id="vincular-android"><span lang="es">Si todavía no tenés la app, se baja sola. Instalala y volvé acá para tocar el botón otra vez. Este código dura 5 minutos.</span><span lang="en">If you don't have the app yet, it downloads on its own. Install it and come back to tap the button again. This code lasts 5 minutes.</span></p>
+    <p id="vincular-otro" hidden><span lang="es">Abrí este QR con la cámara de un celu Android. Por ahora Tachán no está para iPhone.</span><span lang="en">Open this QR with the camera of an Android phone. Tachán isn't available for iPhone yet.</span></p>
+    <a class="bajar" id="continuar" href="tachan.apk"><span lang="es">Vincular o instalar</span><span lang="en">Link or install</span></a>
+  </section>
+  <section class="cabeza">
+    <div>
+      <h1>Tachán</h1>
+      <p class="frase"><span lang="es">Compartís en el celu. Aparece en la compu.</span><span lang="en">Share on your phone. It shows up on your computer.</span></p>
+      <div class="acciones">
+        <a class="bajar" id="b-primero" href="Tachan.exe" download><span lang="es">Bajar para Windows</span><span lang="en">Download for Windows</span></a>
+        <a class="bajar otra" id="b-segundo" href="tachan.apk" download><span lang="es">Bajar para Android</span><span lang="en">Download for Android</span></a>
+      </div>
+      <p class="pronto"><span lang="es">Gratis, sin cuenta. Hacen falta las dos partes.</span><span lang="en">Free, no account. You need both parts.</span></p>
+      <p class="alcelu" id="alcelu"><img src="qr-android.png" alt="" width="104" height="104"><span lang="es">Para el celu: apuntá la cámara y se baja la app.</span><span lang="en">For your phone: point your camera to download the app.</span></p>
+    </div>
+    <div class="escena">
+      <span lang="es">seguís escribiendo acá</span><span lang="en">you keep typing here</span>
+      <div class="aviso">
+        <div class="foto" role="img" aria-label="Foto recibida"></div>
+        <div class="barra" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.500 4.500 4.500L19 7.500"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M15 5.500A1.500 1.500 0 0 0 13.500 4h-8A1.500 1.500 0 0 0 4 5.500v8A1.500 1.500 0 0 0 5.500 15"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.500 6H9l2 2.500h9.500V19h-17z"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+  <ul class="puntos">
+    <li><b><span lang="es">Listo para pegar</span><span lang="en">Ready to paste</span></b><span lang="es">Llega copiado: Ctrl+V donde estabas, o arrastralo.</span><span lang="en">It arrives copied: press Ctrl+V where you are, or drag it.</span></li>
+    <li><b><span lang="es">Todo lo que se comparte</span><span lang="en">Anything you can share</span></b><span lang="es">Fotos, videos, archivos, texto y links.</span><span lang="en">Photos, videos, files, text and links.</span></li>
+    <li><b><span lang="es">Sin servidores</span><span lang="en">No servers</span></b><span lang="es">Va cifrado por tu wifi, de tu celu a tu compu. Sin cuenta.</span><span lang="en">Encrypted over your wifi, from your phone to your computer. No account.</span></li>
+  </ul>
+  <section>
+    <h2><span lang="es">Cómo se instala</span><span lang="en">How to install</span></h2>
+    <ol class="pasos">
+      <li><b><span lang="es">En la compu</span><span lang="en">On your computer</span></b><span lang="es">Abrí Tachan.exe: se instala solo. Permitilo en la red y aparece un QR.</span><span lang="en">Open Tachan.exe: it installs itself. Allow it on your network and a QR code appears.</span>
+        <small><span lang="es">Si Windows avisa: Más información, Ejecutar de todos modos.</span><span lang="en">If Windows warns you: More info, Run anyway.</span></small></li>
+      <li><b><span lang="es">En el celu</span><span lang="en">On your phone</span></b><span lang="es">Apuntá la cámara al QR de la compu. Si no tenés la app, se baja sola.</span><span lang="en">Point your camera at the computer's QR. If you don't have the app, it downloads on its own.</span>
+        <small><span lang="es">Android pide permitir la instalación porque todavía no está en Google Play.</span><span lang="en">Android asks you to allow the install because it isn't on Google Play yet.</span></small></li>
+      <li><b><span lang="es">Vinculalos</span><span lang="en">Link them</span></b><span lang="es">Confirmá en el celu y listo. Los dos tienen que estar en el mismo wifi.</span><span lang="en">Confirm on your phone and you're done. Both must be on the same wifi.</span></li>
+    </ol>
+  </section>
+  <footer>
+    <span class="firma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.500 20.200 7.200v9.600L12 21.500l-8.200-4.700V7.200z"/><circle cx="12" cy="12" r="2.200" fill="currentColor" stroke="none"/></svg><span lang="es">hecho por Kvothesson</span><span lang="en">made by Kvothesson</span></span>
+    <a href="privacidad.html"><span lang="es">Privacidad</span><span lang="en">Privacy</span></a>
+  </footer>
+</main>
+<script>
+  (function () {
+    var android = /android/i.test(navigator.userAgent);
+    if (android) {
+      document.getElementById("alcelu").hidden = true;
+      var a = document.getElementById("b-primero"), b = document.getElementById("b-segundo");
+      a.href = "tachan.apk"; b.href = "Tachan.exe";
+      a.innerHTML = '<span lang="es">Bajar para Android</span><span lang="en">Download for Android</span>';
+      b.innerHTML = '<span lang="es">Bajar para Windows</span><span lang="en">Download for Windows</span>';
+    }
+    var datos = location.hash.slice(1);
+    if (!/(^|&)c=[a-z2-7 -]+/i.test(datos)) return;
+    document.getElementById("vincular").hidden = false;
+    if (!android) {
+      document.getElementById("vincular-android").hidden = true;
+      document.getElementById("vincular-otro").hidden = false;
+      document.getElementById("continuar").hidden = true;
+      return;
+    }
+    // Abre la app si está. Si no, Chrome va al respaldo, que baja el APK.
+    var respaldo = new URL("tachan.apk", location.href).href;
+    var destino = "intent://v?" + datos + "#Intent;scheme=tachan;package=com.kvothesson.tachan;S.browser_fallback_url=" + encodeURIComponent(respaldo) + ";end";
+    var boton = document.getElementById("continuar");
+    boton.href = destino;
+    location.href = destino;
+  })();
+</script>
+</body>
+</html>

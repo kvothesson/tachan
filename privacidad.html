@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacidad de Tachán</title>
+<link rel="canonical" href="https://kvothesson.com/tachan/privacidad.html">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="marca.css">
+<style>
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.55 var(--font-sans); }
+  main { max-width: 65ch; margin: 0 auto; padding: var(--space-5) max(var(--space-3), env(safe-area-inset-right)) var(--space-5) max(var(--space-3), env(safe-area-inset-left)); }
+  h1 { margin: 0 0 var(--space-3); font: 800 40px/1.05 var(--font-display); }
+  h2 { margin: var(--space-5) 0 var(--space-2); font: 800 24px/1.15 var(--font-display); }
+  a { color: inherit; }
+  p, li { color: var(--ink); }
+  small { color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+</style>
+</head>
+<body>
+<main>
+  <section lang="es">
+    <h1>Privacidad</h1>
+    <p>Tachán no tiene servidores ni cuentas, y no junta datos de nadie.</p>
+    <h2>Qué pasa con lo que compartís</h2>
+    <p>Lo que compartís viaja directo de tu celu a tu compu por tu red local, cifrado con TLS. No pasa por ningún servidor nuestro ni de terceros, y nosotros nunca lo vemos.</p>
+    <h2>Qué se guarda y dónde</h2>
+    <ul>
+      <li><b>En tu celu:</b> la dirección y el nombre de tu compu, la clave del vínculo, los nombres de lo último que mandaste y lo que todavía espera para salir.</li>
+      <li><b>En tu compu:</b> lo que recibís, en Descargas, el nombre de cada celu vinculado y una huella de su clave.</li>
+    </ul>
+    <p>Para borrarlo, desvinculá el celu y desinstalá Tachán. Lo que ya llegó a Descargas se borra como cualquier archivo.</p>
+    <h2>Permisos en Android</h2>
+    <ul>
+      <li><b>Cámara:</b> solo para leer el QR de tu compu al vincular. Las imágenes se analizan en el celu y no se guardan.</li>
+      <li><b>Internet y estado de la red:</b> para hablar con tu compu en tu red local.</li>
+      <li><b>Notificaciones y servicio en primer plano:</b> para mostrar el avance mientras se manda algo.</li>
+      <li><b>Iniciar al prender el celu:</b> para reintentar lo que quedó pendiente.</li>
+    </ul>
+    <p>Tachán no usa publicidad, analíticas ni rastreadores.</p>
+  </section>
+  <section lang="en">
+    <h2>Privacy, in English</h2>
+    <p>Tachán has no servers and no accounts, and collects no data. What you share travels directly from your phone to your computer over your local network, encrypted with TLS. Nobody else sees it, including us.</p>
+    <p>Your phone stores your computer's address and name, the link key, the names of recent items and anything waiting to be sent. Your computer stores what it receives, in Downloads, along with each linked phone's name and a hash of its key. To erase it, unlink the phone and uninstall Tachán; received files are deleted like any other file.</p>
+    <p>Android permissions: camera only to read your computer's QR code when linking, with images analyzed on the phone and never stored; internet and network state to reach your computer; notifications and a foreground service to show progress; start on boot to retry pending items. Tachán uses no ads, analytics or trackers.</p>
+  </section>
+  <p><small>Vigente desde el lanzamiento de la app.</small></p>
+  <p><a href="./">Tachán</a></p>
+</main>
+</body>
+</html>
