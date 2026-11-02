@@ -1,5 +1,6 @@
 """Compila el programa de PC con el C# de Visual Studio Build Tools: .NET 4.8 ya viene en Windows."""
 import json
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -38,7 +39,19 @@ def dibujar_icono(lado):
     return im.resize((lado, lado), Image.LANCZOS)
 
 
+def escribir_version():
+    """La versión se decide en un solo lugar: el manifiesto de Android."""
+    manifiesto = (AQUI.parent / "android" / "AndroidManifest.xml").read_text(encoding="utf-8")
+    codigo = re.search(r'versionCode="(\d+)"', manifiesto)[1]
+    nombre = re.search(r'versionName="([^"]+)"', manifiesto)[1]
+    (AQUI / "VersionApp.cs").write_text(
+        "// Generado por pc/compilar.py desde android/AndroidManifest.xml: no editar a mano.\n"
+        f'namespace Tachan\n{{\n    static class VersionApp\n    {{\n        public const int Codigo = {codigo};\n        public const string Nombre = "{nombre}";\n    }}\n}}\n',
+        encoding="utf-8")
+
+
 def main():
+    escribir_version()
     SALIDA.mkdir(exist_ok=True)
     grande = dibujar_icono(256)
     grande.save(ICONO, sizes=[(16, 16), (24, 24), (32, 32), (48, 48), (64, 64), (256, 256)])

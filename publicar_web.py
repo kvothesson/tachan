@@ -3,6 +3,9 @@
 El código sigue en el repo privado kvothesson/tachan-app.
 python publicar_web.py "mensaje del commit"
 """
+import hashlib
+import json
+import re
 import shutil
 import subprocess
 import sys
@@ -18,6 +21,12 @@ def git(*a):
     subprocess.run(["git", "-C", str(PUBLICO), *a], check=True)
 
 
+manifiesto = (WEB.parent / "android" / "AndroidManifest.xml").read_text(encoding="utf-8")
+(WEB / "version.json").write_text(json.dumps({
+    "codigo": int(re.search(r'versionCode="(\d+)"', manifiesto)[1]),
+    "nombre": re.search(r'versionName="([^"]+)"', manifiesto)[1],
+    "exe_sha256": hashlib.sha256((WEB / "Tachan.exe").read_bytes()).hexdigest(),
+}, indent=2), encoding="utf-8")
 for viejo in PUBLICO.iterdir():
     if viejo.name not in SALVAR:
         viejo.unlink()

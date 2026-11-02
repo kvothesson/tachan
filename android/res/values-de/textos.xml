@@ -31,4 +31,8 @@
     <string name="avance_parcial">%1$s von %2$s</string>
     <string name="avance_detalle">%1$s von %2$s · noch %3$s</string>
     <string name="sin_programa">Noch nicht auf dem Computer? kvothesson.com/tachan</string>
+    <string name="buscar_actualizacion">Nach Updates suchen</string>
+    <string name="ultima_version">Du hast die neueste Version</string>
+    <string name="hay_version">Eine neue Version ist verfügbar</string>
+    <string name="bajar">Herunterladen</string>
 </resources>

@@ -222,11 +222,12 @@ namespace Tachan
             menu.Items.Add(new ToolStripSeparator());
             menu.Items.Add(Textos.T("salir"), null, (s, a) => Salir());
             menu.Items.Add(new ToolStripSeparator());
-            menu.Items.Add(new ToolStripMenuItem(Textos.T("firma")) { Enabled = false });
+            menu.Items.Add(Textos.T("buscar"), null, (s, a) => BuscarActualizacion());
+            menu.Items.Add(new ToolStripMenuItem(Marca.Visible + " " + VersionApp.Nombre + " · " + Textos.T("firma")) { Enabled = false });
             menu.Opening += (s, a) => ArmarCelus();
 
             icono.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-            icono.Text = Marca.Visible;
+            icono.Text = Marca.Visible + " " + VersionApp.Nombre;
             icono.ContextMenuStrip = menu;
             icono.Visible = true;
             icono.MouseUp += (s, a) => { if (a.Button == MouseButtons.Left) AbrirVinculoOCarpeta(); };
@@ -245,6 +246,7 @@ namespace Tachan
 
             Prueba.Enganchar(this, servidor);
             if (!oculto && Datos.Dispositivos.Count == 0) AbrirVinculo();
+            if (Environment.GetCommandLineArgs().Contains("--buscar-actualizacion")) BuscarActualizacion();
         }
 
         static ToolStripMenuItem Casilla(string clave, Func<bool> leer, Action<bool> poner)
@@ -295,6 +297,8 @@ namespace Tachan
             ventana.FormClosed += (s, a) => { servidor.CerrarVinculo(); ventana = null; };
             ventana.Show();
         }
+
+        void BuscarActualizacion() => Actualizador.Buscar(texto => hilo.BeginInvoke((Action)(() => aviso.MostrarTexto(texto))));
 
         void AlVincular(Dispositivo d)
         {

@@ -32,16 +32,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /** Tres pantallas: escanear, confirmar y la principal. Todo se decide por el estado, sin navegación. */
 public class Principal extends Activity {
     private static final int ELEGIR = 1;
     private static final int PERMISO = 2;
     private static final int LEER = 3;
+    private static final String WEB = "https://kvothesson.com/tachan/";
     private static final int MAXIMO_FOTOS = 100;
 
     private Transporte.Enlace pendiente;
@@ -240,8 +246,12 @@ public class Principal extends Activity {
     // --- Acciones ---
 
     private void abrirWeb() {
+        abrirLink(WEB);
+    }
+
+    private void abrirLink(String link) {
         try {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://kvothesson.com/tachan/")));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
         } catch (ActivityNotFoundException e) {
             aviso(R.string.sin_programa);
         }
@@ -320,6 +330,47 @@ public class Principal extends Activity {
                 .show();
     }
 
+    private String nombreVersion() {
+        try { return getPackageManager().getPackageInfo(getPackageName(), 0).versionName; }
+        catch (android.content.pm.PackageManager.NameNotFoundException e) { return ""; }
+    }
+
+    private int codigoVersion() {
+        try { return getPackageManager().getPackageInfo(getPackageName(), 0).versionCode; }
+        catch (android.content.pm.PackageManager.NameNotFoundException e) { return Integer.MAX_VALUE; }
+    }
+
+    /** Solo se conecta a internet si lo pedís. Android rechaza un APK que no venga firmado con la misma llave. */
+    private void buscarActualizacion() {
+        new Thread(() -> {
+            int publicado = -1;
+            try {
+                HttpsURLConnection c = (HttpsURLConnection) new URL(WEB + "version.json?t=" + System.currentTimeMillis()).openConnection();
+                c.setConnectTimeout(8000);
+                c.setReadTimeout(8000);
+                try (java.util.Scanner lector = new java.util.Scanner(c.getInputStream(), "UTF-8")) {
+                    Matcher m = Pattern.compile("\"codigo\"\\s*:\\s*(\\d+)").matcher(lector.useDelimiter("\\A").next());
+                    if (m.find()) publicado = Integer.parseInt(m.group(1));
+                } finally {
+                    c.disconnect();
+                }
+            } catch (IOException | RuntimeException e) {
+                publicado = -1;
+            }
+            final int encontrado = publicado;
+            runOnUiThread(() -> {
+                if (!visible) return;
+                if (encontrado < 0) aviso(R.string.sin_conexion);
+                else if (encontrado <= codigoVersion()) aviso(R.string.ultima_version);
+                else new AlertDialog.Builder(this)
+                        .setMessage(R.string.hay_version)
+                        .setPositiveButton(R.string.bajar, (d, w) -> abrirLink(WEB + "tachan.apk"))
+                        .setNegativeButton(R.string.cancelar, null)
+                        .show();
+            });
+        }).start();
+    }
+
     private void acercaDe() {
         LinearLayout firma = new LinearLayout(this);
         firma.setGravity(Gravity.CENTER_VERTICAL);
@@ -328,7 +379,11 @@ public class Principal extends Activity {
         TextView texto = texto(getString(R.string.firma), 12, getColor(R.color.kvo_muted));
         texto.setTypeface(Typeface.MONOSPACE);
         firma.addView(texto, margenes(8, 0, 0, 0));
-        new AlertDialog.Builder(this).setView(firma).show();
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.app_name) + " " + nombreVersion())
+                .setView(firma)
+                .setPositiveButton(R.string.buscar_actualizacion, (d, w) -> buscarActualizacion())
+                .show();
     }
 
     private void elegirArchivos() {

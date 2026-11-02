@@ -31,4 +31,8 @@
     <string name="avance_parcial">%1$s de %2$s</string>
     <string name="avance_detalle">%1$s de %2$s · faltan %3$s</string>
     <string name="sin_programa">¿No lo tenés en la compu? kvothesson.com/tachan</string>
+    <string name="buscar_actualizacion">Buscar actualización</string>
+    <string name="ultima_version">Tenés la última versión</string>
+    <string name="hay_version">Hay una versión nueva</string>
+    <string name="bajar">Bajar</string>
 </resources>
