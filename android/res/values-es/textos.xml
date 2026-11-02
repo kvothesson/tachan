@@ -30,4 +30,5 @@
     <string name="desvincular_de">¿Desvincular de %1$s?</string>
     <string name="avance_parcial">%1$s de %2$s</string>
     <string name="avance_detalle">%1$s de %2$s · faltan %3$s</string>
+    <string name="sin_programa">¿No lo tenés en la compu? kvothesson.com/tachan</string>
 </resources>

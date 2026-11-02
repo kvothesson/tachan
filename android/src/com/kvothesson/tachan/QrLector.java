@@ -78,7 +78,8 @@ final class QrLector {
                 suma[(y + 1) * (w + 1) + x + 1] = suma[y * (w + 1) + x + 1] + fila;
             }
         }
-        int radio = Math.max(8, Math.min(w, h) / 16);
+        // Grande, para que el cuadrado del medio de un QR muy cerca no quede blanco por dentro.
+        int radio = Math.max(8, Math.min(w, h) / 6);
         boolean[] negro = negroReusado(w, h);
         for (int y = 0; y < h; y++) {
             int y0 = Math.max(0, y - radio), y1 = Math.min(h, y + radio + 1);
@@ -217,8 +218,10 @@ final class QrLector {
         int radio = (int) Math.ceil(m * 7);
         int mejor = Integer.MIN_VALUE;
         double[] res = {ex, ey};
-        for (int dy = -radio; dy <= radio; dy++)
-            for (int dx = -radio; dx <= radio; dx++) {
+        // Con el QR cerca, recorrer píxel por píxel gasta todo el tiempo del cuadro: alcanza con pasos de un quinto de módulo.
+        int paso = Math.max(1, (int) (m / 5));
+        for (int dy = -radio; dy <= radio; dy += paso)
+            for (int dx = -radio; dx <= radio; dx += paso) {
                 double x = ex + dx, y = ey + dy;
                 int puntos = 0;
                 for (int i = -2; i <= 2; i++)

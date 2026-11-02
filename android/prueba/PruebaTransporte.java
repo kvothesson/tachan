@@ -37,6 +37,7 @@ public class PruebaTransporte {
 
         Transporte.Enlace e = Transporte.leerEnlace(enlace);
         chequear("lee el enlace del QR", e != null && e.host.contains(".") && e.nombre.length() > 0);
+        chequear("lee también el enlace que abre la web", Transporte.leerEnlace(enlace.replace("https://kvothesson.com/tachan/#", "tachan://v?")) != null);
         chequear("rechaza un enlace inventado", Transporte.leerEnlace("tachan://v?c=abc") == null);
         chequear("lee el código pelado", Transporte.leerEnlace(enlace.substring(enlace.indexOf("c=") + 2, enlace.indexOf('&'))) != null);
 

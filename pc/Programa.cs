@@ -23,6 +23,12 @@ namespace Tachan
                 Firewall.Agregar();
                 return;
             }
+            if (argumentos.Contains("--desinstalar"))
+            {
+                Instalador.Desinstalar();
+                return;
+            }
+            var mudarse = false;
             using (var unico = new Mutex(true, NombreUnico("instancia"), out var primero))
             using (var senal = new EventWaitHandle(false, EventResetMode.AutoReset, NombreUnico("abrir")))
             {
@@ -31,11 +37,22 @@ namespace Tachan
                     senal.Set();
                     return;
                 }
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Datos.Cargar();
-                Application.Run(new Bandeja(senal, argumentos.Contains("--oculto")));
+                mudarse = Instalador.HaceFalta;
+                if (!mudarse) Correr(senal, argumentos);
             }
+            // Afuera del using: la copia instalada tiene que encontrar libre el lugar de "programa único".
+            if (mudarse && !Instalador.Mudarse())
+                using (var unico = new Mutex(true, NombreUnico("instancia")))
+                using (var senal = new EventWaitHandle(false, EventResetMode.AutoReset, NombreUnico("abrir")))
+                    Correr(senal, argumentos);
+        }
+
+        static void Correr(EventWaitHandle senal, string[] argumentos)
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Datos.Cargar();
+            Application.Run(new Bandeja(senal, argumentos.Contains("--oculto")));
         }
 
         static string NombreUnico(string que)
@@ -91,12 +108,14 @@ namespace Tachan
             }
         }
 
-        public static void Poner(bool activo)
+        public static void Poner(bool activo) => Poner(activo, Application.ExecutablePath);
+
+        public static void Poner(bool activo, string ruta)
         {
             if (Datos.EsPrueba) return;
             using (var k = Registry.CurrentUser.CreateSubKey(Clave))
             {
-                if (activo) k.SetValue(Marca.Nombre, "\"" + Application.ExecutablePath + "\" --oculto");
+                if (activo) k.SetValue(Marca.Nombre, "\"" + ruta + "\" --oculto");
                 else k.DeleteValue(Marca.Nombre, false);
             }
         }
@@ -423,7 +442,7 @@ namespace Tachan
         public void Refrescar()
         {
             var c = servidor.AbrirVinculo();
-            var enlace = Marca.Esquema + "://v?c=" + c + "&n=" + Uri.EscapeDataString(Environment.MachineName);
+            var enlace = Marca.Enlace + "c=" + c + "&n=" + Uri.EscapeDataString(Environment.MachineName);
             codigo.Text = c;
             qr.Image?.Dispose();
             qr.Image = Qr.Crear(enlace).Imagen(8, 3);

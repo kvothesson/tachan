@@ -76,10 +76,11 @@ public final class Transporte {
         if (crudo == null) return null;
         String texto = crudo.trim();
         String nombre = "";
-        int pregunta = texto.indexOf('?');
-        if (pregunta >= 0) {
+        // Los datos van después del # en el link del QR, o después del ? al abrir la app desde la web.
+        int datos = Math.max(texto.indexOf('#'), texto.indexOf('?'));
+        if (datos >= 0) {
             String codigo = null;
-            for (String parte : texto.substring(pregunta + 1).split("&")) {
+            for (String parte : texto.substring(datos + 1).split("&")) {
                 if (parte.startsWith("c=")) codigo = parte.substring(2);
                 if (parte.startsWith("n=")) {
                     try { nombre = URLDecoder.decode(parte.substring(2), "UTF-8"); }

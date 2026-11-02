@@ -30,4 +30,5 @@
     <string name="desvincular_de">Von %1$s trennen?</string>
     <string name="avance_parcial">%1$s von %2$s</string>
     <string name="avance_detalle">%1$s von %2$s · noch %3$s</string>
+    <string name="sin_programa">Noch nicht auf dem Computer? kvothesson.com/tachan</string>
 </resources>

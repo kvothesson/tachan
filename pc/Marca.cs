@@ -8,7 +8,8 @@ namespace Tachan
     {
         public const string Nombre = "Tachan";
         public const string Visible = "Tachán";
-        public const string Esquema = "tachan";
+        // El código va después del #: esa parte del link el navegador no se la manda a ningún servidor.
+        public const string Enlace = "https://kvothesson.com/tachan/#";
         public const int PuertoTcp = 47810;
         public const int PuertoUdp = 47811;
     }

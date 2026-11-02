@@ -31,4 +31,5 @@
     <string name="desvincular_de">Unlink from %1$s?</string>
     <string name="avance_parcial">%1$s of %2$s</string>
     <string name="avance_detalle">%1$s of %2$s · %3$s left</string>
+    <string name="sin_programa">No program on your computer? kvothesson.com/tachan</string>
 </resources>

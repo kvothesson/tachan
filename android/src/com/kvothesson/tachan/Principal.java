@@ -104,6 +104,7 @@ public class Principal extends Activity {
         centro.addView(frase(getString(R.string.escanea)), margenes(0, 18, 0, 0));
         raiz.addView(boton(getString(R.string.camara), this::escanear));
         raiz.addView(enlace(getString(R.string.escribir), this::escribirCodigo));
+        raiz.addView(enlace(getString(R.string.sin_programa), this::abrirWeb));
         setContentView(raiz);
     }
 
@@ -237,6 +238,14 @@ public class Principal extends Activity {
     }
 
     // --- Acciones ---
+
+    private void abrirWeb() {
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://kvothesson.com/tachan/")));
+        } catch (ActivityNotFoundException e) {
+            aviso(R.string.sin_programa);
+        }
+    }
 
     private void escanear() {
         startActivityForResult(new Intent(this, Lector.class), LEER);
