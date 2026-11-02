@@ -21,6 +21,8 @@
   .frase { margin: var(--space-3) 0 var(--space-4); font: 700 clamp(22px, 3vw, 28px)/1.2 var(--font-display); text-wrap: balance; }
   .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
   .bajar { display: inline-flex; align-items: center; min-height: 48px; padding: 0 var(--space-4); border-radius: var(--radius-m); background: var(--accent); color: var(--on-accent); font-weight: 600; text-decoration: none; }
+  .alcelu { display: flex; align-items: center; gap: var(--space-3); margin: var(--space-3) 0 0; color: var(--muted); font-size: 15px; }
+  .alcelu img { flex: none; border-radius: var(--radius-s); background: #fff; }
   .bajar.otra { background: var(--surface-raised); color: var(--ink); }
   .pronto { margin: var(--space-2) 0 0; color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
   .pasos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
@@ -30,6 +32,7 @@
   .pasos small { display: block; margin-top: var(--space-2); color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
   .vincular { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-4); border: 1px solid var(--accent); border-radius: var(--radius-m); }
   .vincular[hidden] { display: none; }
+  .alcelu[hidden] { display: none; }
   .vincular h2, .vincular p { margin: 0; }
   h2 { margin: 0 0 var(--space-3); font: 800 28px/1.1 var(--font-display); }
   .escena { position: relative; min-height: 340px; overflow: hidden; display: flex; align-items: flex-end; justify-content: flex-end; padding: var(--space-3); border: 1px solid var(--line-strong); border-radius: var(--radius-m); background: var(--surface-raised); }
@@ -68,6 +71,7 @@
         <a class="bajar otra" id="b-segundo" href="tachan.apk" download><span lang="es">Bajar para Android</span><span lang="en">Download for Android</span></a>
       </div>
       <p class="pronto"><span lang="es">Gratis, sin cuenta. Hacen falta las dos partes.</span><span lang="en">Free, no account. You need both parts.</span></p>
+      <p class="alcelu" id="alcelu"><img src="qr-android.png" alt="" width="104" height="104"><span lang="es">Para el celu: apuntá la cámara y se baja la app.</span><span lang="en">For your phone: point your camera to download the app.</span></p>
     </div>
     <div class="escena">
       <span lang="es">seguís escribiendo acá</span><span lang="en">you keep typing here</span>
@@ -105,6 +109,7 @@
   (function () {
     var android = /android/i.test(navigator.userAgent);
     if (android) {
+      document.getElementById("alcelu").hidden = true;
       var a = document.getElementById("b-primero"), b = document.getElementById("b-segundo");
       a.href = "tachan.apk"; b.href = "Tachan.exe";
       a.innerHTML = '<span lang="es">Bajar para Android</span><span lang="en">Download for Android</span>';
