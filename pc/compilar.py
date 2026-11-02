@@ -1,5 +1,6 @@
 """Compila el programa de PC con el C# de Visual Studio Build Tools: .NET 4.8 ya viene en Windows."""
 import json
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -49,6 +50,7 @@ def main():
     comando += [f"/r:{NET / r if isinstance(r, str) else r}" for r in referencias]
     comando += [str(p) for p in sorted(AQUI.glob("*.cs"))]
     subprocess.run(comando, check=True)
+    shutil.copy(EXE, AQUI.parent / "web" / EXE.name)  # lo que baja la gente desde la página
     print(f"Listo: {EXE} ({EXE.stat().st_size // 1024} KB)")
 
 

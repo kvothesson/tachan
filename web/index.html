@@ -19,7 +19,9 @@
   .cabeza { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: var(--space-5); align-items: center; }
   h1 { margin: 0; font: 800 clamp(64px, 12vw, 120px)/.95 var(--font-display); }
   .frase { margin: var(--space-3) 0 var(--space-4); font: 700 clamp(22px, 3vw, 28px)/1.2 var(--font-display); text-wrap: balance; }
-  .pronto { display: inline-flex; align-items: center; min-height: 48px; padding: 0 var(--space-4); border-radius: var(--radius-m); background: var(--accent); color: var(--on-accent); font-weight: 600; }
+  .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .bajar { display: inline-flex; align-items: center; min-height: 48px; padding: 0 var(--space-4); border-radius: var(--radius-m); background: var(--accent); color: var(--on-accent); font-weight: 600; text-decoration: none; }
+  .pronto { color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
   .escena { position: relative; min-height: 340px; overflow: hidden; display: flex; align-items: flex-end; justify-content: flex-end; padding: var(--space-3); border: 1px solid var(--line-strong); border-radius: var(--radius-m); background: var(--surface-raised); }
   .escena > span { position: absolute; left: var(--space-3); top: var(--space-3); color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
   .aviso { width: min(280px, 100%); overflow: hidden; border-radius: var(--radius-m); background: var(--surface); box-shadow: 0 14px 40px rgba(0, 0, 0, .45); }
@@ -45,7 +47,10 @@
     <div>
       <h1>Tachán</h1>
       <p class="frase"><span lang="es">Compartís en el celu. Aparece en la compu.</span><span lang="en">Share on your phone. It shows up on your computer.</span></p>
-      <span class="pronto"><span lang="es">Muy pronto en Google Play</span><span lang="en">Coming soon to Google Play</span></span>
+      <div class="acciones">
+        <a class="bajar" href="Tachan.exe" download><span lang="es">Bajar para Windows</span><span lang="en">Download for Windows</span></a>
+        <span class="pronto"><span lang="es">Android: muy pronto en Google Play</span><span lang="en">Android: coming soon to Google Play</span></span>
+      </div>
     </div>
     <div class="escena">
       <span lang="es">seguís escribiendo acá</span><span lang="en">you keep typing here</span>

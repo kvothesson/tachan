@@ -5,6 +5,7 @@ android/compilado/
 android/herramientas/
 android/prueba/compilado/
 *.apk
+*.aab
 *.idsig
 *.keystore
 android/prueba/compilado_lector/

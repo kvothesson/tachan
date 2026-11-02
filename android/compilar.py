@@ -1,7 +1,13 @@
-"""Compila la app con el SDK de D:\\dev, sin Gradle, y deja el APK en esta carpeta."""
+"""Compila la app con el SDK de D:\\dev, sin Gradle.
+
+python android/compilar.py            APK de prueba, firmado con la llave de desarrollo
+python android/compilar.py --tienda   además, el AAB para Google Play, firmado con la llave de subida
+"""
 import os
 import shutil
 import subprocess
+import sys
+import zipfile
 from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent
@@ -12,6 +18,12 @@ ANDROID_JAR = SDK / "platforms" / "android-35" / "android.jar"
 SALIDA = AQUI / "compilado"
 LLAVE = AQUI / "tachan.keystore"
 APK = AQUI / "tachan.apk"
+AAB = AQUI / "tachan.aab"
+LLAVE_SUBIDA = Path.home() / ".tachan" / "subida.keystore"
+CLAVE_SUBIDA = Path.home() / ".tachan" / "subida.txt"
+CACHE_GRADLE = Path.home() / ".gradle" / "caches" / "modules-2" / "files-2.1"
+DEPENDENCIAS = ["bundletool", "guava", "failureaccess", "protobuf-java", "protobuf-java-util", "gson", "aapt2-proto", "dagger", "javax.inject", "jsr305",
+                "auto-value-annotations", "jose4j", "slf4j-api", "error_prone_annotations", "checker-qual"]
 
 
 def correr(*comando, cwd=None):
@@ -51,6 +63,38 @@ def main():
            "--out", APK, alineado)
     correr(HERRAMIENTAS / "apksigner.bat", "verify", APK)
     print(f"Listo: {APK} ({APK.stat().st_size // 1024} KB)")
+    if "--tienda" in sys.argv:
+        armar_aab(recursos, dex)
+
+
+def bundletool(*argumentos):
+    """Usa el bundletool que dejó Gradle en su caché: la app no depende de Gradle para compilar."""
+    jars = []
+    for nombre in DEPENDENCIAS:
+        hallados = [j for j in CACHE_GRADLE.glob(f"*/{nombre}/*/*/{nombre}-*.jar") if not j.stem.endswith(("-sources", "-javadoc"))]
+        if not hallados:
+            raise SystemExit(f"Falta {nombre} en {CACHE_GRADLE}")
+        jars.append(max(hallados, key=lambda j: j.parent.parent.name))
+    correr(JDK / "bin" / "java.exe", "-cp", os.pathsep.join(map(str, jars)), "com.android.tools.build.bundletool.BundleToolMain", *argumentos)
+
+
+def armar_aab(recursos, dex):
+    if not LLAVE_SUBIDA.exists():
+        raise SystemExit(f"Falta la llave de subida: {LLAVE_SUBIDA}")
+    proto = SALIDA / "proto.apk"
+    correr(HERRAMIENTAS / "aapt2.exe", "link", "--proto-format", "-o", proto, "-I", ANDROID_JAR,
+           "--manifest", AQUI / "AndroidManifest.xml", recursos)
+    modulo = SALIDA / "base.zip"
+    with zipfile.ZipFile(proto) as entrada, zipfile.ZipFile(modulo, "w", zipfile.ZIP_DEFLATED) as salida:
+        for item in entrada.namelist():
+            destino = "manifest/AndroidManifest.xml" if item == "AndroidManifest.xml" else item
+            salida.writestr(destino, entrada.read(item))
+        salida.write(dex / "classes.dex", "dex/classes.dex")
+    AAB.unlink(missing_ok=True)
+    bundletool("build-bundle", f"--modules={modulo}", f"--output={AAB}")
+    correr(JDK / "bin" / "jarsigner.exe", "-keystore", LLAVE_SUBIDA, "-storepass:file", CLAVE_SUBIDA, "-sigalg", "SHA256withRSA", "-digestalg", "SHA-256", AAB, "subida")
+    bundletool("validate", f"--bundle={AAB}")
+    print(f"Listo: {AAB} ({AAB.stat().st_size // 1024} KB)")
 
 
 if __name__ == "__main__":

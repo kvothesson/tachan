@@ -7,7 +7,7 @@ Al llegar queda copiado para Ctrl+V y aparece un aviso que no te saca de donde e
 ## Partes
 
 - `pc/`: programa de Windows, un `.exe` de unos 80 KB en C# sobre .NET 4.8, que ya viene con Windows. Compilar: `python pc/compilar.py`.
-- `android/`: la app, sin Gradle ni librerías. Compilar: `python android/compilar.py`.
+- `android/`: la app, sin Gradle ni librerías. Compilar: `python android/compilar.py`; con `--tienda` también sale el AAB para Google Play.
 - `android/src/.../Transporte.java`: el protocolo, en Java puro para poder probarlo contra el `.exe`.
 - `android/src/.../QrLector.java` y `Lector.java`: el lector de QR propio, sin librerías. La cámara de cada marca abre distinto los enlaces `tachan://`.
 - `diseno/`: el sonido de llegada y el primer boceto de pantallas. El diseño vigente sale del taller, en `D:\workspace\kvothesson\marca`. `pc/MarcaColores.cs`, `pc/marca.json` y `android/res/values*/marca.xml` se generan con `python marca/generar.py` y no se editan a mano.
@@ -33,4 +33,4 @@ En pantalla es Tachán; en tiendas, rutas y código, Tachan. La web va en kvothe
 - Android 15 en adelante y exigencias de Play: revisar el `targetSdk` que pida Google en ese momento y el permiso de red local.
 - Declarar en Play el uso de `FOREGROUND_SERVICE_DATA_SYNC`, y publicar una política de privacidad.
 - Firmar el `.exe` o publicarlo en Microsoft Store para evitar el aviso de SmartScreen.
-- Hacer la llave de firma de Android definitiva y guardarla bien: la actual es de desarrollo.
+- La llave de subida está en `~/.tachan/`, fuera del repo: hacerle una copia de seguridad. Usar Play App Signing, así Google guarda la llave final y la de subida se puede reemplazar.
