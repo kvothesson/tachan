@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tachán</title>
+<meta name="description" content="Compartís algo en el celu y aparece en la compu, por tu wifi y sin pasar por ningún servidor.">
+<link rel="canonical" href="https://kvothesson.com/tachan/">
+<meta property="og:title" content="Tachán">
+<meta property="og:description" content="Compartís algo en el celu y aparece en la compu.">
+<meta property="og:url" content="https://kvothesson.com/tachan/">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="marca.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 400 17px/1.45 var(--font-sans); }
+  main { max-width: 980px; margin: 0 auto; padding: var(--space-5) max(var(--space-3), env(safe-area-inset-right)) var(--space-5) max(var(--space-3), env(safe-area-inset-left)); display: grid; gap: var(--space-5); }
+  html:lang(es) [lang="en"], html:lang(en) [lang="es"] { display: none; }
+  .cabeza { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: var(--space-5); align-items: center; }
+  h1 { margin: 0; font: 800 clamp(64px, 12vw, 120px)/.95 var(--font-display); }
+  .frase { margin: var(--space-3) 0 var(--space-4); font: 700 clamp(22px, 3vw, 28px)/1.2 var(--font-display); text-wrap: balance; }
+  .pronto { display: inline-flex; align-items: center; min-height: 48px; padding: 0 var(--space-4); border-radius: var(--radius-m); background: var(--accent); color: var(--on-accent); font-weight: 600; }
+  .escena { position: relative; min-height: 340px; overflow: hidden; display: flex; align-items: flex-end; justify-content: flex-end; padding: var(--space-3); border: 1px solid var(--line-strong); border-radius: var(--radius-m); background: var(--surface-raised); }
+  .escena > span { position: absolute; left: var(--space-3); top: var(--space-3); color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+  .aviso { width: min(280px, 100%); overflow: hidden; border-radius: var(--radius-m); background: var(--surface); box-shadow: 0 14px 40px rgba(0, 0, 0, .45); }
+  .foto { height: 170px; background: linear-gradient(160deg, #ffb347, #ff5a6e 62%, #04080d); }
+  .barra { display: flex; gap: var(--space-2); padding: var(--space-2) 12px; color: var(--muted); }
+  .barra svg { width: 18px; height: 18px; }
+  .barra svg:first-child { margin-right: auto; color: var(--ok); }
+  .puntos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
+  .puntos b { display: block; margin-bottom: var(--space-1); font: 700 20px/1.15 var(--font-display); }
+  .puntos li > span { color: var(--muted); }
+  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); padding-top: var(--space-3); border-top: 1px solid var(--line); color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+  footer a { color: inherit; }
+  .firma { display: inline-flex; align-items: center; gap: var(--space-2); }
+  .firma svg { width: 16px; height: 16px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 700px) { .cabeza, .puntos { grid-template-columns: minmax(0, 1fr); } }
+</style>
+<script>if (!/^es/i.test(navigator.language || "es")) document.documentElement.lang = "en";</script>
+</head>
+<body>
+<main>
+  <section class="cabeza">
+    <div>
+      <h1>Tachán</h1>
+      <p class="frase"><span lang="es">Compartís en el celu. Aparece en la compu.</span><span lang="en">Share on your phone. It shows up on your computer.</span></p>
+      <span class="pronto"><span lang="es">Muy pronto en Google Play</span><span lang="en">Coming soon to Google Play</span></span>
+    </div>
+    <div class="escena">
+      <span lang="es">seguís escribiendo acá</span><span lang="en">you keep typing here</span>
+      <div class="aviso">
+        <div class="foto" role="img" aria-label="Foto recibida"></div>
+        <div class="barra" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.500 4.500 4.500L19 7.500"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M15 5.500A1.500 1.500 0 0 0 13.500 4h-8A1.500 1.500 0 0 0 4 5.500v8A1.500 1.500 0 0 0 5.500 15"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.500 6H9l2 2.500h9.500V19h-17z"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+  <ul class="puntos">
+    <li><b><span lang="es">Listo para pegar</span><span lang="en">Ready to paste</span></b><span lang="es">Llega copiado: Ctrl+V donde estabas, o arrastralo.</span><span lang="en">It arrives copied: press Ctrl+V where you are, or drag it.</span></li>
+    <li><b><span lang="es">Todo lo que se comparte</span><span lang="en">Anything you can share</span></b><span lang="es">Fotos, videos, archivos, texto y links.</span><span lang="en">Photos, videos, files, text and links.</span></li>
+    <li><b><span lang="es">Sin servidores</span><span lang="en">No servers</span></b><span lang="es">Va cifrado por tu wifi, de tu celu a tu compu. Sin cuenta.</span><span lang="en">Encrypted over your wifi, from your phone to your computer. No account.</span></li>
+  </ul>
+  <footer>
+    <span class="firma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.500 20.200 7.200v9.600L12 21.500l-8.200-4.700V7.200z"/><circle cx="12" cy="12" r="2.200" fill="currentColor" stroke="none"/></svg><span lang="es">hecho por Kvothesson</span><span lang="en">made by Kvothesson</span></span>
+    <a href="privacidad.html"><span lang="es">Privacidad</span><span lang="en">Privacy</span></a>
+  </footer>
+</main>
+</body>
+</html>

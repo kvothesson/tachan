@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="escanea">Scanne den Code auf dem Computer</string>
+    <string name="camara">QR scannen</string>
+    <string name="escribir">Code eingeben</string>
+    <string name="vincular_con">Mit %1$s verbinden?</string>
+    <string name="vincular">Verbinden</string>
+    <string name="cancelar">Abbrechen</string>
+    <string name="desvincular">Trennen</string>
+    <string name="otra">Weiteren Computer verbinden</string>
+    <string name="pega">Code einfügen</string>
+    <string name="sin_conexion">Keine Verbindung. Gleiches WLAN?</string>
+    <string name="codigo_vencido">Dieser Code gilt nicht mehr</string>
+    <string name="enviando_n">Sende %1$d von %2$d</string>
+    <string name="enviado">Gesendet</string>
+    <string name="esperando">Warte auf den Computer</string>
+    <string name="fallo">Senden fehlgeschlagen</string>
+    <string name="revincular">Computer erneut verbinden</string>
+    <string name="canal">Senden</string>
+    <string name="enviado_a">An %1$s gesendet</string>
+    <string name="en_red">In diesem WLAN</string>
+    <string name="no_aparece">Nicht gefunden</string>
+    <string name="acerca">Über</string>
+    <string name="firma">von Kvothesson</string>
+    <string name="no_es_tachan">Dieser Code ist nicht von Tachán</string>
+    <string name="sin_camara">Keine Kamera verfügbar: Code eingeben</string>
+    <string name="elegir">Wähle, was du senden willst</string>
+    <string name="fotos">Fotos und Videos</string>
+    <string name="archivos">Dateien</string>
+    <string name="desvincular_de">Von %1$s trennen?</string>
+</resources>

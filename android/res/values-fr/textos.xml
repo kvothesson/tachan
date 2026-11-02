@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="escanea">Scannez le code sur l\'ordinateur</string>
+    <string name="camara">Scanner le QR</string>
+    <string name="escribir">Saisir le code</string>
+    <string name="vincular_con">Associer à %1$s ?</string>
+    <string name="vincular">Associer</string>
+    <string name="cancelar">Annuler</string>
+    <string name="desvincular">Dissocier</string>
+    <string name="otra">Associer un autre ordinateur</string>
+    <string name="pega">Collez le code</string>
+    <string name="sin_conexion">Connexion impossible. Même Wi-Fi ?</string>
+    <string name="codigo_vencido">Ce code n\'est plus valide</string>
+    <string name="enviando_n">Envoi %1$d sur %2$d</string>
+    <string name="enviado">Envoyé</string>
+    <string name="esperando">En attente de l\'ordinateur</string>
+    <string name="fallo">Envoi impossible</string>
+    <string name="revincular">Associez à nouveau l\'ordinateur</string>
+    <string name="canal">Envoi</string>
+    <string name="enviado_a">Envoyé à %1$s</string>
+    <string name="en_red">Sur ce wifi</string>
+    <string name="no_aparece">Introuvable</string>
+    <string name="acerca">À propos</string>
+    <string name="firma">fait par Kvothesson</string>
+    <string name="no_es_tachan">Ce code ne vient pas de Tachán</string>
+    <string name="sin_camara">Appareil photo indisponible : saisissez le code</string>
+    <string name="elegir">Choisissez quoi envoyer</string>
+    <string name="fotos">Photos et vidéos</string>
+    <string name="archivos">Fichiers</string>
+    <string name="desvincular_de">Dissocier de %1$s ?</string>
+</resources>

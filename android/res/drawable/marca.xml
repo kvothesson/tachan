@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="@color/kvo_icono_acento" android:pathData="M54,21L82.6,37.5V70.5L54,87L25.4,70.5V37.5Z" />
+    <group android:translateX="36" android:translateY="36" android:scaleX="1.5" android:scaleY="1.5">
+        <path android:strokeColor="@color/kvo_icono_tinta" android:strokeWidth="2.6" android:strokeLineCap="round" android:strokeLineJoin="round"
+            android:pathData="M4,18C6,9 13,5 20,7" />
+        <path android:strokeColor="@color/kvo_icono_tinta" android:strokeWidth="2.6" android:strokeLineCap="round" android:strokeLineJoin="round"
+            android:pathData="M15.5,3.5L20.5,7l-3.2,5" />
+    </group>
+</vector>

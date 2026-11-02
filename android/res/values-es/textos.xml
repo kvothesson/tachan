@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="escanea">Escaneá el código de tu compu</string>
+    <string name="camara">Escanear QR</string>
+    <string name="escribir">Escribir código</string>
+    <string name="vincular_con">¿Vincular con %1$s?</string>
+    <string name="vincular">Vincular</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="desvincular">Desvincular</string>
+    <string name="otra">Vincular otra compu</string>
+    <string name="pega">Pegá el código</string>
+    <string name="sin_conexion">No se pudo conectar. ¿Mismo wifi?</string>
+    <string name="codigo_vencido">Este código ya no vale</string>
+    <string name="enviando_n">Enviando %1$d de %2$d</string>
+    <string name="enviado">Enviado</string>
+    <string name="esperando">Esperando a tu compu</string>
+    <string name="fallo">No se pudo enviar</string>
+    <string name="revincular">Volvé a vincular tu compu</string>
+    <string name="canal">Enviando</string>
+    <string name="enviado_a">Enviado a %1$s</string>
+    <string name="en_red">En este wifi</string>
+    <string name="no_aparece">No aparece</string>
+    <string name="acerca">Acerca de</string>
+    <string name="firma">hecho por Kvothesson</string>
+    <string name="no_es_tachan">Ese código no es de Tachán</string>
+    <string name="sin_camara">No se puede usar la cámara: escribí el código</string>
+    <string name="elegir">Elegí qué mandar</string>
+    <string name="fotos">Fotos y videos</string>
+    <string name="archivos">Archivos</string>
+    <string name="desvincular_de">¿Desvincular de %1$s?</string>
+</resources>

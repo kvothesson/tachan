@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Diseño de pantallas</title>
+<style>
+  :root {
+    --acento: #ff5c39; --ok: #2fbf71;
+    --fondo: #f4f3f0; --sup: #ffffff; --sup2: #eeece8; --txt: #17181c; --ten: #6d6f76; --borde: #dedcd6;
+  }
+  .oscuro {
+    --fondo: #15161a; --sup: #202228; --sup2: #2b2e35; --txt: #f3f3f4; --ten: #9a9da5; --borde: #34373f;
+    background: var(--fondo); color: var(--txt);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #d9d7d1; font: 15px/1.35 "Segoe UI", system-ui, sans-serif; color: #17181c; padding: 28px; }
+  h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: #5a5b60; margin: 28px 0 12px; font-weight: 600; }
+  h2:first-child { margin-top: 0; }
+  .fila { display: flex; flex-wrap: wrap; gap: 22px; align-items: flex-start; }
+  .cel { width: 250px; height: 520px; border-radius: 30px; background: var(--fondo); color: var(--txt); border: 6px solid #0d0e10;
+         display: flex; flex-direction: column; overflow: hidden; position: relative; padding: 22px 18px; }
+  .pie { font-size: 12px; color: #5a5b60; margin-top: 8px; width: 250px; }
+  .centro { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; }
+  .frase { font-size: 17px; font-weight: 600; }
+  .boton { background: var(--acento); color: #fff; border: 0; border-radius: 14px; height: 50px; width: 100%; font: 600 15px "Segoe UI", sans-serif;
+           display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .boton.sec { background: var(--sup2); color: var(--txt); }
+  .link { font-size: 13px; color: var(--ten); text-align: center; margin-top: 12px; }
+  .pc { display: flex; align-items: center; gap: 12px; background: var(--sup); border-radius: 16px; padding: 14px; }
+  .pc b { display: block; font-size: 15px; }
+  .punto { width: 10px; height: 10px; border-radius: 50%; background: var(--ok); margin-left: auto; box-shadow: 0 0 0 4px color-mix(in srgb, var(--ok) 22%, transparent); }
+  .mas { width: 118px; height: 118px; border-radius: 50%; background: var(--acento); color: #fff; display: flex; align-items: center; justify-content: center; }
+  .item { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 13px; color: var(--ten); }
+  .mini { width: 36px; height: 36px; border-radius: 9px; background: var(--sup2); display: flex; align-items: center; justify-content: center; flex: none; overflow: hidden; }
+  .foto { background: linear-gradient(150deg, #ffb347, #e8486a 60%, #5b3a8c); }
+  .check { margin-left: auto; color: var(--ok); }
+  .noti { background: var(--sup); border-radius: 16px; padding: 12px 14px; font-size: 13px; }
+  .barra { height: 5px; background: var(--sup2); border-radius: 3px; margin-top: 8px; overflow: hidden; }
+  .barra i { display: block; height: 100%; width: 62%; background: var(--acento); }
+  .hoja { position: absolute; left: 0; right: 0; bottom: 0; background: var(--sup); border-radius: 22px 22px 0 0; padding: 16px; }
+  .apps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; font-size: 10px; text-align: center; color: var(--ten); margin-top: 10px; }
+  .apps span { display: block; width: 42px; height: 42px; border-radius: 12px; background: var(--sup2); margin: 0 auto 4px; }
+  .apps .nuestra span { background: var(--acento); display: flex; align-items: center; justify-content: center; color: #fff; }
+  .apps .nuestra { color: var(--txt); font-weight: 600; }
+  .escritorio { width: 460px; height: 300px; border-radius: 10px; position: relative; overflow: hidden;
+                background: linear-gradient(135deg, #25364f, #3e5f70 55%, #7f8f7a); }
+  .aviso { position: absolute; right: 14px; bottom: 44px; width: 250px; background: var(--sup); color: var(--txt); border-radius: 14px; overflow: hidden; box-shadow: 0 14px 40px rgba(0,0,0,.45); }
+  .aviso .img { height: 140px; }
+  .aviso .acciones { display: flex; align-items: center; gap: 4px; padding: 6px 8px; }
+  .aviso .acciones .ok { color: var(--ok); margin-right: auto; display: flex; padding: 4px; }
+  .ico { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--ten); }
+  .barratareas { position: absolute; left: 0; right: 0; bottom: 0; height: 32px; background: rgba(15,17,22,.8); }
+  .texto { padding: 14px; font-size: 14px; max-height: 110px; overflow: hidden; }
+  .archivo { padding: 14px; display: flex; gap: 12px; align-items: center; font-size: 13px; }
+  .archivo .mini { width: 46px; height: 46px; color: var(--acento); font-weight: 700; font-size: 11px; }
+  .archivo small { color: var(--ten); display: block; }
+  .pila { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,.65); color: #fff; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+  .vinc { width: 300px; background: var(--sup); color: var(--txt); border-radius: 14px; padding: 22px; display: flex; flex-direction: column; align-items: center; gap: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+  .qr { width: 196px; height: 196px; background: #fff; border-radius: 10px; padding: 12px; }
+  .menu { width: 230px; background: var(--sup); color: var(--txt); border-radius: 10px; padding: 6px; box-shadow: 0 10px 30px rgba(0,0,0,.25); font-size: 13px; }
+  .menu div { padding: 8px 10px; border-radius: 6px; display: flex; justify-content: space-between; }
+  .menu hr { border: 0; border-top: 1px solid var(--borde); margin: 4px 0; }
+  .menu .on { color: var(--acento); font-weight: 700; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-mas" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="i-copia" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="2" fill="none"/><path d="M15 5.5A1.5 1.5 0 0 0 13.5 4h-8A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
+    <symbol id="i-carpeta" viewBox="0 0 24 24"><path d="M3.5 7.5A1.5 1.5 0 0 1 5 6h4l2 2.5h8A1.5 1.5 0 0 1 20.5 10v7.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/></symbol>
+    <symbol id="i-ok" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-abrir" viewBox="0 0 24 24"><path d="M9 5H6.5A1.5 1.5 0 0 0 5 6.5v11A1.5 1.5 0 0 0 6.5 19h11a1.5 1.5 0 0 0 1.5-1.5V15M13 5h6v6M19 5l-8 8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-pc" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="12" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M8 20h8M12 16.5V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-marca" viewBox="0 0 24 24"><path d="M4 18C6 9 13 5 20 7" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M15.5 3.5L20.5 7l-3.2 5" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24"><path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M20 15v3.5a1.5 1.5 0 0 1-1.5 1.5H15M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<h2>Celu</h2>
+<div class="fila">
+  <div>
+    <div class="cel oscuro">
+      <div class="centro">
+        <div style="display:flex;align-items:center;gap:10px;color:var(--acento)">
+          <svg width="56" height="56"><use href="#i-qr"/></svg>
+          <svg width="34" height="34" style="color:var(--ten)"><use href="#i-marca"/></svg>
+          <svg width="56" height="56" style="color:var(--txt)"><use href="#i-pc"/></svg>
+        </div>
+        <div class="frase">Escaneá el código de tu compu</div>
+      </div>
+      <button class="boton">Abrir cámara</button>
+      <div class="link">Escribir código</div>
+    </div>
+    <div class="pie">1. Primera vez. El programa de PC ya muestra el QR.</div>
+  </div>
+  <div>
+    <div class="cel oscuro">
+      <div class="centro">
+        <svg width="72" height="72" style="color:var(--txt)"><use href="#i-pc"/></svg>
+        <div class="frase">¿Vincular con Mi compu?</div>
+      </div>
+      <button class="boton">Vincular</button>
+      <div class="link">Cancelar</div>
+    </div>
+    <div class="pie">2. Confirmación obligatoria: un link no puede vincular solo.</div>
+  </div>
+  <div>
+    <div class="cel oscuro">
+      <div class="pc"><svg width="26" height="26"><use href="#i-pc"/></svg><b>Mi compu</b><span class="punto"></span></div>
+      <div class="centro"><div class="mas"><svg width="52" height="52"><use href="#i-mas"/></svg></div></div>
+      <div class="item"><span class="mini foto"></span>IMG_2041.jpg<svg class="check" width="18" height="18"><use href="#i-ok"/></svg></div>
+      <div class="item"><span class="mini">PDF</span>factura.pdf<svg class="check" width="18" height="18"><use href="#i-ok"/></svg></div>
+      <div class="item"><span class="mini">Aa</span>https://kvothesson.com<svg class="check" width="18" height="18"><use href="#i-ok"/></svg></div>
+    </div>
+    <div class="pie">3. Pantalla principal. Punto verde: la compu está. El + elige archivos.</div>
+  </div>
+  <div>
+    <div class="cel">
+      <div class="noti"><b>Enviando 2 de 3</b><div class="barra"><i></i></div></div>
+      <div class="hoja">
+        <b style="font-size:13px">Compartir</b>
+        <div class="apps">
+          <div class="nuestra"><span><svg width="24" height="24"><use href="#i-marca"/></svg></span>Mi compu</div>
+          <div><span></span>Mensajes</div><div><span></span>Correo</div><div><span></span>Drive</div>
+        </div>
+      </div>
+    </div>
+    <div class="pie">4. Compartir desde cualquier app: un toque y el progreso queda en una notificación. Nada bloquea la pantalla.</div>
+  </div>
+</div>
+
+<h2>Compu</h2>
+<div class="fila">
+  <div>
+    <div class="escritorio">
+      <div class="aviso oscuro">
+        <div class="img foto"></div>
+        <div class="acciones"><span class="ok"><svg width="18" height="18"><use href="#i-ok"/></svg></span>
+          <span class="ico"><svg width="18" height="18"><use href="#i-copia"/></svg></span>
+          <span class="ico"><svg width="18" height="18"><use href="#i-carpeta"/></svg></span></div>
+      </div>
+      <div class="barratareas"></div>
+    </div>
+    <div class="pie" style="width:460px">5. Foto: ya está copiada (tilde). Se arrastra desde la imagen. Se va sola en 6 s, y se queda si le pasás el mouse.</div>
+  </div>
+  <div>
+    <div class="escritorio">
+      <div class="aviso oscuro">
+        <div class="texto">https://kvothesson.com/decretos/</div>
+        <div class="acciones"><span class="ok"><svg width="18" height="18"><use href="#i-ok"/></svg></span>
+          <span class="ico" style="color:var(--acento)"><svg width="18" height="18"><use href="#i-abrir"/></svg></span>
+          <span class="ico"><svg width="18" height="18"><use href="#i-copia"/></svg></span></div>
+      </div>
+      <div class="barratareas"></div>
+    </div>
+    <div class="pie" style="width:460px">6. Texto o link: copiado. El link nunca se abre solo: hace falta tocar la flecha.</div>
+  </div>
+  <div>
+    <div class="escritorio">
+      <div class="aviso oscuro">
+        <div class="archivo"><span class="mini">PDF</span><div>factura_octubre.pdf<small>1,2 MB</small></div></div>
+        <div class="acciones"><span class="ok"><svg width="18" height="18"><use href="#i-ok"/></svg></span>
+          <span class="ico"><svg width="18" height="18"><use href="#i-copia"/></svg></span>
+          <span class="ico"><svg width="18" height="18"><use href="#i-carpeta"/></svg></span></div>
+      </div>
+      <div class="barratareas"></div>
+    </div>
+    <div class="pie" style="width:460px">7. Archivo: copiado, se arrastra. Ctrl+V lo pega en una carpeta.</div>
+  </div>
+  <div>
+    <div class="vinc oscuro">
+      <div class="qr"><svg viewBox="0 0 21 21" width="172" height="172"><path d="M0 0h7v7H0zM1 1v5h5V1zM2 2h3v3H2zM14 0h7v7h-7zM15 1v5h5V1zM16 2h3v3h-3zM0 14h7v7H0zM1 15v5h5v-5zM2 16h3v3H2zM9 1h2v2H9zM9 5h3v2H9zM8 9h4v2H8zM14 9h3v2h-3zM9 13h2v3H9zM13 13h3v3h-3zM18 13h3v2h-3zM17 17h4v2h-4zM9 18h4v3H9zM1 9h3v2H1zM5 9h2v3H5z" fill="#111" fill-rule="evenodd"/></svg></div>
+      <div class="frase">Escaneá con el celu</div>
+    </div>
+    <div class="pie" style="width:300px">8. Vincular: solo el QR. Si el firewall falta, aparece un botón con escudo.</div>
+  </div>
+  <div>
+    <div class="menu oscuro">
+      <div>Vincular un celu</div><div>Celus vinculados ›</div><hr>
+      <div>Abrir carpeta</div><hr>
+      <div>Pegar solo <span class="on">✓</span></div><div>Sonido <span class="on">✓</span></div><div>Iniciar con Windows <span class="on">✓</span></div><hr>
+      <div>Salir</div>
+    </div>
+    <div class="pie" style="width:230px">9. Menú del ícono junto al reloj: todo lo que no es uso diario.</div>
+  </div>
+</div>
+</body>
+</html>

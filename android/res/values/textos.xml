@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Tachán</string>
+    <string name="escanea">Scan the code on your computer</string>
+    <string name="camara">Scan QR</string>
+    <string name="escribir">Enter code</string>
+    <string name="vincular_con">Link with %1$s?</string>
+    <string name="vincular">Link</string>
+    <string name="cancelar">Cancel</string>
+    <string name="desvincular">Unlink</string>
+    <string name="otra">Link another computer</string>
+    <string name="pega">Paste the code</string>
+    <string name="sin_conexion">Could not connect. Same Wi-Fi?</string>
+    <string name="codigo_vencido">This code is no longer valid</string>
+    <string name="enviando_n">Sending %1$d of %2$d</string>
+    <string name="enviado">Sent</string>
+    <string name="esperando">Waiting for your computer</string>
+    <string name="fallo">Could not send</string>
+    <string name="revincular">Link your computer again</string>
+    <string name="canal">Sending</string>
+    <string name="enviado_a">Sent to %1$s</string>
+    <string name="en_red">On this wifi</string>
+    <string name="no_aparece">Not found</string>
+    <string name="acerca">About</string>
+    <string name="firma">made by Kvothesson</string>
+    <string name="no_es_tachan">That code isn\'t from Tachán</string>
+    <string name="sin_camara">No camera available: enter the code instead</string>
+    <string name="elegir">Choose what to send</string>
+    <string name="fotos">Photos and videos</string>
+    <string name="archivos">Files</string>
+    <string name="desvincular_de">Unlink from %1$s?</string>
+</resources>

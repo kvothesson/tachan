@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="escanea">Escaneie o código do computador</string>
+    <string name="camara">Ler QR</string>
+    <string name="escribir">Digitar código</string>
+    <string name="vincular_con">Vincular com %1$s?</string>
+    <string name="vincular">Vincular</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="desvincular">Desvincular</string>
+    <string name="otra">Vincular outro computador</string>
+    <string name="pega">Cole o código</string>
+    <string name="sin_conexion">Sem conexão. Mesmo Wi-Fi?</string>
+    <string name="codigo_vencido">Este código não vale mais</string>
+    <string name="enviando_n">Enviando %1$d de %2$d</string>
+    <string name="enviado">Enviado</string>
+    <string name="esperando">Aguardando seu computador</string>
+    <string name="fallo">Não foi possível enviar</string>
+    <string name="revincular">Vincule o computador novamente</string>
+    <string name="canal">Enviando</string>
+    <string name="enviado_a">Enviado para %1$s</string>
+    <string name="en_red">Neste wi-fi</string>
+    <string name="no_aparece">Não encontrado</string>
+    <string name="acerca">Sobre</string>
+    <string name="firma">feito por Kvothesson</string>
+    <string name="no_es_tachan">Esse código não é do Tachán</string>
+    <string name="sin_camara">Não dá para usar a câmera: digite o código</string>
+    <string name="elegir">Escolha o que enviar</string>
+    <string name="fotos">Fotos e vídeos</string>
+    <string name="archivos">Arquivos</string>
+    <string name="desvincular_de">Desvincular de %1$s?</string>
+</resources>

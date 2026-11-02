@@ -1,0 +1,13 @@
+config.json
+__pycache__/
+pc/compilado/
+android/compilado/
+android/herramientas/
+android/prueba/compilado/
+*.apk
+*.idsig
+*.keystore
+android/prueba/compilado_lector/
+android/prueba/compilado_lector/
+# Lleva un QR real, aunque ya vencido
+diseno/muestras/vinculo.png

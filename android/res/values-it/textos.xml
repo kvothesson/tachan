@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="escanea">Scansiona il codice sul computer</string>
+    <string name="camara">Scansiona QR</string>
+    <string name="escribir">Inserisci codice</string>
+    <string name="vincular_con">Collegare a %1$s?</string>
+    <string name="vincular">Collega</string>
+    <string name="cancelar">Annulla</string>
+    <string name="desvincular">Scollega</string>
+    <string name="otra">Collega un altro computer</string>
+    <string name="pega">Incolla il codice</string>
+    <string name="sin_conexion">Nessuna connessione. Stesso Wi-Fi?</string>
+    <string name="codigo_vencido">Questo codice non è più valido</string>
+    <string name="enviando_n">Invio %1$d di %2$d</string>
+    <string name="enviado">Inviato</string>
+    <string name="esperando">In attesa del computer</string>
+    <string name="fallo">Invio non riuscito</string>
+    <string name="revincular">Collega di nuovo il computer</string>
+    <string name="canal">Invio</string>
+    <string name="enviado_a">Inviato a %1$s</string>
+    <string name="en_red">Su questo wifi</string>
+    <string name="no_aparece">Non trovato</string>
+    <string name="acerca">Informazioni</string>
+    <string name="firma">fatto da Kvothesson</string>
+    <string name="no_es_tachan">Questo codice non è di Tachán</string>
+    <string name="sin_camara">Fotocamera non disponibile: inserisci il codice</string>
+    <string name="elegir">Scegli cosa inviare</string>
+    <string name="fotos">Foto e video</string>
+    <string name="archivos">File</string>
+    <string name="desvincular_de">Scollegare da %1$s?</string>
+</resources>
