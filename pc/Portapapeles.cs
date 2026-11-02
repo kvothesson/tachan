@@ -52,15 +52,15 @@ namespace Tachan
         }
 
         // Para el aviso alcanza con algo chico: la foto entera se queda solo el rato de copiarla.
-        public static Bitmap Miniatura(Bitmap imagen, int anchoMaximo)
+        public static Bitmap Miniatura(Bitmap imagen, int anchoMaximo, int altoMaximo)
         {
-            if (imagen.Width <= anchoMaximo) return new Bitmap(imagen);
-            var alto = Math.Max(1, imagen.Height * anchoMaximo / imagen.Width);
-            var chica = new Bitmap(anchoMaximo, alto, PixelFormat.Format24bppRgb);
+            var escala = Math.Min(1.0, Math.Min(anchoMaximo / (double)imagen.Width, altoMaximo / (double)imagen.Height));
+            int ancho = Math.Max(1, (int)(imagen.Width * escala)), alto = Math.Max(1, (int)(imagen.Height * escala));
+            var chica = new Bitmap(ancho, alto, Image.IsAlphaPixelFormat(imagen.PixelFormat) ? PixelFormat.Format32bppArgb : PixelFormat.Format24bppRgb);
             using (var g = Graphics.FromImage(chica))
             {
                 g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                g.DrawImage(imagen, 0, 0, anchoMaximo, alto);
+                g.DrawImage(imagen, 0, 0, ancho, alto);
             }
             return chica;
         }

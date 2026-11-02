@@ -90,6 +90,7 @@ namespace Tachan
 
         const int MilisegundosVisible = 6000;
         const int LadoMiniaturaShell = 256;
+        const int AltoMaximoImagen = 320;
 
         readonly Timer reloj = new Timer { Interval = 60 };
         readonly ToolTip ayuda = new ToolTip();
@@ -147,6 +148,7 @@ namespace Tachan
         }
 
         public int AnchoImagen => (int)(300 * e);
+        public int AltoImagen => (int)(AltoMaximoImagen * e);
 
         // El aviso se queda con la miniatura y la suelta al cerrarse.
         public void Mostrar(List<Recibido> nueva, bool seCopio, Bitmap miniatura = null)
@@ -245,7 +247,7 @@ namespace Tachan
         float AltoContenido()
         {
             var ancho = 300 * e;
-            if (imagenDeArchivo) return Math.Min(190 * e, Math.Max(90 * e, ancho * imagen.Height / imagen.Width));
+            if (imagenDeArchivo) return Math.Min(AltoMaximoImagen * e, Math.Max(90 * e, ancho * imagen.Height / imagen.Width));
             if (tanda.Last().Texto != null)
             {
                 using (var f = new Font("Segoe UI", 10.5f))
@@ -315,7 +317,7 @@ namespace Tachan
 
             var ultima = tanda.LastOrDefault();
             if (ultima == null) return;
-            if (imagenDeArchivo) PintarCubriendo(g, imagen, zonaContenido);
+            if (imagenDeArchivo) PintarEntera(g, imagen, zonaContenido);
             else if (ultima.Texto != null) PintarTexto(g, ultima.Texto);
             else PintarArchivo(g, ultima.Ruta);
 
@@ -339,13 +341,14 @@ namespace Tachan
             }
         }
 
-        static void PintarCubriendo(Graphics g, Image i, RectangleF zona)
+        // Se ve siempre entera: lo que llegó tiene que reconocerse de un vistazo, aunque sea largo.
+        static void PintarEntera(Graphics g, Image i, RectangleF zona)
         {
-            var escala = Math.Max(zona.Width / i.Width, zona.Height / i.Height);
-            var w = zona.Width / escala;
-            var h = zona.Height / escala;
-            var origen = new RectangleF((i.Width - w) / 2, (i.Height - h) / 2, w, h);
-            g.DrawImage(i, zona, origen, GraphicsUnit.Pixel);
+            using (var b = new SolidBrush(Tema.Fondo2)) g.FillRectangle(b, zona);
+            var escala = Math.Min(zona.Width / i.Width, zona.Height / i.Height);
+            var w = i.Width * escala;
+            var h = i.Height * escala;
+            g.DrawImage(i, zona.X + (zona.Width - w) / 2, zona.Y + (zona.Height - h) / 2, w, h);
         }
 
         void PintarTexto(Graphics g, string texto)

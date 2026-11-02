@@ -317,10 +317,11 @@ namespace Tachan
             var copia = tanda.ToList();
             tanda.Clear();
             var anchoAviso = aviso.AnchoImagen;
+            var altoAviso = aviso.AltoImagen;
             ThreadPool.QueueUserWorkItem(_ =>
             {
                 var imagen = Portapapeles.UltimaImagen(copia, out var origen);
-                var miniatura = imagen != null && origen == copia.Last().Ruta ? Imagenes.Miniatura(imagen, anchoAviso) : null;
+                var miniatura = imagen != null && origen == copia.Last().Ruta ? Imagenes.Miniatura(imagen, anchoAviso, altoAviso) : null;
                 hilo.BeginInvoke((Action)(() =>
                 {
                     var seCopio = Portapapeles.Copiar(copia, imagen);
