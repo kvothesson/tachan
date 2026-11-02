@@ -9,11 +9,11 @@ Al llegar queda copiado para Ctrl+V y aparece un aviso que no te saca de donde e
 - `pc/`: programa de Windows, un `.exe` de unos 80 KB en C# sobre .NET 4.8, que ya viene con Windows. Al abrirlo se instala solo en `%LOCALAPPDATA%\Programs\Tachan`, y abrir una versión distinta lo actualiza. Compilar: `python pc/compilar.py`.
 - `android/`: la app, sin Gradle ni librerías. Compilar: `python android/compilar.py`; con `--tienda` también sale el AAB para Google Play.
 - `android/src/.../Transporte.java`: el protocolo, en Java puro para poder probarlo contra el `.exe`.
-- `android/src/.../QrLector.java` y `Lector.java`: el lector de QR propio, sin librerías. La cámara de cada marca abre distinto los enlaces `tachan://`.
+- `android/src/.../QrLector.java` y `Lector.java`: el lector de QR propio, sin librerías. La cámara de cada marca abre distinto los enlaces `tachan://`, por eso el QR es un link web.
 - `diseno/`: el sonido de llegada y el primer boceto de pantallas. El diseño vigente sale del taller, en `D:\workspace\kvothesson\marca`. `pc/MarcaColores.cs`, `pc/marca.json` y `android/res/values*/marca.xml` se generan con `python marca/generar.py` y no se editan a mano.
 - `web/`: la página y la privacidad. Se publica en kvothesson.com/tachan con `python publicar_web.py`, que copia esta carpeta al repo público kvothesson/tachan; este código queda en kvothesson/tachan-app, privado. `tienda/`: la ficha de Google Play en 6 idiomas.
 - `pruebas/`: `medir_envio.py` (envío real por el selector de fotos, con el celu bloqueado), `medir_velocidad.py` (el protocolo solo), `medir_celu.py` (arranque y lector), `prueba_memoria.py` (memoria y recursos con muchas fotos), `prueba_copia.py` (portapapeles, sin mover el mouse), `prueba_arriba.py` (el aviso sobre una ventana a pantalla completa), `prueba_buscar_version.py` (Buscar actualización contra una web local), `prueba_aviso_imagen.py` (imágenes altas, anchas y transparentes, enteras), `prueba_actualizar.py` (reemplaza la instalación real, sin perder vínculos), `prueba_lector.py` (el QR real deformado como lo ve una cámara), `prueba_e2e.py` (protocolo y seguridad) y `prueba_pc.py` (aviso, portapapeles, arrastre, pegado). Usan datos aislados con `TACHAN_DATOS`.
-- `receptor.py`, `pagina.html`, `abrir.cmd`, `instalar.cmd`: la primera versión en Python. Quedan hasta probar la nueva en un celu real.
+- `receptor.py`, `pagina.html`, `abrir.cmd`, `instalar.cmd`: la primera versión en Python. Ya no hacen falta: se pueden borrar.
 
 ## Seguridad
 
@@ -25,12 +25,6 @@ Al llegar queda copiado para Ctrl+V y aparece un aviso que no te saca de donde e
 
 ## Nombre
 
-En pantalla es Tachán; en tiendas, rutas y código, Tachan. La web va en kvothesson.com/tachan. El `package` `com.kvothesson.tachan` no se puede cambiar después de publicar.
+En pantalla es Tachán; en tiendas, rutas y código, Tachan. El `package` `com.kvothesson.tachan` no se puede cambiar después de publicar en Google Play.
 
-## Antes de publicar
-
-- Probar en celus reales: nada de la parte Android con pantalla se ejecutó todavía.
-- Android 15 en adelante y exigencias de Play: revisar el `targetSdk` que pida Google en ese momento y el permiso de red local.
-- Declarar en Play el uso de `FOREGROUND_SERVICE_DATA_SYNC`, y publicar una política de privacidad.
-- Firmar el `.exe` o publicarlo en Microsoft Store para evitar el aviso de SmartScreen.
-- La llave de subida está en `~/.tachan/`, fuera del repo: hacerle una copia de seguridad. Usar Play App Signing, así Google guarda la llave final y la de subida se puede reemplazar.
+Para seguir trabajando en el repo, ver `AGENTS.md`: tiene decisiones, pruebas, cómo publicar y qué falta.
