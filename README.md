@@ -11,7 +11,7 @@ Al llegar queda copiado para Ctrl+V y aparece un aviso que no te saca de donde e
 - `android/src/.../Transporte.java`: el protocolo, en Java puro para poder probarlo contra el `.exe`.
 - `android/src/.../QrLector.java` y `Lector.java`: el lector de QR propio, sin librerías. La cámara de cada marca abre distinto los enlaces `tachan://`.
 - `diseno/`: el sonido de llegada y el primer boceto de pantallas. El diseño vigente sale del taller, en `D:\workspace\kvothesson\marca`. `pc/MarcaColores.cs`, `pc/marca.json` y `android/res/values*/marca.xml` se generan con `python marca/generar.py` y no se editan a mano.
-- `web/`: la página y la privacidad para kvothesson.com/tachan, sin publicar. `tienda/`: la ficha de Google Play en 6 idiomas.
+- `web/`: la página y la privacidad. Se publica en kvothesson.com/tachan con `python publicar_web.py`, que copia esta carpeta al repo público kvothesson/tachan; este código queda en kvothesson/tachan-app, privado. `tienda/`: la ficha de Google Play en 6 idiomas.
 - `pruebas/`: `medir_envio.py` (envío real por el selector de fotos, con el celu bloqueado), `medir_velocidad.py` (el protocolo solo), `medir_celu.py` (arranque y lector), `prueba_memoria.py` (memoria y recursos con muchas fotos), `prueba_copia.py` (portapapeles, sin mover el mouse), `prueba_arriba.py` (el aviso sobre una ventana a pantalla completa), `prueba_actualizar.py` (reemplaza la instalación real, sin perder vínculos), `prueba_lector.py` (el QR real deformado como lo ve una cámara), `prueba_e2e.py` (protocolo y seguridad) y `prueba_pc.py` (aviso, portapapeles, arrastre, pegado). Usan datos aislados con `TACHAN_DATOS`.
 - `receptor.py`, `pagina.html`, `abrir.cmd`, `instalar.cmd`: la primera versión en Python. Quedan hasta probar la nueva en un celu real.
 
