@@ -1,7 +1,7 @@
 """Compila la app con el SDK de D:\\dev, sin Gradle.
 
 python android/compilar.py            APK de prueba, firmado con la llave de desarrollo
-python android/compilar.py --tienda   además, el AAB para Google Play, firmado con la llave de subida
+python android/compilar.py --tienda   además, el AAB para Google Play y el APK de la web, firmados con la llave definitiva
 """
 import os
 import shutil
@@ -19,6 +19,7 @@ SALIDA = AQUI / "compilado"
 LLAVE = AQUI / "tachan.keystore"
 APK = AQUI / "tachan.apk"
 AAB = AQUI / "tachan.aab"
+APK_WEB = AQUI.parent / "web" / "tachan.apk"
 LLAVE_SUBIDA = Path.home() / ".tachan" / "subida.keystore"
 CLAVE_SUBIDA = Path.home() / ".tachan" / "subida.txt"
 CACHE_GRADLE = Path.home() / ".gradle" / "caches" / "modules-2" / "files-2.1"
@@ -65,6 +66,16 @@ def main():
     print(f"Listo: {APK} ({APK.stat().st_size // 1024} KB)")
     if "--tienda" in sys.argv:
         armar_aab(recursos, dex)
+        armar_apk_web(alineado)
+
+
+def armar_apk_web(alineado):
+    # Con la misma llave que después usará Play, para que quien la baje de la web pueda actualizarla desde ahí.
+    correr(HERRAMIENTAS / "apksigner.bat", "sign", "--ks", LLAVE_SUBIDA, "--ks-pass", f"file:{CLAVE_SUBIDA}", "--ks-key-alias", "subida",
+           "--out", APK_WEB, alineado)
+    correr(HERRAMIENTAS / "apksigner.bat", "verify", APK_WEB)
+    Path(str(APK_WEB) + ".idsig").unlink(missing_ok=True)
+    print(f"Listo: {APK_WEB} ({APK_WEB.stat().st_size // 1024} KB)")
 
 
 def bundletool(*argumentos):

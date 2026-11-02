@@ -21,7 +21,14 @@
   .frase { margin: var(--space-3) 0 var(--space-4); font: 700 clamp(22px, 3vw, 28px)/1.2 var(--font-display); text-wrap: balance; }
   .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
   .bajar { display: inline-flex; align-items: center; min-height: 48px; padding: 0 var(--space-4); border-radius: var(--radius-m); background: var(--accent); color: var(--on-accent); font-weight: 600; text-decoration: none; }
-  .pronto { color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+  .bajar.otra { background: var(--surface-raised); color: var(--ink); }
+  .pronto { margin: var(--space-2) 0 0; color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+  .pasos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
+  .pasos b { display: block; margin-bottom: var(--space-1); font: 700 20px/1.15 var(--font-display); }
+  .pasos i { font-style: normal; color: var(--accent); }
+  .pasos li > span { color: var(--muted); }
+  .pasos small { display: block; margin-top: var(--space-2); color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+  h2 { margin: 0 0 var(--space-3); font: 800 28px/1.1 var(--font-display); }
   .escena { position: relative; min-height: 340px; overflow: hidden; display: flex; align-items: flex-end; justify-content: flex-end; padding: var(--space-3); border: 1px solid var(--line-strong); border-radius: var(--radius-m); background: var(--surface-raised); }
   .escena > span { position: absolute; left: var(--space-3); top: var(--space-3); color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
   .aviso { width: min(280px, 100%); overflow: hidden; border-radius: var(--radius-m); background: var(--surface); box-shadow: 0 14px 40px rgba(0, 0, 0, .45); }
@@ -37,7 +44,7 @@
   .firma { display: inline-flex; align-items: center; gap: var(--space-2); }
   .firma svg { width: 16px; height: 16px; }
   a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  @media (max-width: 700px) { .cabeza, .puntos { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 700px) { .cabeza, .puntos, .pasos { grid-template-columns: minmax(0, 1fr); } }
 </style>
 <script>if (!/^es/i.test(navigator.language || "es")) document.documentElement.lang = "en";</script>
 </head>
@@ -48,9 +55,10 @@
       <h1>Tachán</h1>
       <p class="frase"><span lang="es">Compartís en el celu. Aparece en la compu.</span><span lang="en">Share on your phone. It shows up on your computer.</span></p>
       <div class="acciones">
-        <a class="bajar" href="Tachan.exe" download><span lang="es">Bajar para Windows</span><span lang="en">Download for Windows</span></a>
-        <span class="pronto"><span lang="es">Android: muy pronto en Google Play</span><span lang="en">Android: coming soon to Google Play</span></span>
+        <a class="bajar" href="tachan.apk" download><span lang="es">Bajar para Android</span><span lang="en">Download for Android</span></a>
+        <a class="bajar otra" href="Tachan.exe" download><span lang="es">Bajar para Windows</span><span lang="en">Download for Windows</span></a>
       </div>
+      <p class="pronto"><span lang="es">Gratis, sin cuenta. Hacen falta las dos partes.</span><span lang="en">Free, no account. You need both parts.</span></p>
     </div>
     <div class="escena">
       <span lang="es">seguís escribiendo acá</span><span lang="en">you keep typing here</span>
@@ -69,6 +77,16 @@
     <li><b><span lang="es">Todo lo que se comparte</span><span lang="en">Anything you can share</span></b><span lang="es">Fotos, videos, archivos, texto y links.</span><span lang="en">Photos, videos, files, text and links.</span></li>
     <li><b><span lang="es">Sin servidores</span><span lang="en">No servers</span></b><span lang="es">Va cifrado por tu wifi, de tu celu a tu compu. Sin cuenta.</span><span lang="en">Encrypted over your wifi, from your phone to your computer. No account.</span></li>
   </ul>
+  <section>
+    <h2><span lang="es">Cómo se instala</span><span lang="en">How to install</span></h2>
+    <ol class="pasos">
+      <li><b><span lang="es">En la compu</span><span lang="en">On your computer</span></b><span lang="es">Abrí Tachan.exe y permitilo en la red. Aparece un QR.</span><span lang="en">Open Tachan.exe and allow it on your network. A QR code appears.</span>
+        <small><span lang="es">Si Windows avisa: Más información, Ejecutar de todos modos.</span><span lang="en">If Windows warns you: More info, Run anyway.</span></small></li>
+      <li><b><span lang="es">En el celu</span><span lang="en">On your phone</span></b><span lang="es">Instalá tachan.apk y abrí la app.</span><span lang="en">Install tachan.apk and open the app.</span>
+        <small><span lang="es">Android pide permitir la instalación porque todavía no está en Google Play.</span><span lang="en">Android asks you to allow the install because it isn't on Google Play yet.</span></small></li>
+      <li><b><span lang="es">Vinculalos</span><span lang="en">Link them</span></b><span lang="es">Tocá Escanear QR, apuntá a la compu y listo. Los dos tienen que estar en el mismo wifi.</span><span lang="en">Tap Scan QR, point at your computer, and you're done. Both must be on the same wifi.</span></li>
+    </ol>
+  </section>
   <footer>
     <span class="firma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.500 20.200 7.200v9.600L12 21.500l-8.200-4.700V7.200z"/><circle cx="12" cy="12" r="2.200" fill="currentColor" stroke="none"/></svg><span lang="es">hecho por Kvothesson</span><span lang="en">made by Kvothesson</span></span>
     <a href="privacidad.html"><span lang="es">Privacidad</span><span lang="en">Privacy</span></a>
