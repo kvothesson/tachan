@@ -9,6 +9,9 @@
 <meta property="og:title" content="Tachán: pasá fotos y archivos del celular a la PC sin cable">
 <meta property="og:description" content="Pasá fotos, videos y archivos del celular Android a la PC con Windows, sin cable.">
 <meta property="og:url" content="https://kvothesson.com/tachan/">
+<link rel="alternate" hreflang="es" href="https://kvothesson.com/tachan/">
+<link rel="alternate" hreflang="en" href="https://kvothesson.com/tachan/en.html">
+<link rel="alternate" hreflang="x-default" href="https://kvothesson.com/tachan/en.html">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="marca.css">
 <style>
@@ -48,15 +51,20 @@
   .puntos li > span { color: var(--muted); }
   footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); padding-top: var(--space-3); border-top: 1px solid var(--line); color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
   footer a { color: inherit; }
+  .enlaces { display: flex; gap: var(--space-3); }
+  .otroidioma { margin: 0; }
+  .otroidioma[hidden] { display: none; }
+  .otroidioma a { color: var(--accent); }
   .firma { display: inline-flex; align-items: center; gap: var(--space-2); }
   .firma svg { width: 16px; height: 16px; }
   a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   @media (max-width: 700px) { .cabeza, .puntos, .pasos { grid-template-columns: minmax(0, 1fr); } }
 </style>
-<script>if (!/^es/i.test(navigator.language || "es")) document.documentElement.lang = "en";</script>
+<script>if (/(^|&)c=/.test(location.hash.slice(1)) && !/^es/i.test(navigator.language || "es")) document.documentElement.lang = "en";</script>
 </head>
 <body>
 <main>
+  <p class="otroidioma" id="otroidioma" hidden><a href="en.html" hreflang="en">Read this page in English</a></p>
   <section class="vincular" id="vincular" hidden>
     <h2><span lang="es">Vinculá tu celu</span><span lang="en">Link your phone</span></h2>
     <p id="vincular-android"><span lang="es">Si todavía no tenés la app, se baja sola. Instalala y volvé acá para tocar el botón otra vez. Este código dura 5 minutos.</span><span lang="en">If you don't have the app yet, it downloads on its own. Install it and come back to tap the button again. This code lasts 5 minutes.</span></p>
@@ -104,7 +112,7 @@
   </section>
   <footer>
     <span class="firma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.500 20.200 7.200v9.600L12 21.500l-8.200-4.700V7.200z"/><circle cx="12" cy="12" r="2.200" fill="currentColor" stroke="none"/></svg><span lang="es">hecho por Kvothesson</span><span lang="en">made by Kvothesson</span></span>
-    <a href="privacidad.html"><span lang="es">Privacidad</span><span lang="en">Privacy</span></a>
+    <span class="enlaces"><a href="en.html" hreflang="en">English</a><a href="privacidad.html"><span lang="es">Privacidad</span><span lang="en">Privacy</span></a></span>
   </footer>
 </main>
 <script>
@@ -125,6 +133,7 @@
       b.innerHTML = '<span lang="es">Bajar para Windows</span><span lang="en">Download for Windows</span>';
     }
     var datos = location.hash.slice(1);
+    if (!/(^|&)c=/.test(datos) && !/^es/i.test(navigator.language || "es")) document.getElementById("otroidioma").hidden = false;
     if (!/(^|&)c=[a-z2-7 -]+/i.test(datos)) return;
     document.getElementById("vincular").hidden = false;
     if (!android) {
