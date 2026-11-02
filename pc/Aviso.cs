@@ -128,7 +128,7 @@ namespace Tachan
             get
             {
                 var p = base.CreateParams;
-                p.ExStyle |= 0x08000000 | 0x00000080;  // WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW
+                p.ExStyle |= 0x08000000 | 0x00000080 | 0x00000008;  // WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST
                 p.ClassStyle |= 0x00020000;  // sombra
                 return p;
             }
@@ -151,6 +151,8 @@ namespace Tachan
         // El aviso se queda con la miniatura y la suelta al cerrarse.
         public void Mostrar(List<Recibido> nueva, bool seCopio, Bitmap miniatura = null)
         {
+            // Una ventana nace en el escritorio virtual donde estás: si se reusara, aparecería en el de antes.
+            if (!Visible) RecreateHandle();
             tanda = nueva;
             copiado = seCopio;
             confirmadoEn = DateTime.MinValue;
@@ -177,8 +179,16 @@ namespace Tachan
                 Opacity = 0;
                 Show();
             }
+            // Mostrarla sin activarla no alcanza para que quede sobre las demás ventanas: hay que pedirlo aparte.
+            SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
             Invalidate();
         }
+
+        static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        const uint SWP_NOSIZE = 0x0001, SWP_NOMOVE = 0x0002, SWP_NOACTIVATE = 0x0010;
+
+        [DllImport("user32.dll")]
+        static extern bool SetWindowPos(IntPtr ventana, IntPtr despuesDe, int x, int y, int ancho, int alto, uint marcas);
 
         // Para confirmar algo sin contenido, como un celu recién vinculado.
         public void MostrarTexto(string texto)
