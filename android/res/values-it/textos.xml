@@ -28,4 +28,6 @@
     <string name="fotos">Foto e video</string>
     <string name="archivos">File</string>
     <string name="desvincular_de">Scollegare da %1$s?</string>
+    <string name="avance_parcial">%1$s di %2$s</string>
+    <string name="avance_detalle">%1$s di %2$s · mancano %3$s</string>
 </resources>

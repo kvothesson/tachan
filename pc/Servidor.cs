@@ -260,6 +260,8 @@ namespace Tachan
             Vinculado?.Invoke(nuevo);
         }
 
+        const int TamanoTrozo = 80 * 1024;  // justo por debajo de donde .NET lo trataría como objeto grande
+
         void Enviar(Stream s, Dictionary<string, string> cabeceras)
         {
             if (!cabeceras.TryGetValue("Content-Length", out var crudo) || !long.TryParse(crudo, out var largo) || largo < 0)
@@ -301,7 +303,7 @@ namespace Tachan
             {
                 using (var f = File.Create(parcial))
                 {
-                    var trozo = new byte[1024 * 1024];
+                    var trozo = new byte[TamanoTrozo];
                     var restante = largo;
                     while (restante > 0)
                     {

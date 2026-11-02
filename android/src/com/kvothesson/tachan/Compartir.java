@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,12 @@ public class Compartir extends Activity {
             finish();
             return;
         }
-        EnvioServicio.iniciar(this, adjuntos(recibido), textoDe(recibido));
+        try {
+            EnvioServicio.iniciar(this, adjuntos(recibido), textoDe(recibido));
+        } catch (SecurityException e) {
+            // La otra app compartió algo sin darnos permiso para leerlo.
+            Toast.makeText(this, R.string.fallo, Toast.LENGTH_LONG).show();
+        }
         finish();
     }
 

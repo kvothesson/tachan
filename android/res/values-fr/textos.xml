@@ -28,4 +28,6 @@
     <string name="fotos">Photos et vidéos</string>
     <string name="archivos">Fichiers</string>
     <string name="desvincular_de">Dissocier de %1$s ?</string>
+    <string name="avance_parcial">%1$s sur %2$s</string>
+    <string name="avance_detalle">%1$s sur %2$s · reste %3$s</string>
 </resources>

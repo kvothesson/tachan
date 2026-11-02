@@ -26,7 +26,29 @@ final class QrLector {
         for (int i = 255; i < 512; i++) EXP[i] = EXP[i - 255];
     }
 
+    // La cámara manda varios cuadros por segundo: pedir memoria nueva en cada uno haría trabajar de más al recolector.
+    // Solo se lee desde un hilo a la vez.
+    private static int[] sumaGuardada = new int[0];
+    private static boolean[] negroGuardado = new boolean[0];
+
     private QrLector() { }
+
+    /** Al cerrar el lector no hace falta seguir guardando la memoria de los cuadros. */
+    static void soltar() {
+        sumaGuardada = new int[0];
+        negroGuardado = new boolean[0];
+    }
+
+    private static int[] sumaReusada(int w, int h) {
+        int largo = (w + 1) * (h + 1);
+        if (sumaGuardada.length != largo) sumaGuardada = new int[largo];
+        return sumaGuardada;
+    }
+
+    private static boolean[] negroReusado(int w, int h) {
+        if (negroGuardado.length != w * h) negroGuardado = new boolean[w * h];
+        return negroGuardado;
+    }
 
     /** Busca un QR en una imagen de luminancia, por ejemplo el primer plano de un cuadro NV21. Devuelve su texto o null. */
     static String leer(byte[] luz, int ancho, int alto) {
@@ -48,7 +70,7 @@ final class QrLector {
 
     /** Compara cada píxel con el promedio de su zona: aguanta sombras y pantallas con brillo desparejo. */
     private static boolean[] binarizar(byte[] luz, int w, int h) {
-        int[] suma = new int[(w + 1) * (h + 1)];
+        int[] suma = sumaReusada(w, h);
         for (int y = 0; y < h; y++) {
             int fila = 0;
             for (int x = 0; x < w; x++) {
@@ -57,7 +79,7 @@ final class QrLector {
             }
         }
         int radio = Math.max(8, Math.min(w, h) / 16);
-        boolean[] negro = new boolean[w * h];
+        boolean[] negro = negroReusado(w, h);
         for (int y = 0; y < h; y++) {
             int y0 = Math.max(0, y - radio), y1 = Math.min(h, y + radio + 1);
             for (int x = 0; x < w; x++) {

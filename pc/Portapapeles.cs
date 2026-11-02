@@ -24,10 +24,12 @@ namespace Tachan
         {
             try
             {
-                using (var memoria = new MemoryStream(File.ReadAllBytes(ruta)))
-                using (var original = Image.FromStream(memoria))
+                using (var archivo = new FileStream(ruta, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (var original = Image.FromStream(archivo))
                 {
-                    var derecha = new Bitmap(original.Width, original.Height, PixelFormat.Format32bppArgb);
+                    // Sin transparencia alcanza con 3 bytes por píxel: en una foto de 12 MP son 12 MB menos.
+                    var formato = Image.IsAlphaPixelFormat(original.PixelFormat) ? PixelFormat.Format32bppArgb : PixelFormat.Format24bppRgb;
+                    var derecha = new Bitmap(original.Width, original.Height, formato);
                     using (var g = Graphics.FromImage(derecha)) g.DrawImage(original, 0, 0, original.Width, original.Height);
                     if (Array.IndexOf(original.PropertyIdList, 0x0112) >= 0)
                     {
@@ -47,6 +49,20 @@ namespace Tachan
             }
             catch (Exception) { }
             return AbrirConWic(ruta);
+        }
+
+        // Para el aviso alcanza con algo chico: la foto entera se queda solo el rato de copiarla.
+        public static Bitmap Miniatura(Bitmap imagen, int anchoMaximo)
+        {
+            if (imagen.Width <= anchoMaximo) return new Bitmap(imagen);
+            var alto = Math.Max(1, imagen.Height * anchoMaximo / imagen.Width);
+            var chica = new Bitmap(anchoMaximo, alto, PixelFormat.Format24bppRgb);
+            using (var g = Graphics.FromImage(chica))
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.DrawImage(imagen, 0, 0, anchoMaximo, alto);
+            }
+            return chica;
         }
 
         // WebP y HEIC: GDI+ no los lee, pero el códec de Windows sí cuando está instalado.
@@ -135,6 +151,25 @@ namespace Tachan
         // Las rutas como archivos y la última imagen como dibujo: sirve en cualquier programa.
         public static bool Copiar(IList<Recibido> tanda)
         {
+            using (var imagen = UltimaImagen(tanda, out _)) return Copiar(tanda, imagen);
+        }
+
+        // Decodificar tarda: se hace afuera del hilo de la ventana. Copiar sí tiene que ser en ese hilo.
+        public static Bitmap UltimaImagen(IList<Recibido> tanda, out string origen)
+        {
+            foreach (var ruta in tanda.Where(r => r.Ruta != null).Select(r => r.Ruta).Reverse())
+            {
+                var imagen = Imagenes.Abrir(ruta);
+                if (imagen == null) continue;
+                origen = ruta;
+                return imagen;
+            }
+            origen = null;
+            return null;
+        }
+
+        public static bool Copiar(IList<Recibido> tanda, Bitmap imagen)
+        {
             try
             {
                 var datos = new DataObject();
@@ -144,13 +179,7 @@ namespace Tachan
                     var lista = new StringCollection();
                     lista.AddRange(rutas);
                     datos.SetFileDropList(lista);
-                    foreach (var ruta in rutas.Reverse())
-                    {
-                        var imagen = Imagenes.Abrir(ruta);
-                        if (imagen == null) continue;
-                        datos.SetImage(imagen);
-                        break;
-                    }
+                    if (imagen != null) datos.SetImage(imagen);
                 }
                 var texto = tanda.LastOrDefault(r => r.Texto != null)?.Texto;
                 if (texto != null && texto.Length > 0) datos.SetText(texto);

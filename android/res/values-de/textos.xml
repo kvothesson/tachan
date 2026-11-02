@@ -28,4 +28,6 @@
     <string name="fotos">Fotos und Videos</string>
     <string name="archivos">Dateien</string>
     <string name="desvincular_de">Von %1$s trennen?</string>
+    <string name="avance_parcial">%1$s von %2$s</string>
+    <string name="avance_detalle">%1$s von %2$s · noch %3$s</string>
 </resources>

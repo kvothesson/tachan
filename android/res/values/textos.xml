@@ -29,4 +29,6 @@
     <string name="fotos">Photos and videos</string>
     <string name="archivos">Files</string>
     <string name="desvincular_de">Unlink from %1$s?</string>
+    <string name="avance_parcial">%1$s of %2$s</string>
+    <string name="avance_detalle">%1$s of %2$s · %3$s left</string>
 </resources>

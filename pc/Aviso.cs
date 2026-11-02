@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
+using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Kvothesson;
@@ -145,7 +146,10 @@ namespace Tachan
             base.WndProc(ref m);
         }
 
-        public void Mostrar(List<Recibido> nueva, bool seCopio)
+        public int AnchoImagen => (int)(300 * e);
+
+        // El aviso se queda con la miniatura y la suelta al cerrarse.
+        public void Mostrar(List<Recibido> nueva, bool seCopio, Bitmap miniatura = null)
         {
             tanda = nueva;
             copiado = seCopio;
@@ -157,10 +161,11 @@ namespace Tachan
             var ultima = tanda.LastOrDefault(r => r.Ruta != null);
             if (tanda.Last().Texto == null && ultima != null)
             {
-                imagen = Imagenes.Abrir(ultima.Ruta);
+                imagen = miniatura;
                 imagenDeArchivo = imagen != null;
                 if (imagen == null) imagen = Imagenes.MiniaturaDeShell(ultima.Ruta, LadoMiniaturaShell);
             }
+            else miniatura?.Dispose();
             ArmarAcciones();
             Acomodar();
             ocultarEn = DateTime.Now.AddMilliseconds(MilisegundosVisible);
@@ -181,6 +186,25 @@ namespace Tachan
             Mostrar(new List<Recibido> { new Recibido { Texto = texto } }, true);
             acciones.Clear();
             Invalidate();
+        }
+
+        protected override void OnVisibleChanged(EventArgs a)
+        {
+            base.OnVisibleChanged(a);
+            if (Visible) return;
+            imagen?.Dispose();
+            imagen = null;
+            imagenDeArchivo = false;
+            tanda = new List<Recibido>();
+            acciones.Clear();
+            DevolverMemoria();
+        }
+
+        // Queda prendido todo el día: lo que ocuparon las fotos se devuelve ahora, no cuando le toque al sistema.
+        public static void DevolverMemoria()
+        {
+            GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+            GC.Collect();
         }
 
         Uri EnlaceDeTexto()

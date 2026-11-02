@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Arquitectura de Tachán</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../web/marca.css">
+<style>
+  /* Siempre de noche, para que la imagen no cambie según el sistema. Una línea central: de un equipo al otro por el wifi. */
+  :root { --n-ground: #04080d; --n-surface: #0b1219; --n-raised: #121c25; --n-line: #16303f; --n-strong: #4a7084; --n-ink: #d8f3ff; --n-muted: #7f9fb3; --n-amber: #ffb347; --n-ice: #5ce1ff; --n-ok: #2fbf71; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; width: 1600px; height: 780px; background: var(--n-ground); color: var(--n-ink); font: 400 20px/1.35 var(--font-sans); padding: 44px 56px; display: flex; flex-direction: column; gap: 26px; }
+  header { display: flex; align-items: baseline; gap: 24px; }
+  h1 { margin: 0; font: 800 64px/1 var(--font-display); }
+  header p { margin: 0; font: 700 28px/1.2 var(--font-display); color: var(--n-muted); }
+  .mapa { display: grid; grid-template-columns: 1fr 300px 1fr; gap: 0; flex: 1; min-height: 0; }
+  .equipo { border: 1.5px solid var(--n-strong); border-radius: 18px; background: var(--n-surface); padding: 24px 26px; display: flex; flex-direction: column; gap: 14px; }
+  .equipo h2 { margin: 0 0 4px; font: 800 34px/1 var(--font-display); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .equipo h2 small { font: 400 15px/1 var(--font-mono); color: var(--n-muted); }
+  .pieza { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; padding: 13px 16px; border-radius: 12px; background: var(--n-raised); }
+  .pieza svg { width: 34px; height: 34px; color: var(--n-amber); margin-top: 2px; }
+  .pieza b { display: block; font: 700 22px/1.2 var(--font-display); }
+  .pieza span { color: var(--n-muted); font-size: 18px; }
+  .puente { position: relative; display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 26px; padding: 0 16px; }
+  .via { text-align: center; }
+  .via b { display: block; font: 700 21px/1.2 var(--font-display); }
+  .via span { display: block; color: var(--n-muted); font-size: 16px; }
+  .flecha { height: 34px; width: 100%; }
+  .nube { border: 1.5px dashed var(--n-strong); border-radius: 12px; padding: 12px; text-align: center; font: 400 15px/1.35 var(--font-mono); color: var(--n-muted); }
+  .nube b { display: block; color: var(--n-ink); font: 700 19px/1.2 var(--font-display); margin-bottom: 3px; }
+  .pasos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .paso { display: grid; grid-template-columns: 42px 1fr; gap: 12px; align-items: start; }
+  .paso i { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: var(--n-amber); color: var(--n-ground); font: 800 22px/1 var(--font-display); font-style: normal; }
+  .paso b { display: block; font: 700 21px/1.15 var(--font-display); }
+  .paso span { color: var(--n-muted); font-size: 17px; }
+  footer { display: flex; justify-content: space-between; align-items: center; color: var(--n-muted); font: 400 15px/1 var(--font-mono); }
+  footer span { display: inline-flex; align-items: center; gap: 8px; }
+  footer svg { width: 18px; height: 18px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Tachán</h1>
+  <p>Compartís en el celu. Aparece en la compu. Sin nada en el medio.</p>
+</header>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="punta" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 1 9 5 1 9" fill="none" stroke="#ffb347" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+    <marker id="puntaf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 1 9 5 1 9" fill="none" stroke="#5ce1ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+</svg>
+
+<main class="mapa">
+  <section class="equipo">
+    <h2>Celu <small>Android · 65 KB</small></h2>
+    <div class="pieza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"/></svg><div><b>Compartir</b><span>Tachán aparece en el menú de cualquier app.</span></div></div>
+    <div class="pieza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9V5.500A1.500 1.500 0 0 1 5.500 4H9M15 4h3.500A1.500 1.500 0 0 1 20 5.500V9M20 15v3.500a1.500 1.500 0 0 1-1.500 1.500H15M9 20H5.500A1.500 1.500 0 0 1 4 18.500V15"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg><div><b>Lector de QR</b><span>Lee el código de la compu, sin librerías ni otras apps.</span></div></div>
+    <div class="pieza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg><div><b>Envío</b><span>Manda en segundo plano y muestra cuánto falta.</span></div></div>
+    <div class="pieza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg><div><b>Cola</b><span>Si la compu no está, guarda y reintenta sola.</span></div></div>
+  </section>
+
+  <div class="puente">
+    <div class="via"><b>1 · Vincular</b><span>una sola vez, con QR</span>
+      <svg class="flecha" viewBox="0 0 268 34" fill="none"><path d="M260 17H10" stroke="#5ce1ff" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 9" marker-end="url(#puntaf)"/></svg>
+    </div>
+    <div class="via"><b>2 · Mandar</b><span>fotos, videos, archivos, texto y links</span>
+      <svg class="flecha" viewBox="0 0 268 34" fill="none"><path d="M8 17h250" stroke="#ffb347" stroke-width="4" stroke-linecap="round" marker-end="url(#punta)"/></svg>
+    </div>
+    <div class="nube"><b>Tu wifi, cifrado</b>TLS · huella fijada · token por celu<br>ningún servidor ni cuenta</div>
+  </div>
+
+  <section class="equipo">
+    <h2>Compu <small>Windows · 83 KB</small></h2>
+    <div class="pieza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.500 3 8 7 10 4-2 7-5.500 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg><div><b>Receptor seguro</b><span>Solo acepta a los celus vinculados de tu red.</span></div></div>
+    <div class="pieza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.500 6H9l2 2.500h9.500V19h-17z"/></svg><div><b>Descargas</b><span>Lo recibido queda en la carpeta Tachan.</span></div></div>
+    <div class="pieza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.500"/><path d="M15 5.500A1.500 1.500 0 0 0 13.500 4h-8A1.500 1.500 0 0 0 4 5.500v8A1.500 1.500 0 0 0 5.500 15"/></svg><div><b>Portapapeles</b><span>Queda listo para Ctrl+V en cualquier programa.</span></div></div>
+    <div class="pieza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3.500" y="5" width="17" height="14" rx="2.500"/><path d="M13 15h4"/></svg><div><b>Aviso con ta-chán</b><span>No te saca de lo que hacés, y se arrastra desde ahí.</span></div></div>
+  </section>
+</main>
+
+<section class="pasos">
+  <div class="paso"><i>1</i><div><b>Elegís Tachán</b><span>en Compartir, o con el + de la app</span></div></div>
+  <div class="paso"><i>2</i><div><b>Busca tu compu</b><span>en el wifi, aunque cambie de dirección</span></div></div>
+  <div class="paso"><i>3</i><div><b>Viaja cifrado</b><span>solo a tu compu, a ninguna otra</span></div></div>
+  <div class="paso"><i>4</i><div><b>¡Ta-chán!</b><span>aparece, copiado y listo para usar</span></div></div>
+</section>
+
+<footer>
+  <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.500 20.200 7.200v9.600L12 21.500l-8.200-4.700V7.200z"/><circle cx="12" cy="12" r="2.200" fill="currentColor" stroke="none"/></svg>hecho por Kvothesson</span>
+  <span>Colores y fuentes: sistema de diseño Kvothesson Apps</span>
+</footer>
+</body>
+</html>

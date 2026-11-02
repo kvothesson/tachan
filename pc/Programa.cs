@@ -280,10 +280,21 @@ namespace Tachan
             espera.Stop();
             var copia = tanda.ToList();
             tanda.Clear();
-            var seCopio = Portapapeles.Copiar(copia);
-            Sonido.Sonar();
-            aviso.Mostrar(copia, seCopio);
-            if (seCopio && Datos.PegarSolo) Portapapeles.ApretarPegar();
+            var anchoAviso = aviso.AnchoImagen;
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                var imagen = Portapapeles.UltimaImagen(copia, out var origen);
+                var miniatura = imagen != null && origen == copia.Last().Ruta ? Imagenes.Miniatura(imagen, anchoAviso) : null;
+                hilo.BeginInvoke((Action)(() =>
+                {
+                    var seCopio = Portapapeles.Copiar(copia, imagen);
+                    imagen?.Dispose();
+                    Aviso.DevolverMemoria();
+                    Sonido.Sonar();
+                    aviso.Mostrar(copia, seCopio, miniatura);
+                    if (seCopio && Datos.PegarSolo) Portapapeles.ApretarPegar();
+                }));
+            });
         }
 
         public void Salir()

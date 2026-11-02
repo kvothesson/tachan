@@ -96,6 +96,7 @@ public class Lector extends Activity implements TextureView.SurfaceTextureListen
         super.onPause();
         cerrar();
         hilo.quitSafely();
+        QrLector.soltar();
     }
 
     @Override
