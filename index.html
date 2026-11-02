@@ -42,6 +42,7 @@
   .barra { display: flex; gap: var(--space-2); padding: var(--space-2) 12px; color: var(--muted); }
   .barra svg { width: 18px; height: 18px; }
   .barra svg:first-child { margin-right: auto; color: var(--ok); }
+  .demo { display: block; width: 100%; height: auto; border: 1px solid var(--line-strong); border-radius: var(--radius-m); background: var(--ground); }
   .puntos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
   .puntos b { display: block; margin-bottom: var(--space-1); font: 700 20px/1.15 var(--font-display); }
   .puntos li > span { color: var(--muted); }
@@ -85,6 +86,7 @@
       </div>
     </div>
   </section>
+  <video class="demo" id="demo" src="tachan-es.mp4" poster="tachan-es.jpg" width="1280" height="800" controls muted loop playsinline preload="metadata" aria-label="Cómo funciona Tachán"></video>
   <ul class="puntos">
     <li><b><span lang="es">Listo para pegar</span><span lang="en">Ready to paste</span></b><span lang="es">Llega copiado: Ctrl+V donde estabas, o arrastralo.</span><span lang="en">It arrives copied: press Ctrl+V where you are, or drag it.</span></li>
     <li><b><span lang="es">Todo lo que se comparte</span><span lang="en">Anything you can share</span></b><span lang="es">Fotos, videos, archivos, texto y links.</span><span lang="en">Photos, videos, files, text and links.</span></li>
@@ -107,6 +109,13 @@
 </main>
 <script>
   (function () {
+    var demo = document.getElementById("demo");
+    if (document.documentElement.lang === "en") {
+      demo.src = "tachan-en.mp4";
+      demo.poster = "tachan-en.jpg";
+      demo.setAttribute("aria-label", "How Tachán works");
+    }
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) demo.autoplay = true;
     var android = /android/i.test(navigator.userAgent);
     if (android) {
       document.getElementById("alcelu").hidden = true;
