@@ -15,6 +15,8 @@ namespace Tachan
 {
     static class Programa
     {
+        const int EsperaCierreMs = 8000;
+
         [STAThread]
         static void Main(string[] argumentos)
         {
@@ -32,7 +34,7 @@ namespace Tachan
             using (var unico = new Mutex(true, NombreUnico("instancia"), out var primero))
             using (var senal = new EventWaitHandle(false, EventResetMode.AutoReset, NombreUnico("abrir")))
             {
-                if (!primero)
+                if (!primero && !PedirQueCierre(unico))
                 {
                     senal.Set();
                     return;
@@ -47,6 +49,15 @@ namespace Tachan
                     Correr(senal, argumentos);
         }
 
+        // Si abrís una versión distinta con otra prendida, esa cierra para dejarle el lugar. Tus datos no se tocan.
+        static bool PedirQueCierre(Mutex unico)
+        {
+            if (!Instalador.HaceFalta || !Instalador.EsOtraVersion) return false;
+            using (var cerrar = new EventWaitHandle(false, EventResetMode.AutoReset, NombreUnico("cerrar"))) cerrar.Set();
+            try { return unico.WaitOne(EsperaCierreMs); }
+            catch (AbandonedMutexException) { return true; }
+        }
+
         static void Correr(EventWaitHandle senal, string[] argumentos)
         {
             Application.EnableVisualStyles();
@@ -55,7 +66,7 @@ namespace Tachan
             Application.Run(new Bandeja(senal, argumentos.Contains("--oculto")));
         }
 
-        static string NombreUnico(string que)
+        public static string NombreUnico(string que)
         {
             var carpeta = Datos.Carpeta.ToLowerInvariant().GetHashCode();
             return "Local\\" + Marca.Nombre + "_" + que + "_" + (Datos.EsPrueba ? carpeta.ToString() : "real");
@@ -224,6 +235,12 @@ namespace Tachan
             new Thread(() =>
             {
                 while (senal.WaitOne()) hilo.BeginInvoke((Action)AbrirVinculo);
+            }) { IsBackground = true }.Start();
+
+            new Thread(() =>
+            {
+                using (var cerrar = new EventWaitHandle(false, EventResetMode.AutoReset, Programa.NombreUnico("cerrar")))
+                    if (cerrar.WaitOne()) hilo.BeginInvoke((Action)Salir);
             }) { IsBackground = true }.Start();
 
             Prueba.Enganchar(this, servidor);

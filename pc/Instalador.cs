@@ -19,6 +19,16 @@ namespace Tachan
 
         public static bool HaceFalta => !Datos.EsPrueba && !string.Equals(Path.GetFullPath(Application.ExecutablePath), Destino, StringComparison.OrdinalIgnoreCase);
 
+        public static bool EsOtraVersion
+        {
+            get
+            {
+                if (!File.Exists(Destino)) return true;
+                try { return !File.ReadAllBytes(Application.ExecutablePath).SequenceEqual(File.ReadAllBytes(Destino)); }
+                catch (IOException) { return false; }
+            }
+        }
+
         // Devuelve false si no se pudo: el programa igual anda desde donde esté.
         public static bool Mudarse()
         {
