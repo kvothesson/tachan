@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cómo comprobar Tachán</title>
+<meta name="description" content="Cómo comprobar vos mismo que Tachán no sale de tu red, que el programa es el original y qué se revisó.">
+<link rel="canonical" href="https://kvothesson.com/tachan/comprobar.html">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="marca.css">
+<style>
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.55 var(--font-sans); }
+  main { max-width: 65ch; margin: 0 auto; padding: var(--space-5) max(var(--space-3), env(safe-area-inset-right)) var(--space-5) max(var(--space-3), env(safe-area-inset-left)); }
+  h1 { margin: 0 0 var(--space-3); font: 800 40px/1.05 var(--font-display); }
+  h2 { margin: var(--space-5) 0 var(--space-2); font: 800 24px/1.15 var(--font-display); }
+  a { color: inherit; }
+  p, li { color: var(--ink); }
+  code { font: 400 14px/1.45 var(--font-mono); overflow-wrap: anywhere; }
+  pre { margin: var(--space-2) 0; padding: var(--space-2) var(--space-3); overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--surface); }
+  .reportar { display: inline-block; margin-top: var(--space-1); padding: 10px 16px; border-radius: var(--radius-m); background: var(--accent); color: var(--ground); font-weight: 700; text-decoration: none; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  small { color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+</style>
+</head>
+<body>
+<main>
+  <section lang="es">
+    <h1>Cómo comprobarlo</h1>
+    <p>No hace falta creernos. Esto lo podés revisar vos.</p>
+
+    <h2>Que no sale de tu casa</h2>
+    <p>Cortale internet al router, o desenchufá el cable que viene de la calle, y dejá el wifi prendido. Mandá algo desde el celu: llega igual, porque va directo de un aparato al otro.</p>
+    <p>En la compu, con Tachán abierto, esto en PowerShell muestra sus conexiones. En reposo solo espera en el puerto 47810, y durante un envío ves la dirección de tu celu, nunca una de internet:</p>
+    <pre><code>Get-NetTCPConnection -OwningProcess (Get-Process Tachan).Id</code></pre>
+    <p>Tachán solo sale a internet si tocás Buscar actualización.</p>
+
+    <h2>Que el programa es el original</h2>
+    <p><b>Windows:</b> calculá la huella del archivo y comparala con <code>exe_sha256</code> de <a href="version.json">version.json</a>. Tienen que ser iguales.</p>
+    <pre><code>Get-FileHash Tachan.exe</code></pre>
+    <p>Desde la 1.3, Buscar actualización solo instala versiones firmadas con una llave que no está en este sitio.</p>
+    <p><b>Android:</b> el APK está firmado siempre con la misma llave. Su huella SHA-256 es:</p>
+    <pre><code>4F:2C:96:BE:94:EA:AF:30:5A:1F:BC:C1:0F:54:96:4C:CE:16:36:1D:3C:F9:EF:E4:93:BA:23:D0:04:D4:E0:8D</code></pre>
+    <p>Se ve con <code>keytool -printcert -jarfile tachan.apk</code> o <code>apksigner verify --print-certs tachan.apk</code>. Android no deja instalar encima una versión firmada con otra llave.</p>
+
+    <h2>Qué se guarda</h2>
+    <p>En la compu, lo que recibís queda en <code>Descargas\Tachan</code> y los vínculos en <code>%APPDATA%\Tachan</code>, y el programa en <code>%LOCALAPPDATA%\Programs\Tachan</code>. El detalle está en <a href="privacidad.html">Privacidad</a>.</p>
+
+    <h2>Qué se revisó</h2>
+    <p>Tachán está hecho con ayuda de inteligencia artificial. El 2 de noviembre de 2026 se hizo una revisión de seguridad con la misma IA: encontró 10 fallas, 2 graves, y todas se arreglaron en la versión 1.3.</p>
+    <p>Que se revise a sí misma no alcanza. Falta que lo mire una persona de afuera: si sabés de seguridad, nos sirve mucho.</p>
+    <p>Límites que conocemos:</p>
+    <ul>
+      <li>Alguien en tu mismo wifi puede armar un link de vínculo falso. Por eso el celu siempre pide confirmar, muestra la dirección de la compu y avisa si reemplaza a otra.</li>
+      <li>Otra app de tu celu puede mandarle cosas a Tachán. Las ves llegar en el aviso, y pegar solo no pega textos de varias líneas.</li>
+      <li>La primera descarga depende de este sitio, porque el exe todavía no tiene firma de Windows.</li>
+    </ul>
+    <p>El código todavía no es público. Está previsto abrirlo, para que cualquiera pueda leerlo y comprobar que el programa sale de ahí.</p>
+
+    <h2>Si encontrás una falla</h2>
+    <p>Contanos en privado por GitHub. Solo lo vemos nosotros hasta que esté arreglado.</p>
+    <p><a class="reportar" href="https://github.com/kvothesson/tachan/security/advisories/new">Reportar una falla</a></p>
+  </section>
+  <section lang="en">
+    <h2>How to check it, in English</h2>
+    <p>You don't have to take our word for it. Cut your router's internet and keep the wifi on: sharing still works, because it goes straight from one device to the other. On the computer, <code>Get-NetTCPConnection -OwningProcess (Get-Process Tachan).Id</code> in PowerShell shows Tachán only listening on port 47810, or connected to your phone while sending. It only goes online if you tap Check for updates.</p>
+    <p>To check the Windows program, compare <code>Get-FileHash Tachan.exe</code> with <code>exe_sha256</code> in <a href="version.json">version.json</a>. Since 1.3, updates must be signed with a key that isn't on this site. The Android APK is always signed with the key whose SHA-256 fingerprint is shown above.</p>
+    <p>Tachán is built with AI help. A security review by the same AI on November 2, 2026 found 10 issues, 2 serious, all fixed in 1.3. That isn't enough: it still needs an outside reviewer. Known limits: someone on your wifi can craft a fake link, so the phone always asks you to confirm and shows the computer's address; another app on your phone can send things through Tachán, which you'll see arrive; and the first download depends on this site. The code isn't public yet; we plan to open it. If you find an issue, <a href="https://github.com/kvothesson/tachan/security/advisories/new">report it privately on GitHub</a>.</p>
+  </section>
+  <p><a href="./">Tachán</a></p>
+</main>
+</body>
+</html>
