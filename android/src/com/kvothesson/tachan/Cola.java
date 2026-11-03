@@ -86,12 +86,12 @@ final class Cola {
 
     private static void enviarConBusqueda(Context c, Transporte.Compu compu, InputStream in, File datos, String nombre, String clase) throws IOException {
         try {
-            Transporte.enviar(compu, in, datos.length(), nombre, clase, null);
+            Transporte.enviar(compu, in, datos.length(), nombre, clase, null, true);
         } catch (Transporte.NoLlega e) {
             if (Transporte.descubrir(compu, EnvioServicio.PUERTO_UDP) == null) throw e;
             Almacen.guardar(c, compu);
             try (InputStream otra = new FileInputStream(datos)) {
-                Transporte.enviar(compu, otra, datos.length(), nombre, clase, null);
+                Transporte.enviar(compu, otra, datos.length(), nombre, clase, null, true);
             }
         }
     }

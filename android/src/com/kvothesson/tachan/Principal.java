@@ -24,6 +24,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -387,11 +388,33 @@ public class Principal extends Activity {
     }
 
     private void elegirArchivos() {
-        CharSequence[] opciones = {getString(R.string.fotos), getString(R.string.archivos)};
+        CharSequence[] opciones = {getString(R.string.fotos), getString(R.string.archivos), getString(R.string.texto_enviado)};
         new AlertDialog.Builder(this).setItems(opciones, (d, cual) -> {
             if (cual == 0) elegirFotos();
-            else elegirDocumentos();
+            else if (cual == 1) elegirDocumentos();
+            else escribirTexto();
         }).show();
+    }
+
+    private void escribirTexto() {
+        final EditText campo = new EditText(this);
+        campo.setHint(R.string.escribi_texto);
+        campo.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        campo.setMinLines(3);
+        campo.setMaxLines(8);
+        campo.setGravity(Gravity.TOP);
+        LinearLayout marco = new LinearLayout(this);
+        marco.setPadding(dp(20), dp(12), dp(20), 0);
+        marco.addView(campo, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        campo.requestFocus();
+        AlertDialog dialogo = new AlertDialog.Builder(this)
+                .setView(marco)
+                .setPositiveButton(R.string.mandar, (d, w) -> EnvioServicio.iniciar(this, new ArrayList<>(), campo.getText().toString()))
+                .setNegativeButton(R.string.cancelar, null)
+                .create();
+        dialogo.setCanceledOnTouchOutside(false);  // un roce no puede borrar lo que escribiste
+        dialogo.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        dialogo.show();
     }
 
     /** El selector de fotos no pide permisos ni pasa por el de documentos, que en algunos celus se cae por otras apps. */

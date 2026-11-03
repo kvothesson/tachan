@@ -232,6 +232,11 @@ public final class Transporte {
 
     /** Manda un archivo o un texto. clase es "archivo" o "texto". */
     public static void enviar(Compu compu, InputStream datos, long largo, String nombre, String clase, Avance avance) throws IOException {
+        enviar(compu, datos, largo, nombre, clase, avance, false);
+    }
+
+    /** demorado: sale de la cola, no de un envío de recién. La compu no lo mezcla con lo nuevo ni lo copia sola. */
+    public static void enviar(Compu compu, InputStream datos, long largo, String nombre, String clase, Avance avance, boolean demorado) throws IOException {
         hola(compu);  // si el vínculo no vale, se sabe antes de subir nada: el servidor corta sin leer
         HttpsURLConnection c = null;
         try {
@@ -240,6 +245,7 @@ public final class Transporte {
             c.setRequestProperty("Authorization", "Bearer " + compu.token);
             c.setRequestProperty("X-Clase", clase);
             c.setRequestProperty("X-Nombre", URLEncoder.encode(nombre == null ? "" : nombre, "UTF-8").replace("+", "%20"));
+            if (demorado) c.setRequestProperty("X-Demorado", "1");
             c.setFixedLengthStreamingMode(largo);
             c.setDoOutput(true);
             long total = 0;

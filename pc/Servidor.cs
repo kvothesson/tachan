@@ -18,6 +18,7 @@ namespace Tachan
     {
         public string Ruta;   // null si es texto
         public string Texto;  // null si es archivo
+        public bool Demorado;  // se mandó antes, con la compu apagada: salió solo de la cola del celu
     }
 
     class Servidor
@@ -270,6 +271,7 @@ namespace Tachan
                 return;
             }
             cabeceras.TryGetValue("X-Clase", out var clase);
+            var demorado = cabeceras.ContainsKey("X-Demorado");
             if (clase == "texto")
             {
                 if (largo > MaximoTexto)
@@ -286,7 +288,7 @@ namespace Tachan
                     leidos += n;
                 }
                 Responder(s, 200, "{\"ok\":true}");
-                Llegada?.Invoke(new Recibido { Texto = Encoding.UTF8.GetString(datos) });
+                Llegada?.Invoke(new Recibido { Texto = Encoding.UTF8.GetString(datos), Demorado = demorado });
                 return;
             }
 
@@ -317,7 +319,7 @@ namespace Tachan
                 File.Move(parcial, final);
                 MarcarDeInternet(final);
                 Responder(s, 200, "{\"ok\":true}");
-                Llegada?.Invoke(new Recibido { Ruta = final });
+                Llegada?.Invoke(new Recibido { Ruta = final, Demorado = demorado });
             }
             finally
             {

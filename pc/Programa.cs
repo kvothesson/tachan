@@ -194,6 +194,7 @@ namespace Tachan
         readonly Servidor servidor;
         readonly System.Windows.Forms.Timer espera = new System.Windows.Forms.Timer { Interval = EsperaTandaMs };
         readonly List<Recibido> tanda = new List<Recibido>();
+        readonly List<Recibido> demorados = new List<Recibido>();
         readonly ToolStripMenuItem menuCelus;
         VentanaVinculo ventana;
 
@@ -208,6 +209,7 @@ namespace Tachan
             servidor.Arrancar();
 
             espera.Tick += (s, a) => Entregar();
+            aviso.VisibleChanged += (s, a) => { if (!aviso.Visible) hilo.BeginInvoke((Action)MostrarDemorados); };
 
             var menu = new ContextMenuStrip { Renderer = Tema.Oscuro ? new RendererOscuro() : null };
             menu.Items.Add(Textos.T("vincular"), null, (s, a) => AbrirVinculo());
@@ -318,8 +320,14 @@ namespace Tachan
         void Entregar()
         {
             espera.Stop();
-            var copia = tanda.ToList();
+            var copia = tanda.Where(r => !r.Demorado).ToList();
+            demorados.AddRange(tanda.Where(r => r.Demorado));
             tanda.Clear();
+            if (copia.Count == 0)
+            {
+                MostrarDemorados();
+                return;
+            }
             var anchoAviso = aviso.AnchoImagen;
             var altoAviso = aviso.AltoImagen;
             ThreadPool.QueueUserWorkItem(_ =>
@@ -332,8 +340,41 @@ namespace Tachan
                     imagen?.Dispose();
                     Aviso.DevolverMemoria();
                     Sonido.Sonar();
+                    var sinVer = aviso.TextoDemoradoSinVer;
+                    if (sinVer != null) demorados.Insert(0, sinVer);
                     aviso.Mostrar(copia, seCopio, miniatura);
                     if (seCopio && Datos.PegarSolo) Portapapeles.ApretarPegar();
+                }));
+            });
+        }
+
+        // Lo que se mandó con la compu apagada puede llegar en cualquier momento: se avisa, pero no pisa el
+        // portapapeles, no se pega solo y no se suma a lo que acabás de mandar. Los archivos ya están en la carpeta.
+        void MostrarDemorados()
+        {
+            if (aviso.Visible || demorados.Count == 0) return;
+            var archivos = demorados.Where(r => r.Ruta != null).ToList();
+            var copia = archivos.Count > 0 ? archivos : demorados.Take(1).ToList();
+            demorados.RemoveAll(copia.Contains);
+            var anchoAviso = aviso.AnchoImagen;
+            var altoAviso = aviso.AltoImagen;
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                Bitmap miniatura = null;
+                if (copia.Last().Ruta != null)
+                    using (var imagen = Imagenes.Abrir(copia.Last().Ruta))
+                        if (imagen != null) miniatura = Imagenes.Miniatura(imagen, anchoAviso, altoAviso);
+                hilo.BeginInvoke((Action)(() =>
+                {
+                    if (aviso.Visible)
+                    {
+                        miniatura?.Dispose();
+                        demorados.InsertRange(0, copia);
+                        return;
+                    }
+                    Aviso.DevolverMemoria();
+                    Sonido.Sonar();
+                    aviso.Mostrar(copia, false, miniatura);
                 }));
             });
         }

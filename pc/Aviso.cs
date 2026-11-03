@@ -71,6 +71,10 @@ namespace Tachan
                     case "ok":
                         g.DrawLines(p, new[] { new PointF(5, 12.5f), new PointF(9.5f, 17), new PointF(19, 7.5f) });
                         break;
+                    case "reloj":
+                        g.DrawEllipse(p, 4, 4, 16, 16);
+                        g.DrawLines(p, new[] { new PointF(12, 7.5f), new PointF(12, 12), new PointF(15, 14) });
+                        break;
                 }
             }
             g.Restore(estado);
@@ -105,6 +109,7 @@ namespace Tachan
         Accion bajoElMouse;
         Point? apretadoEn;
         bool arrastrando;
+        bool visto;
         int yFinal;
         RectangleF zonaContenido;
         float e = 1f;
@@ -150,6 +155,14 @@ namespace Tachan
         public int AnchoImagen => (int)(300 * e);
         public int AltoImagen => (int)(AltoMaximoImagen * e);
 
+        bool Demorada => tanda.LastOrDefault()?.Demorado == true;
+
+        // Un texto no queda en ninguna carpeta: si llegó con la cola, espera a que pases el mouse.
+        public Recibido TextoDemoradoSinVer => Visible && Demorada && tanda.Last().Texto != null && !visto ? tanda.Last() : null;
+
+        // Arrastrás y copiás lo que ves. La cola junta cosas que mandaste por separado: esas se agarran de a una.
+        IList<Recibido> Elegidos => Demorada ? tanda.Skip(tanda.Count - 1).ToList() : tanda;
+
         // El aviso se queda con la miniatura y la suelta al cerrarse.
         public void Mostrar(List<Recibido> nueva, bool seCopio, Bitmap miniatura = null)
         {
@@ -157,6 +170,7 @@ namespace Tachan
             if (!Visible) RecreateHandle();
             tanda = nueva;
             copiado = seCopio;
+            visto = false;
             confirmadoEn = DateTime.MinValue;
             imagen?.Dispose();
             imagen = null;
@@ -239,7 +253,7 @@ namespace Tachan
 
         void CopiarDeNuevo()
         {
-            copiado = Portapapeles.Copiar(tanda);
+            copiado = Portapapeles.Copiar(Elegidos);
             confirmadoEn = DateTime.Now;
             Invalidate();
         }
@@ -288,7 +302,8 @@ namespace Tachan
             if (Top != y) Top = y;
 
             var adentro = Bounds.Contains(Cursor.Position);
-            if (adentro || arrastrando) ocultarEn = DateTime.Now.AddMilliseconds(2000);
+            if (adentro) visto = true;
+            if (adentro || arrastrando || TextoDemoradoSinVer != null) ocultarEn = DateTime.Now.AddMilliseconds(2000);
             if (!adentro && bajoElMouse != null)
             {
                 bajoElMouse = null;
@@ -326,6 +341,14 @@ namespace Tachan
             var y = Height - 22 * e;
             var okCaja = new RectangleF(12 * e, y - 10 * e, 20 * e, 20 * e);
             if (copiado) Tema.Icono(g, "ok", okCaja, Tema.Ok, 2.6f);
+            else if (Demorada)
+            {
+                Tema.Icono(g, "reloj", okCaja, Tema.Tenue);
+                using (var f = new Font("Segoe UI", 8.5f))
+                using (var b = new SolidBrush(Tema.Tenue))
+                using (var formato = new StringFormat { LineAlignment = StringAlignment.Center, FormatFlags = StringFormatFlags.NoWrap })
+                    g.DrawString(Textos.T("demorado"), f, b, new RectangleF(okCaja.Right + 4 * e, okCaja.Y, 170 * e, okCaja.Height), formato);
+            }
 
             foreach (var accion in acciones)
             {
@@ -453,14 +476,15 @@ namespace Tachan
         void Arrastrar()
         {
             var datos = new DataObject();
-            var rutas = tanda.Where(r => r.Ruta != null).Select(r => r.Ruta).ToArray();
+            var elegidos = Elegidos;
+            var rutas = elegidos.Where(r => r.Ruta != null).Select(r => r.Ruta).ToArray();
             if (rutas.Length > 0)
             {
                 var lista = new StringCollection();
                 lista.AddRange(rutas);
                 datos.SetFileDropList(lista);
             }
-            var texto = tanda.LastOrDefault(r => r.Texto != null)?.Texto;
+            var texto = elegidos.LastOrDefault(r => r.Texto != null)?.Texto;
             if (!string.IsNullOrEmpty(texto)) datos.SetText(texto);
             arrastrando = true;
             try { DoDragDrop(datos, DragDropEffects.Copy); }

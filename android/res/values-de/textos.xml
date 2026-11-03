@@ -35,4 +35,7 @@
     <string name="ultima_version">Du hast die neueste Version</string>
     <string name="hay_version">Eine neue Version ist verfügbar</string>
     <string name="bajar">Herunterladen</string>
+    <string name="texto_enviado">Text</string>
+    <string name="escribi_texto">Text eingeben oder einfügen</string>
+    <string name="mandar">Senden</string>
 </resources>
