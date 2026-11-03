@@ -21,7 +21,7 @@ Fecha: 2026-11-02. Sobre el código de la versión 1.2 de este repo. **No public
 
 `pruebas/prueba_e2e.py` da todo bien con la 1.3 en la compu.
 
-**En un celu real (2026-11-02), con la 1.3 instalada encima de la 1.2:** el vínculo siguió, un texto mandado figura como "Texto" en Recientes (falla 8), y un pedido con `file:///system/etc/hosts` no dejó ningún archivo en Descargas ni entrada en Recientes (falla 4). **Sin aclarar:** ese texto no estaba en el portapapeles de la compu a los 6 segundos. Otra sesión estaba cambiando y reinstalando el programa de la compu en ese momento, así que hay que repetirlo con la compu quieta. La pantalla de confirmación del link y la falla 5 siguen sin probar en el celu.
+**En un celu real (2026-11-02), con la 1.3 instalada encima de la 1.2:** el vínculo siguió, un texto mandado figura como "Texto" en Recientes (falla 8), y un pedido con `file:///system/etc/hosts` no dejó ningún archivo en Descargas ni entrada en Recientes (falla 4). La primera vez, ese texto no estaba en el portapapeles de la compu a los 6 segundos, mientras otra sesión reinstalaba el programa. Repetido con la compu quieta y la 1.3 final en el celu, llegó, y el pedido con `file://` volvió a ser rechazado. La pantalla de confirmación del link y la falla 5 siguen sin probar en el celu.
 
 El detalle de abajo describe la 1.2.
 
