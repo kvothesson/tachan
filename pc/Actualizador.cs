@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -12,6 +13,9 @@ namespace Tachan
     // Solo se conecta a internet si lo pedís: Tachán no consulta nada por su cuenta.
     static class Actualizador
     {
+        // La parte pública de ~/.tachan/actualizar.pem, que no está en el sitio. Ver firmar.py.
+        const string ClavePublica = "<RSAKeyValue><Modulus>pmnlO5hrq97x3V3zl+bnu35A5vvzod6DOrDbYf63wFKNVOO7VF9sAKFI7226heW8kMrUS+9tkOOIbY/iENqc3D8Bpx2IcVPmU19IotzRU3GfeZokR3Ohrpv3gn8U4UckfeRnb3tF2yqDlR6fQljtNK/HbetH3feRYPtohXuCXq+fB1/DLuekMt2eefCxTAmSZliMzJoupxfFOyaRgQCO6G4SQGTkoABFW6+PAKH1CKLng8zL597LrZ4z35AxpszBhTz0yvInsXhYpuPrtGgy6mH2aXk6RChllH5CjEhxmpvmo9h/QgwGpjSCHWclWNJN5pT1EANXU9IW50HHd4MoD6sp+pMkxRolt4ek6CJhOQbt6RMpyaPReViLzebp0rnAorjtW3TFRaOq6NeDc+WkJJabhCey28Qh1lRpBPEm8jDq5o7kIEVsEwmEeHOk3YYF4xwW5eIJe/8LWubbjRUCBzKsU9Qsaych5Gbm3HZt/t5pM/z5YrDEj5NdOTaMLn0x</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
+
         static string Base => Environment.GetEnvironmentVariable("TACHAN_ACTUALIZAR") ?? "https://kvothesson.com/tachan/";
 
         public static void Buscar(Action<string> avisar)
@@ -31,6 +35,9 @@ namespace Tachan
                             return;
                         }
                         var esperado = Regex.Match(datos, "\"exe_sha256\"\\s*:\\s*\"([0-9a-f]{64})\"").Groups[1].Value;
+                        // El hash solo descubre una descarga rota: quien controle el sitio lo cambia junto con el exe. La firma, no.
+                        if (!FirmaValida(codigo, esperado, Regex.Match(datos, "\"firma\"\\s*:\\s*\"([A-Za-z0-9+/=]+)\"").Groups[1].Value))
+                            throw new InvalidDataException("sin firma válida");
                         var exe = web.DownloadData(Base + Marca.Nombre + ".exe?t=" + DateTime.UtcNow.Ticks);
                         using (var sha = SHA256.Create())
                             if (string.Concat(sha.ComputeHash(exe).Select(b => b.ToString("x2"))) != esperado)
@@ -50,6 +57,16 @@ namespace Tachan
                     avisar(Textos.T("sinred"));
                 }
             }) { IsBackground = true }.Start();
+        }
+
+        static bool FirmaValida(int codigo, string sha256, string firma)
+        {
+            using (var rsa = RSA.Create())
+            {
+                rsa.FromXmlString(ClavePublica);
+                try { return rsa.VerifyData(Encoding.ASCII.GetBytes(codigo + "\n" + sha256), Convert.FromBase64String(firma), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1); }
+                catch (CryptographicException) { return false; }
+            }
         }
     }
 }

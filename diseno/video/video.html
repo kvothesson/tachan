@@ -1,0 +1,296 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Tachán: video</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  /* Colores de pc/marca.json (noche). Medidas del aviso y de las pantallas: las de pc/Aviso.cs y Principal.java. */
+  * { box-sizing:border-box; }
+  html, body { margin:0; width:1280px; height:800px; overflow:hidden; background:var(--ground); color:var(--ink); font:400 16px/1.4 "Segoe UI", system-ui, sans-serif; }
+  .a { position:absolute; }
+  #camara { left:0; top:0; width:1280px; height:800px; transform-origin:0 0; }
+  #pantalla { left:40px; top:36px; width:860px; height:570px; border-radius:12px; overflow:hidden; background:linear-gradient(150deg,#12283a,#1d4150 60%,#2c5a5c); outline:6px solid #1a252e; }
+  #pie { left:430px; top:612px; width:80px; height:34px; background:#1a252e; }
+  #base { left:370px; top:646px; width:200px; height:8px; border-radius:4px; background:#1a252e; }
+  #barra { left:0; right:0; bottom:0; height:36px; background:rgba(4,8,13,.82); }
+  #notas { left:30px; top:24px; width:530px; height:470px; border-radius:8px; overflow:hidden; background:var(--surface); box-shadow:0 12px 34px rgba(0,0,0,.45); }
+  #notas .tit { height:34px; padding:7px 14px; background:var(--surface-raised); color:var(--muted); font-size:13px; }
+  #cuerpo { padding:18px 22px; font-size:19px; }
+  #tipeo:after { content:""; display:inline-block; width:2px; height:21px; margin-left:1px; vertical-align:-4px; background:var(--ink); opacity:var(--cursor,1); }
+  #pegada { width:320px; height:200px; margin-top:14px; border-radius:6px; overflow:hidden; transform-origin:0 0; }
+  .aviso { right:14px; bottom:50px; width:300px; border-radius:14px; overflow:hidden; background:var(--surface); box-shadow:0 14px 40px rgba(0,0,0,.55); }
+  .aviso .zona { width:300px; }
+  .aviso .pie { height:44px; display:flex; align-items:center; padding:0 15px 0 12px; gap:14px; color:var(--muted); }
+  .aviso .pie svg { width:18px; height:18px; }
+  .aviso .pie .ok { width:20px; height:20px; margin-right:auto; color:var(--ok); }
+  .aviso .pie .abrir { color:var(--accent); }
+  .archivo { display:flex; gap:12px; padding:14px; height:74px; }
+  .mini { flex:none; width:46px; height:46px; border-radius:9px; background:var(--surface-raised); display:grid; place-items:center; color:var(--accent); font:600 12px "JetBrains Mono", monospace; }
+  .archivo b { display:block; font-weight:400; font-size:13px; padding-top:3px; }
+  .archivo span { color:var(--muted); font-size:11.5px; }
+  .tex { padding:14px; font-size:14px; }
+  .ico { width:84px; text-align:center; font-size:12px; color:var(--ink); text-shadow:0 1px 3px #000; }
+  .ico .dib { width:52px; height:52px; margin:0 auto 4px; }
+  #ventana { left:270px; top:40px; width:320px; height:430px; border-radius:8px; overflow:hidden; background:var(--ground); box-shadow:0 14px 44px rgba(0,0,0,.6); }
+  #ventana .tit { height:30px; padding:5px 10px; display:flex; gap:8px; align-items:center; background:var(--surface); font-size:13px; color:var(--muted); }
+  #ventana .qr { display:block; margin:24px 40px 0; width:240px; height:240px; image-rendering:pixelated; background:#fff; }
+  #ventana .fr { margin-top:12px; text-align:center; font-weight:600; font-size:16px; }
+  #ventana .ver { margin-top:6px; text-align:center; font-size:12px; color:var(--muted); }
+  #celu { left:945px; top:30px; width:300px; height:624px; border-radius:40px; background:#1a252e; padding:8px; }
+  #vidrio { position:relative; width:284px; height:608px; border-radius:33px; overflow:hidden; background:var(--ground); }
+  .capa { position:absolute; inset:0; }
+  .barra-sup { height:56px; padding:18px 18px 0; color:var(--muted); font-size:13px; }
+  .accion { position:absolute; left:50%; bottom:20px; margin-left:-22px; width:44px; height:44px; color:var(--ink); display:grid; place-items:center; }
+  .centro { position:absolute; left:20px; right:20px; top:150px; text-align:center; }
+  .frase { margin-top:18px; font-size:20px; font-weight:600; line-height:1.25; }
+  .direccion { margin-top:10px; font-size:14px; color:var(--muted); }  /* la app muestra a qué dirección se vincula */
+  .boton { position:absolute; left:20px; right:20px; height:48px; border-radius:14px; background:var(--accent); color:var(--on-accent); display:grid; place-items:center; font-weight:600; font-size:15px; }
+  .enlace { position:absolute; left:20px; right:20px; text-align:center; color:var(--muted); font-size:14px; }
+  #hoja { position:absolute; left:0; right:0; bottom:0; height:190px; padding:18px; border-radius:22px 22px 0 0; background:var(--surface-raised); }
+  #hoja b { display:block; margin-bottom:14px; font-size:15px; }
+  #hoja .fila { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; text-align:center; font-size:11px; color:var(--muted); }
+  #hoja .bola { width:50px; height:50px; margin:0 auto 6px; border-radius:50%; background:var(--line); }
+  #noti { position:absolute; left:10px; right:10px; top:10px; padding:11px 13px; border-radius:16px; background:var(--surface-raised); box-shadow:0 8px 22px rgba(0,0,0,.5); font-size:13px; }
+  #noti .linea { margin-top:8px; height:4px; border-radius:2px; background:var(--line); overflow:hidden; }
+  #noti .linea i { display:block; height:100%; background:var(--accent); }
+  .toque { position:absolute; width:44px; height:44px; margin:-22px 0 0 -22px; border-radius:50%; border:3px solid var(--accent); background:color-mix(in srgb, var(--accent) 28%, transparent); }
+  #puntero { left:0; top:0; width:26px; height:26px; }
+  #fantasma { left:0; top:0; width:92px; }
+  .tecla { display:inline-block; min-width:56px; padding:10px 14px; border-radius:10px; background:var(--surface-raised); border:2px solid var(--line-strong); border-bottom-width:5px; text-align:center; color:var(--ink); font:600 26px "JetBrains Mono", monospace; }
+  #teclas { left:560px; right:0; top:120px; text-align:center; font-size:24px; color:var(--ink); }
+  #titulo { left:0; top:694px; width:1280px; height:106px; display:grid; place-items:center; background:var(--ground); font:800 44px/1.05 "Bricolage Grotesque", "Arial Narrow", sans-serif; text-align:center; padding:0 40px; }
+  #cierre { inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; background:var(--ground); }
+  #cierre h1 { margin:0; font:800 140px/1 "Bricolage Grotesque", sans-serif; }
+  #cierre p { margin:0; font:700 36px/1.2 "Bricolage Grotesque", sans-serif; }
+  #cierre small { margin-top:18px; color:var(--accent); font:600 28px "JetBrains Mono", monospace; }
+  #fundido { inset:0; background:var(--ground); pointer-events:none; }
+</style>
+</head>
+<body>
+
+<div id="camara" class="a">
+  <div id="pantalla" class="a">
+    <div id="desk-archivo" class="a ico" style="left:640px; top:60px"><div class="dib mini" style="width:52px;height:52px">PDF</div><span class="nombre-pdf"></span></div>
+    <div id="desk-exe" class="a ico" style="left:40px; top:40px"><svg class="dib" style="display:block"><use href="#icono"/></svg>Tachan.exe</div>
+    <div id="notas" class="a">
+      <div class="tit" data-t="notas"></div>
+      <div id="cuerpo"><span id="tipeo"></span><div id="pegada"><svg width="320" height="200"><use href="#foto"/></svg></div></div>
+    </div>
+    <div id="ventana" class="a">
+      <div class="tit"><svg width="16" height="16"><use href="#icono"/></svg>Tachán</div>
+      <img class="qr" src="../../web/qr-android.png" alt="">
+      <div class="fr" data-t="escanea_pc"></div>
+      <div class="ver" data-t="ver_codigo"></div>
+    </div>
+    <div id="barra" class="a"></div>
+
+    <div id="av-foto" class="a aviso"><div class="zona" style="height:187px"><svg width="300" height="187" style="display:block"><use href="#foto"/></svg></div>
+      <div class="pie"><svg class="ok"><use href="#i-ok"/></svg><svg><use href="#i-copiar"/></svg><svg><use href="#i-carpeta"/></svg></div></div>
+    <div id="av-pdf" class="a aviso"><div class="zona archivo"><div class="mini">PDF</div><div><b class="nombre-pdf"></b><span>1.2 MB</span></div></div>
+      <div class="pie"><svg class="ok"><use href="#i-ok"/></svg><svg><use href="#i-copiar"/></svg><svg><use href="#i-carpeta"/></svg></div></div>
+    <div id="av-link" class="a aviso"><div class="zona tex">https://kvothesson.com/tachan/</div>
+      <div class="pie"><svg class="ok"><use href="#i-ok"/></svg><svg class="abrir"><use href="#i-abrir"/></svg><svg><use href="#i-copiar"/></svg></div></div>
+    <div id="av-listo" class="a aviso"><div class="zona tex" data-t="vinculado"></div>
+      <div class="pie"><svg class="ok"><use href="#i-ok"/></svg></div></div>
+
+    <div id="fantasma" class="a"><div class="mini" style="width:52px;height:52px;margin:auto;box-shadow:0 6px 18px rgba(0,0,0,.5)">PDF</div></div>
+    <div id="teclas" class="a"><span id="k1" class="tecla">Ctrl</span> + <span id="k2" class="tecla">V</span></div>
+    <svg id="puntero" class="a" viewBox="0 0 24 24"><path d="M5 2v18l5-4.500 3.200 7 3-1.400-3.200-6.800H20z" fill="#fff" stroke="#04080d" stroke-width="1.500" stroke-linejoin="round"/></svg>
+  </div>
+  <div id="pie" class="a"></div><div id="base" class="a"></div>
+
+  <div id="celu" class="a"><div id="vidrio">
+    <div id="c-foto" class="capa" style="background:#000">
+      <div class="barra-sup" data-t="galeria"></div>
+      <svg class="a" style="left:0;top:170px" width="284" height="178"><use href="#foto"/></svg>
+    </div>
+    <div id="c-pdf" class="capa" style="background:#000">
+      <div class="barra-sup nombre-pdf"></div>
+      <div class="a" style="left:32px;top:90px;width:220px;height:310px;background:#e8eff3;border-radius:3px;padding:22px">
+        <div style="height:12px;width:60%;background:#6c8695;margin-bottom:22px"></div>
+        <div style="height:7px;background:#d3dfe5;margin-bottom:11px"></div><div style="height:7px;background:#d3dfe5;margin-bottom:11px"></div><div style="height:7px;width:75%;background:#d3dfe5;margin-bottom:26px"></div>
+        <div style="height:7px;background:#d3dfe5;margin-bottom:11px"></div><div style="height:7px;width:45%;background:#d3dfe5"></div>
+      </div>
+    </div>
+    <div id="c-link" class="capa" style="background:var(--surface)">
+      <div class="barra-sup" style="margin:14px;padding:9px 14px;height:38px;border-radius:19px;background:var(--surface-raised)">kvothesson.com/tachan</div>
+      <div class="a" style="left:20px;right:20px;top:100px;font:800 46px 'Bricolage Grotesque',sans-serif;color:var(--ink)">Tachán</div>
+      <div class="a" style="left:20px;right:60px;top:172px;height:10px;background:var(--line);border-radius:5px"></div>
+      <div class="a" style="left:20px;right:100px;top:194px;height:10px;background:var(--line);border-radius:5px"></div>
+    </div>
+    <div id="accion" class="accion"><svg width="26" height="26"><use href="#i-compartir"/></svg></div>
+
+    <div id="c-escanear" class="capa">
+      <div class="centro" style="top:170px"><div style="display:flex;align-items:center;justify-content:center;gap:10px">
+        <svg width="56" height="56"><use href="#i-qr"/></svg><svg width="32" height="32" style="color:var(--muted)"><use href="#i-envio"/></svg><svg width="56" height="56"><use href="#i-pc"/></svg></div>
+        <div class="frase" data-t="escanea"></div></div>
+      <div class="boton" style="bottom:88px" data-t="escanear_qr"></div>
+      <div class="enlace" style="bottom:46px" data-t="escribir"></div>
+    </div>
+    <div id="c-lector" class="capa" style="background:#0a0f14">
+      <div id="visor" class="a" style="left:36px;top:178px;width:212px;height:212px;background:#fff;padding:8px"><img src="../../web/qr-android.png" style="width:100%;height:100%;image-rendering:pixelated" alt=""></div>
+      <div id="marco" class="a" style="left:22px;top:164px;width:240px;height:240px;border:4px solid var(--accent);border-radius:18px"></div>
+    </div>
+    <div id="c-confirmar" class="capa">
+      <div class="centro"><svg width="72" height="72"><use href="#i-pc"/></svg><div class="frase" data-t="vincular_con"></div><div class="direccion">192.168.0.12</div></div>
+      <div class="boton" style="bottom:88px" data-t="vincular"></div>
+      <div class="enlace" style="bottom:46px" data-t="cancelar"></div>
+    </div>
+    <div id="c-principal" class="capa" style="padding:24px 16px">
+      <div style="font-weight:700;font-size:32px;margin-bottom:16px">Tachán</div>
+      <div style="display:flex;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:14px">
+        <div style="flex:1"><b style="font-size:15px" data-t="compu"></b><div style="font:12px monospace;color:var(--muted)" data-t="en_red"></div></div>
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--ok)"></div>
+      </div>
+      <div class="a" style="left:84px;top:230px;width:116px;height:116px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center">
+        <svg width="52" height="52" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.400" stroke-linecap="round"/></svg></div>
+    </div>
+
+    <div id="hoja"><b data-t="compartir"></b><div class="fila">
+      <div><svg class="bola" style="display:block;background:none"><use href="#icono"/></svg><span data-t="compu"></span></div>
+      <div><div class="bola"></div><span data-t="mensajes"></span></div>
+      <div><div class="bola"></div><span data-t="correo"></span></div>
+      <div><div class="bola"></div><span data-t="notas_app"></span></div>
+    </div></div>
+    <div id="noti"><span id="noti-txt"></span><div class="linea"><i id="noti-barra"></i></div></div>
+    <div id="toque" class="toque"></div>
+  </div></div>
+</div>
+
+<div id="titulo" class="a"></div>
+<div id="fundido" class="a"></div>
+<div id="cierre" class="a">
+  <svg width="120" height="120"><use href="#icono"/></svg>
+  <h1>Tachán</h1>
+  <p data-t="frase"></p>
+  <small>kvothesson.com/tachan</small>
+</div>
+
+<script src="comun.js"></script>
+<script>
+const TEXTOS = {
+  es: {
+    notas:"Notas del viaje", tipeo:"Llegamos tarde, pero el atardecer valió la pena.", pdf:"reserva.pdf",
+    galeria:"Galería", 
+    compu:"Mi compu", celu:"Mi celu", compartir:"Compartir", mensajes:"Mensajes", correo:"Correo", notas_app:"Notas",
+    frase:"Compartís en el celu. Aparece en la compu.",
+    t:["Compartí algo en el celu","Elegí Tachán","Aparece en la compu y seguís escribiendo","Ya está copiado: Ctrl+V","Los archivos se arrastran adonde quieras","Texto y links, igual","La primera vez: abrí Tachan.exe","Escaneá el QR con el celu","Confirmá y listo"],
+  },
+  en: {
+    notas:"Trip notes", tipeo:"We got there late, but the sunset was worth it.", pdf:"booking.pdf",
+    galeria:"Gallery", 
+    compu:"My PC", celu:"My phone", compartir:"Share", mensajes:"Messages", correo:"Mail", notas_app:"Notes",
+    frase:"Share on your phone. It shows up on your computer.",
+    t:["Share something on your phone","Pick Tachán","It shows up on your computer, and you keep typing","It's already copied: Ctrl+V","Drag files wherever you want","Text and links too","First time: open Tachan.exe","Scan the QR with your phone","Confirm and you're done"],
+  },
+};
+const L = armarTextos(TEXTOS[new URLSearchParams(location.search).get("lang") || "es"]);
+document.querySelectorAll(".nombre-pdf").forEach(e => e.textContent = L.pdf);
+
+const DURACION = 31;
+// Cada envío: toca compartir, elige Tachán, llega.
+const ENVIOS = [
+  { capa: "c-foto", desde: 0, compartir: 1.5, elegir: 3.0, llega: 4.5, aviso: "av-foto", hasta: 10.5 },
+  { capa: "c-pdf", desde: 10.6, compartir: 10.9, elegir: 11.5, llega: 12.6, aviso: "av-pdf", hasta: 15.2 },
+  { capa: "c-link", desde: 15.3, compartir: 15.5, elegir: 16.0, llega: 17.0, aviso: "av-link", hasta: 19.6 },
+];
+const CAMBIO = 19.8, QR_ABRE = 21.8, LECTOR = 23.0, CONFIRMA = 24.8, VINCULA = 26.0, CIERRE = 28.2;
+const TITULOS = [[.2,2.7,0],[2.7,4.4,1],[4.5,7.4,2],[7.4,10.4,3],[10.6,15.2,4],[15.3,19.6,5],[20.4,22.4,6],[22.4,24.8,7],[24.8,28.2,8]];
+
+function render(t) {
+  // Cámara: se acerca a la compu cuando llega la foto.
+  const [cx, cy, cz] = pista(t, [[4.6,0,0,1],[5.3,-30,-30,1.18],[9.8,-30,-30,1.18],[10.5,0,0,1]]);
+  $("camara").style.transform = `translate(${cx}px,${cy}px) scale(${cz})`;
+
+  // Título
+  let txt = "", vis = 0;
+  for (const [a, b, i] of TITULOS) if (t >= a && t < b + .15) { txt = L.t[i]; vis = ventana(t, a, b, .15); }
+  $("titulo").textContent = txt;
+  $("titulo").style.color = `color-mix(in srgb, var(--ink) ${vis * 100}%, transparent)`;
+
+  // Compu: notas, tipeando también durante el aviso.
+  const enUso = t < CAMBIO;
+  mostrar("notas", enUso ? 1 : 0);
+  const n = Math.round(L.tipeo.length * prog(t, .5, 7.4));
+  $("tipeo").textContent = L.tipeo.slice(0, n);
+  $("tipeo").style.setProperty("--cursor", (t * 2 % 1) < .6 || (t > .5 && t < 7.4) ? 1 : 0);
+  const pego = prog(t, 8.3, 8.5);
+  $("pegada").style.display = t >= 8.3 ? "block" : "none";
+  $("pegada").style.transform = `scale(${.96 + .04 * suave(pego)})`;
+  $("pegada").style.opacity = pego;
+
+  const apretado = t >= 8.0 && t < 8.4;
+  mostrar("teclas", ventana(t, 7.8, 9.3, .15));
+  for (const k of ["k1", "k2"]) { $(k).style.transform = apretado ? "translateY(3px)" : ""; $(k).style.borderColor = apretado ? "var(--accent)" : ""; }
+
+  // Avisos: 180 ms y 16 px, como en Aviso.cs.
+  const avisos = ENVIOS.map(e => [e.aviso, e.llega, e.hasta]).concat([["av-listo", VINCULA + .1, CIERRE]]);
+  for (const [id, a, b] of avisos) {
+    const v = suave(prog(t, a, a + .18));
+    mostrar(id, t >= a && t < b ? v : 0);
+    $(id).style.transform = `translateY(${(1 - v) * 16}px)`;
+  }
+
+  // Arrastre del PDF: del aviso al escritorio.
+  const [px, py] = pista(t, [[13.0,560,300],[13.6,620,450],[14.7,680,90],[15.2,680,90]]);
+  const [qx, qy] = pista(t, [[20.5,420,330],[21.2,66,70]]);
+  const usaPdf = t >= 13.0 && t < 15.3, usaExe = t >= 20.5 && t < 21.8;
+  mostrar("puntero", usaPdf || usaExe ? 1 : 0);
+  $("puntero").style.transform = usaExe ? `translate(${qx}px,${qy}px)` : `translate(${px}px,${py}px)`;
+  const arrastra = t >= 13.7 && t < 14.7;
+  mostrar("fantasma", arrastra ? .95 : 0);
+  $("fantasma").style.transform = `translate(${px - 46}px,${py - 26}px)`;
+  mostrar("desk-archivo", t >= 14.7 && enUso ? 1 : 0);
+
+  // Primera vez
+  mostrar("desk-exe", !enUso && t < 26.2 ? 1 : 0);
+  mostrar("ventana", t >= QR_ABRE && t < VINCULA ? suave(prog(t, QR_ABRE, QR_ABRE + .18)) : 0);
+
+  // Celu: de dónde se comparte
+  let actual = null;
+  for (const e of ENVIOS) if (t >= e.desde && t < CAMBIO) actual = e;
+  for (const e of ENVIOS) mostrar(e.capa, actual === e ? 1 : 0);
+  mostrar("accion", enUso ? 1 : 0);
+  mostrar("c-escanear", !enUso && t < LECTOR ? 1 : 0);
+  mostrar("c-lector", t >= LECTOR && t < CONFIRMA ? 1 : 0);
+  mostrar("c-confirmar", t >= CONFIRMA && t < VINCULA ? 1 : 0);
+  mostrar("c-principal", t >= VINCULA ? 1 : 0);
+  const mueve = prog(t, LECTOR, CONFIRMA);
+  $("visor").style.transform = `translate(${Math.sin(mueve * 9) * 5}px,${Math.cos(mueve * 7) * 4}px) rotate(${Math.sin(mueve * 5) * 1.6}deg) scale(${.82 + .18 * suave(mueve * 1.6 > 1 ? 1 : mueve * 1.6)})`;
+  $("marco").style.borderColor = t > 24.3 ? "var(--ok)" : "var(--accent)";
+
+  // Hoja de compartir y notificación
+  let hoja = 0, noti = 0, notiTxt = "", avance = 0;
+  if (actual) {
+    const e = actual;
+    hoja = Math.min(suave(prog(t, e.compartir + .1, e.compartir + .35)), 1 - prog(t, e.elegir + .1, e.elegir + .3));
+    noti = ventana(t, e.elegir + .2, e.llega + 1.6, .2);
+    avance = prog(t, e.elegir + .3, e.llega);
+    notiTxt = t < e.llega ? L.enviando : L.enviado;
+  }
+  $("hoja").style.transform = `translateY(${(1 - hoja) * 200}px)`;
+  mostrar("noti", noti);
+  $("noti-txt").textContent = notiTxt;
+  $("noti-barra").style.width = avance * 100 + "%";
+
+  // Toques en el celu
+  const TOQUES = [];
+  for (const e of ENVIOS) { TOQUES.push([e.compartir, 142, 566]); TOQUES.push([e.elegir, 49, 478]); }
+  TOQUES.push([22.8, 142, 496], [25.8, 142, 496]);
+  let tq = 0, tx = 0, ty = 0;
+  for (const [a, x, y] of TOQUES) { const v = ventana(t, a - .12, a + .1, .1); if (v > 0) { tq = v; tx = x; ty = y; } }
+  mostrar("toque", tq);
+  $("toque").style.left = tx + "px"; $("toque").style.top = ty + "px";
+
+  // Pasos entre partes
+  mostrar("fundido", Math.max(ventana(t, CAMBIO - .25, CAMBIO, .25), 1 - prog(t, 0, .3), prog(t, CIERRE + .3, CIERRE + .35)));
+  mostrar("cierre", prog(t, CIERRE, CIERRE + .35) * (1 - prog(t, DURACION - .25, DURACION)));
+}
+window.render = render;
+window.DURACION = DURACION;
+window.LLEGADAS = ENVIOS.map(e => e.llega).concat([VINCULA + .1]);
+render(+(new URLSearchParams(location.search).get("t") || 6));
+</script>
+</body>
+</html>

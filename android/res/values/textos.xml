@@ -37,6 +37,8 @@
     <string name="hay_version">A new version is available</string>
     <string name="bajar">Download</string>
     <string name="texto_enviado">Text</string>
+    <string name="reemplaza">Replaces %1$s</string>
+    <string name="otra_compu">This doesn\'t look like your computer. If you reinstalled it, link again</string>
     <string name="escribi_texto">Type or paste text</string>
     <string name="mandar">Send</string>
 </resources>

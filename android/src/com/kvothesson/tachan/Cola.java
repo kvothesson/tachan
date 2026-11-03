@@ -70,10 +70,10 @@ final class Cola {
                 try (InputStream in = new FileInputStream(datos)) {
                     enviarConBusqueda(c, compu, in, datos, nombre, partes[0]);
                 }
-                Almacen.agregarReciente(c, nombre.isEmpty() ? "…" : nombre);
+                Almacen.agregarReciente(c, "texto".equals(partes[0]) ? c.getString(R.string.texto_enviado) : nombre.isEmpty() ? "…" : nombre);
                 datos.delete();
                 meta.delete();
-            } catch (Transporte.Rechazado | Transporte.Impostor e) {
+            } catch (Transporte.Rechazado e) {
                 Almacen.olvidar(c);
                 borrarTodo(c);
                 return true;

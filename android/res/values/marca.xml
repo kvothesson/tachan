@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generado por marca/generar.py: no editar a mano. -->
 <resources>
-    <color name="kvo_ground">#f4f8fa</color>
-    <color name="kvo_surface">#ffffff</color>
-    <color name="kvo_surface_raised">#e8eff3</color>
-    <color name="kvo_line">#d3dfe5</color>
-    <color name="kvo_line_strong">#6c8695</color>
-    <color name="kvo_ink">#0a1a24</color>
-    <color name="kvo_muted">#4c6474</color>
-    <color name="kvo_ice">#006c8c</color>
-    <color name="kvo_on_ice">#ffffff</color>
-    <color name="kvo_amber">#c97a00</color>
+    <color name="kvo_ground">#04080d</color>
+    <color name="kvo_surface">#0b1219</color>
+    <color name="kvo_surface_raised">#121c25</color>
+    <color name="kvo_line">#16303f</color>
+    <color name="kvo_line_strong">#4a7084</color>
+    <color name="kvo_ink">#d8f3ff</color>
+    <color name="kvo_muted">#7f9fb3</color>
+    <color name="kvo_ice">#5ce1ff</color>
+    <color name="kvo_on_ice">#04080d</color>
+    <color name="kvo_amber">#ffb347</color>
     <color name="kvo_on_amber">#04080d</color>
-    <color name="kvo_accent">#c97a00</color>
+    <color name="kvo_accent">#ffb347</color>
     <color name="kvo_on_accent">#04080d</color>
-    <color name="kvo_ok">#0f7a45</color>
-    <color name="kvo_danger">#b3213a</color>
+    <color name="kvo_ok">#2fbf71</color>
+    <color name="kvo_danger">#ff5a6e</color>
     <color name="kvo_icono_fondo">#04080d</color>
     <color name="kvo_icono_acento">#ffb347</color>
     <color name="kvo_icono_tinta">#04080d</color>

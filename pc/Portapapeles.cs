@@ -183,6 +183,8 @@ namespace Tachan
                 }
                 var texto = tanda.LastOrDefault(r => r.Texto != null)?.Texto;
                 if (texto != null && texto.Length > 0) datos.SetText(texto);
+                // Lo que viaja por tu red no sale a la nube de Windows. El historial local sigue a tu elección.
+                datos.SetData("CanUploadToCloudClipboard", new MemoryStream(BitConverter.GetBytes(0)));
                 Clipboard.SetDataObject(datos, true, 10, 100);
                 return true;
             }

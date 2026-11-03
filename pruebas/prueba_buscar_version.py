@@ -7,6 +7,9 @@ from functools import partial
 from pathlib import Path
 import psutil
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from firmar import firmar
+
 DEST = Path(os.environ["LOCALAPPDATA"]) / "Programs" / "Tachan" / "Tachan.exe"
 VINCULOS = Path(os.environ["APPDATA"]) / "Tachan" / "dispositivos.txt"
 SITIO = Path(tempfile.mkdtemp())
@@ -47,7 +50,7 @@ def preparar_instalada():
 
 
 def buscar(codigo, sha):
-    (SITIO / "version.json").write_text(json.dumps({"codigo": codigo, "nombre": "x", "exe_sha256": sha}), encoding="utf-8")
+    (SITIO / "version.json").write_text(json.dumps({"codigo": codigo, "nombre": "x", "exe_sha256": sha, "firma": firmar(codigo, sha)}), encoding="utf-8")
     subprocess.Popen([DEST, "--oculto", "--buscar-actualizacion"], env=entorno)
     time.sleep(8)
 

@@ -121,6 +121,12 @@ public class Principal extends Activity {
         centro.addView(icono(R.drawable.pc, 72, getColor(R.color.kvo_ink)));
         String nombre = TextUtils.isEmpty(pendiente.nombre) ? pendiente.host : pendiente.nombre;
         centro.addView(frase(getString(R.string.vincular_con, nombre)), margenes(0, 18, 0, 0));
+        // El nombre lo pone quien armó el link: la dirección y el aviso de reemplazo no se pueden disfrazar.
+        Transporte.Compu actual = Almacen.compu(this);
+        String detalle = actual == null ? pendiente.host : pendiente.host + "\n" + getString(R.string.reemplaza, actual.nombre);
+        TextView direccion = texto(detalle, 13, getColor(R.color.kvo_muted));
+        direccion.setGravity(Gravity.CENTER);
+        centro.addView(direccion, margenes(0, 10, 0, 0));
         raiz.addView(boton(getString(R.string.vincular), this::vincular));
         raiz.addView(enlace(getString(R.string.cancelar), () -> {
             pendiente = null;
@@ -213,7 +219,7 @@ public class Principal extends Activity {
         final View esteP = punto;
         new Thread(() -> {
             int color = R.color.kvo_line_strong;
-            boolean rechazado = false;
+            boolean rechazado = false, otra = false;
             try {
                 try {
                     Transporte.hola(compu);
@@ -223,13 +229,15 @@ public class Principal extends Activity {
                     Transporte.hola(compu);
                 }
                 color = R.color.kvo_ok;
-            } catch (Transporte.Rechazado | Transporte.Impostor e) {
+            } catch (Transporte.Rechazado e) {
                 rechazado = true;
+            } catch (Transporte.Impostor e) {
+                otra = true;
             } catch (IOException e) {
                 color = R.color.kvo_line_strong;
             }
             final int final_ = color;
-            final boolean fueRechazado = rechazado;
+            final boolean fueRechazado = rechazado, fueOtra = otra;
             runOnUiThread(() -> {
                 if (!visible) return;
                 if (fueRechazado) {
@@ -238,7 +246,7 @@ public class Principal extends Activity {
                     dibujar();
                 } else if (esteP == punto) {
                     punto.setBackground(circulo(getColor(final_)));
-                    estado.setText(final_ == R.color.kvo_ok ? R.string.en_red : R.string.no_aparece);
+                    estado.setText(final_ == R.color.kvo_ok ? R.string.en_red : fueOtra ? R.string.otra_compu : R.string.no_aparece);
                 }
             });
         }).start();
@@ -283,12 +291,18 @@ public class Principal extends Activity {
 
     private void vincular() {
         final Transporte.Enlace enlace = pendiente;
+        final Transporte.Compu anterior = Almacen.compu(this);
         new Thread(() -> {
             int error = 0;
             Transporte.Compu compu = null;
             try {
                 compu = Transporte.vincular(enlace, Build.MODEL);
                 Almacen.guardar(this, compu);
+                if (anterior != null) {
+                    try { Transporte.desvincular(anterior); } catch (IOException e) { }  // si no está prendida, queda en su lista
+                }
+            } catch (Transporte.Impostor e) {
+                error = R.string.codigo_vencido;
             } catch (Transporte.NoLlega e) {
                 error = R.string.sin_conexion;
             } catch (IOException e) {

@@ -1,0 +1,731 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Tachán: video corto</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  /* Vertical, para mandar por el celular. El celu copia medidas de capturas reales de Google Fotos y Android, en 360 x 802.
+     La compu es un Windows 10 de 1093 x 683, que es una notebook común al 125%. Sin logos de otras marcas.
+     Se ve un solo aparato por vez, grande, y un rótulo dice cuál es. */
+  * { box-sizing:border-box; }
+  html, body { margin:0; width:720px; height:1280px; overflow:hidden; background:var(--ground); color:var(--ink); font:400 16px/1.4 "Segoe UI", system-ui, sans-serif; }
+  .a { position:absolute; }
+  #lugar { left:0; top:18px; width:720px; text-align:center; color:var(--accent); font:600 22px "JetBrains Mono", monospace; letter-spacing:.06em; text-transform:uppercase; }
+  #titulo { left:0; top:50px; width:720px; height:160px; display:grid; place-items:center; padding:0 30px; text-align:center; font:800 50px/1.06 "Bricolage Grotesque", "Arial Narrow", sans-serif; text-wrap:balance; }
+  #forma { left:0; top:0; width:720px; height:1280px; display:grid; place-items:center; padding:0 50px; text-align:center; background:var(--ground); font:800 84px/1.05 "Bricolage Grotesque", sans-serif; text-wrap:balance; }
+
+  /* Compu: la cámara mueve el escritorio entero */
+  #pantalla { left:0; top:220px; width:720px; height:1060px; overflow:hidden; background:var(--ground); }
+  #escritorio { position:absolute; left:0; top:0; width:1093px; height:683px; transform-origin:0 0; background:radial-gradient(120% 120% at 70% 20%,#2f7fc1,#14476f 55%,#0b2a45); font-size:13px; color:#1a1a1a; }
+  #barra { position:absolute; left:0; right:0; bottom:0; height:32px; display:flex; align-items:center; background:rgba(16,24,32,.94); color:#fff; font-size:11px; }
+  #barra .inicio { width:40px; height:32px; display:grid; place-items:center; }
+  #barra .busca { width:220px; height:32px; padding:7px 10px; background:#f2f2f2; color:#555; font-size:12px; }
+  #barra .prog { width:40px; height:32px; display:grid; place-items:center; border-bottom:2px solid #7cb8f0; background:rgba(255,255,255,.1); }
+  #barra .prog i { width:15px; height:15px; border-radius:2px; background:#5b9bd5; }
+  #barra .hora { margin-left:auto; padding:0 10px; text-align:center; line-height:1.25; }
+  .ventana { position:absolute; background:#fff; box-shadow:0 0 0 1px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4); overflow:hidden; }
+  .titulo-v { height:30px; display:flex; align-items:center; padding-left:12px; font-size:12px; color:#222; background:#fff; }
+  .titulo-v .ctrl { margin-left:auto; display:flex; }
+  .titulo-v .ctrl span { width:45px; height:30px; display:grid; place-items:center; color:#333; font-size:12px; }
+
+  /* Editor de textos */
+  #v-doc { left:14px; top:12px; width:752px; height:626px; }
+  #v-doc .azul .titulo-v { background:#2b5797; color:#fff; }
+  #v-doc .azul .ctrl span { color:#fff; }
+  #cinta { display:flex; gap:7px; align-items:center; height:38px; padding:0 12px; background:#f3f3f3; border-bottom:1px solid #d6d6d6; color:#444; font-size:12px; }
+  #cinta b, #cinta u, #cinta em { display:inline-grid; place-items:center; width:22px; height:22px; font-family:Georgia,serif; font-size:14px; }
+  #cinta .fuente { padding:2px 8px; background:#fff; border:1px solid #c8c8c8; width:112px; }
+  #cinta .tam { padding:2px 8px; background:#fff; border:1px solid #c8c8c8; }
+  #lienzo { position:absolute; left:0; right:0; top:68px; bottom:0; background:#e6e6e6; overflow:hidden; }
+  #hoja-doc { position:absolute; left:50%; margin-left:-300px; top:12px; width:600px; height:720px; padding:40px 54px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.28); font:400 20px/1.45 Calibri,"Segoe UI",sans-serif; color:#111; }
+  #hoja-doc h2 { margin:0 0 10px; font:600 32px/1.2 Calibri,"Segoe UI",sans-serif; color:#1f4e79; }
+  #tipeo:after { content:""; display:inline-block; width:1px; height:21px; margin-left:1px; vertical-align:-4px; background:#000; opacity:var(--cursor,1); }
+  #pegada { width:440px; height:275px; margin-top:12px; object-fit:cover; display:block; transform-origin:0 0; }
+
+  /* Navegador y guardar como */
+  #v-chat { left:44px; top:20px; width:1005px; height:616px; background-color:#efeae2; background-image:radial-gradient(#e2dbd0 1.4px,transparent 1.5px),radial-gradient(#e2dbd0 1.4px,transparent 1.5px); background-size:26px 26px; background-position:0 0,13px 13px; }
+  /* Chrome, tema claro de fábrica */
+  #pestana { height:34px; display:flex; align-items:flex-end; padding-left:8px; background:#d3e3fd; }
+  #pestana .tab { display:flex; align-items:center; gap:7px; width:230px; height:29px; padding:0 10px; border-radius:9px 9px 0 0; background:#fff; font-size:12px; color:#1f1f1f; }
+  #pestana .fav { flex:none; width:15px; height:15px; border-radius:50%; background:#25d366; }
+  #pestana .fav.ntp { background:#fff; box-shadow:inset 0 0 0 2px #5f6368; }
+  #pestana .cierra-t { margin-left:auto; color:#474747; font-size:11px; }
+  #pestana .mas-t { align-self:center; margin:0 6px; color:#474747; font-size:18px; }
+  #pestana .ctrl { margin-left:auto; display:flex; align-self:flex-start; color:#1f1f1f; font-size:12px; }
+  #pestana .ctrl span { width:45px; height:30px; display:grid; place-items:center; }
+  #direccion { display:flex; align-items:center; gap:13px; height:36px; padding:0 10px; background:#fff; color:#474747; border-bottom:1px solid #e3e3e3; }
+  #direccion svg { flex:none; width:17px; height:17px; }
+  #direccion .omni { flex:1; display:flex; align-items:center; gap:8px; height:28px; padding:0 13px; border-radius:14px; background:#edf2fa; }
+  #dir-txt { color:#1f1f1f; font-size:15px; }
+  #dir-txt.vacio { color:#5f6368; }
+  #direccion .avatar { flex:none; width:22px; height:22px; border-radius:50%; background:#a9b7c6; }
+  #pc-vacia { position:absolute; left:0; right:0; top:70px; bottom:0; background:#fff; z-index:2; color:#1f1f1f; }
+  #pc-vacia .arriba { position:absolute; right:18px; top:14px; display:flex; align-items:center; gap:14px; font-size:12px; }
+  #pc-vacia .arriba i { width:26px; height:26px; border-radius:50%; background:#a9b7c6; }
+  #pc-vacia .google { position:absolute; left:0; right:0; top:110px; text-align:center; font:500 78px/1 Arial,sans-serif; letter-spacing:-3px; }
+  #pc-vacia .buscar-g { position:absolute; left:50%; top:215px; width:560px; height:44px; margin-left:-280px; padding:11px 22px; border-radius:22px; background:#fff; box-shadow:0 1px 6px rgba(32,33,36,.28); color:#5f6368; font-size:14px; }
+  #pc-vacia .atajos { position:absolute; left:50%; top:295px; margin-left:-46px; width:92px; text-align:center; font-size:12px; }
+  #pc-vacia .atajos i { display:grid; place-items:center; width:48px; height:48px; margin:0 auto 8px; border-radius:50%; background:#f1f3f4; font-style:normal; font-size:24px; color:#1f1f1f; }
+  #pc-vacia .personalizar { position:absolute; right:18px; bottom:16px; padding:8px 14px; border-radius:18px; background:#edf2fa; font-size:12px; }
+  #dir-txt:after { content:""; display:inline-block; width:1px; height:17px; margin-left:1px; vertical-align:-3px; background:#000; opacity:var(--cursor,0); }
+  /* WhatsApp Web claro: riel de íconos, lista y conversación */
+  #pc-riel { position:absolute; left:0; top:70px; bottom:0; width:60px; padding-top:14px; background:#f7f5f3; border-right:1px solid #e9edef; color:#54656f; }
+  #pc-riel span { display:grid; place-items:center; width:40px; height:40px; margin:0 auto 8px; border-radius:50%; }
+  #pc-riel span.sel { background:#e6e3df; }
+  #pc-riel svg { width:22px; height:22px; }
+  #pc-lista { position:absolute; left:60px; top:70px; bottom:0; width:344px; background:#fff; border-right:1px solid #e9edef; color:#111b21; }
+  #pc-lista .marca { height:56px; padding:14px 16px; color:#1daa61; font-size:22px; font-weight:700; }
+  #pc-lista .busca-w { height:38px; margin:0 12px 8px; padding:9px 14px; border-radius:19px; background:#f0f2f5; color:#667781; font-size:13px; }
+  #pc-lista .chips { display:flex; gap:6px; height:36px; padding:0 12px; font-size:12px; color:#54656f; }
+  #pc-lista .chips span { height:28px; padding:5px 11px; border-radius:14px; border:1px solid #d1d7db; }
+  #pc-lista .chips span.sel { background:#d9fdd3; border-color:#d9fdd3; color:#15603e; }
+  .contacto { display:flex; align-items:center; gap:12px; height:72px; margin:0 8px; padding:0 10px; border-radius:10px; font-size:15px; }
+  #pc-fila { background:#f0f2f5; }
+  .contacto i { flex:none; width:48px; height:48px; border-radius:50%; background:#dfe5e7; }
+  .contacto small { display:block; color:#667781; font-size:13px; }
+  #pc-cab { position:absolute; left:404px; right:0; top:70px; height:60px; padding:0 16px; display:flex; align-items:center; gap:12px; background:#fff; border-bottom:1px solid #e9edef; color:#111b21; font-size:15px; }
+  #pc-cab i { width:40px; height:40px; border-radius:50%; background:#dfe5e7; }
+  #pc-escribe { position:absolute; left:420px; right:16px; bottom:12px; height:46px; display:flex; align-items:center; gap:14px; padding:0 16px; border-radius:23px; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.15); color:#667781; font-size:14px; }
+  #pc-mens { position:absolute; right:40px; top:150px; width:340px; padding:4px; border-radius:8px 2px 8px 8px; background:#d9fdd3; box-shadow:0 1px 1px rgba(0,0,0,.14); }
+  #pc-mens img { display:block; width:328px; height:205px; object-fit:cover; border-radius:6px; }
+  #pc-bajar { position:absolute; right:54px; top:164px; width:38px; height:38px; border-radius:50%; background:rgba(0,0,0,.55); color:#fff; display:grid; place-items:center; }
+  /* Explorador de archivos, para el camino a mano */
+  #v-expl { left:610px; top:30px; width:470px; height:590px; font-size:12px; }
+  #v-expl .cinta-e { display:flex; gap:18px; height:26px; padding:5px 12px; background:#f5f6f7; border-bottom:1px solid #e3e3e3; }
+  #v-expl .cinta-e b { font-weight:400; color:#fff; background:#1979ca; margin:-5px 0 -5px -12px; padding:5px 12px; }
+  #v-expl .ruta-e { height:30px; padding:5px 10px; color:#333; border-bottom:1px solid #eee; }
+  #v-expl .lado { position:absolute; left:0; top:86px; bottom:0; width:130px; padding-top:8px; border-right:1px solid #e3e3e3; }
+  #v-expl .lado div { padding:4px 0 4px 16px; }
+  #v-expl .lado div.sel { background:#e5e5e5; }
+  #v-expl .grupo-e { position:absolute; left:144px; top:94px; color:#1e4a8a; font-size:14px; }
+  #v-expl .arch { position:absolute; }
+  #v-expl .arch.sel { background:#cce8ff; box-shadow:0 0 0 1px #99d1ff; padding-bottom:3px; }
+  #fantasma { left:0; top:0; width:120px; }
+  #fantasma img { display:block; width:120px; height:75px; object-fit:cover; opacity:.85; box-shadow:0 6px 18px rgba(0,0,0,.4); }
+  #fantasma span { display:inline-block; margin-top:3px; padding:1px 6px; background:#fff; border:1px solid #777; font-size:11px; color:#222; }
+  /* Guardar como: misma disposición que el de Windows 10, con carpetas y fotos de ejemplo */
+  #dialogo { left:50px; top:40px; width:900px; height:540px; font-size:12px; color:#1a1a1a; background:#fff; box-shadow:0 0 0 1px #6e6e6e,0 10px 34px rgba(0,0,0,.5); }
+  #dialogo .d-tit { height:30px; display:flex; align-items:center; gap:7px; padding:0 10px; }
+  #dialogo .d-tit .x { margin-left:auto; font-size:14px; }
+  #dialogo .d-tit i { width:15px; height:15px; border-radius:50%; background:#9aa4ad; }
+  #d-nav { height:34px; display:flex; align-items:center; gap:10px; padding:0 8px; color:#8a8a8a; font-size:15px; }
+  #d-nav .ruta { flex:1; height:23px; padding:3px 8px; border:1px solid #d9d9d9; color:#333; font-size:12px; white-space:nowrap; }
+  #d-nav .busca { width:185px; height:23px; padding:3px 8px; border:1px solid #d9d9d9; color:#6d6d6d; font-size:12px; }
+  #d-cmd { height:30px; display:flex; align-items:center; gap:22px; padding:0 12px; background:#f5f6f7; border-top:1px solid #eee; border-bottom:1px solid #e3e3e3; color:#333; }
+  #d-cmd .ayuda { margin-left:auto; width:16px; height:16px; border-radius:50%; background:#1979ca; color:#fff; font-weight:700; font-size:11px; display:grid; place-items:center; }
+  #d-arbol { position:absolute; left:0; top:94px; bottom:116px; width:150px; padding-top:8px; border-right:1px solid #e3e3e3; overflow:hidden; }
+  #d-arbol div { display:flex; align-items:center; gap:7px; height:23px; padding-left:22px; white-space:nowrap; }
+  #d-arbol div.sel { background:#e5e5e5; }
+  #d-arbol svg { flex:none; width:15px; height:15px; }
+  #d-lista { position:absolute; left:150px; right:14px; top:94px; bottom:116px; padding:8px 14px; overflow:hidden; }
+  #d-lista .grupo { display:flex; align-items:center; gap:8px; height:24px; color:#1e4a8a; font-size:14px; }
+  #d-lista .grupo:after { content:""; flex:1; height:1px; background:#e3e6ea; }
+  #d-lista .fila-a { display:flex; gap:14px; padding:6px 8px 8px; }
+  .arch { width:90px; text-align:center; line-height:1.25; }
+  .arch svg { display:block; width:66px; height:56px; margin:0 auto 5px; }
+  .arch img { display:block; width:76px; height:56px; margin:0 auto 5px; object-fit:cover; box-shadow:0 0 0 1px #d8d8d8; }
+  #d-barra { position:absolute; right:0; top:94px; bottom:116px; width:14px; background:#f0f0f0; }
+  #d-barra i { position:absolute; left:2px; right:2px; top:14px; height:150px; background:#cdcdcd; }
+  #d-campos { position:absolute; left:0; right:0; bottom:44px; height:72px; padding:9px 12px 0; background:#f0f0f0; border-top:1px solid #dfdfdf; }
+  #d-campos .fila-c { display:flex; align-items:center; height:27px; }
+  #d-campos label { width:92px; text-align:right; padding-right:7px; }
+  #d-campos .campo { flex:1; height:23px; padding:3px 4px; background:#fff; border:1px solid #7a7a7a; }
+  #d-campos .campo.foco-n { border:1px solid #0078d7; }
+  #d-campos .campo.foco-n span { background:#0078d7; color:#fff; padding:0 1px; }
+  #d-campos .campo.lista { background:#e6e6e6; border-color:#adadad; }
+  #d-pie { position:absolute; left:0; right:0; bottom:0; height:44px; display:flex; align-items:center; gap:14px; padding:0 14px; background:#f0f0f0; }
+  #d-pie .ocultar { margin-right:auto; }
+  #d-pie .boton-w { width:86px; height:24px; display:grid; place-items:center; background:#e1e1e1; border:1px solid #adadad; }
+  #d-pie .boton-w.prim { border:2px solid #0078d7; }
+
+  /* El aviso real: medidas y colores de pc/Aviso.cs */
+  #aviso { right:14px; bottom:46px; width:300px; border-radius:14px; overflow:hidden; background:var(--surface); box-shadow:0 14px 40px rgba(0,0,0,.55); }
+  #aviso img { display:block; width:300px; height:187.500px; object-fit:cover; }
+  #aviso .pie-a { height:44px; display:flex; align-items:center; padding:0 15px 0 12px; gap:14px; color:var(--muted); }
+  #aviso .pie-a svg { width:18px; height:18px; }
+  #aviso .pie-a .ok { width:20px; height:20px; margin-right:auto; color:var(--ok); }
+  #puntero { left:0; top:0; width:36px; height:36px; }
+  #teclas { left:0; top:1110px; width:720px; text-align:center; color:var(--ink); font-size:44px; }
+  .tecla { display:inline-block; min-width:96px; padding:12px 22px; border-radius:10px; background:#fff; color:#111; border:2px solid #fff; border-bottom:6px solid #b7bcc2; text-align:center; font:600 44px "Segoe UI", sans-serif; }
+
+  /* Celu */
+  #celu { left:117px; top:224px; width:486px; height:1035px; border-radius:50px; background:#111317; padding:6px; box-shadow:0 0 0 2px #2b2f35; }
+  #vidrio { position:relative; width:474px; height:1023px; border-radius:44px; overflow:hidden; background:#fff; }
+  #android { position:absolute; left:0; top:0; width:360px; height:777px; transform:scale(1.3167); transform-origin:0 0; color:#1f1f1f; font-family:Roboto,"Segoe UI",sans-serif; }
+  .capa { position:absolute; inset:0; background:#fff; }
+  #estado { position:absolute; left:0; right:0; top:0; height:26px; display:flex; align-items:center; padding:0 14px; font-size:12px; z-index:5; color:#1f1f1f; }
+  #estado .der { margin-left:auto; display:flex; gap:6px; align-items:center; }
+  #estado .pila { width:22px; height:10px; border:1px solid currentColor; border-radius:2px; padding:1px; }
+  #estado .pila i { display:block; width:70%; height:100%; background:currentColor; }
+
+  #c-chat .cab { position:absolute; left:0; right:0; top:0; height:82px; padding:26px 12px 0 8px; display:flex; align-items:center; gap:8px; background:#fff; color:#111b21; font-weight:500; font-size:18px; border-bottom:1px solid #e9edef; }
+  #c-chat .cab small { display:block; font-weight:400; font-size:12px; opacity:.85; }
+  #c-chat .cab .iconos { margin-left:auto; display:flex; gap:18px; }
+  #c-chat .cab i { width:38px; height:38px; border-radius:50%; background:#a9b7c6; }
+  #c-chat { background-color:#efeae2; background-image:radial-gradient(#e2dbd0 1.4px,transparent 1.5px),radial-gradient(#e2dbd0 1.4px,transparent 1.5px); background-size:26px 26px; background-position:0 0,13px 13px; }
+  #burbuja { position:absolute; right:12px; bottom:82px; width:262px; padding:4px 4px 20px; border-radius:9px 2px 9px 9px; background:#d9fdd3; box-shadow:0 1px 1px rgba(0,0,0,.14); }
+  #burbuja .hora { position:absolute; right:8px; bottom:3px; font-size:11px; color:#667781; }
+  #burbuja .hora b { color:#53bdeb; font-weight:400; letter-spacing:-2px; margin-left:3px; }
+  #burbuja img { display:block; width:252px; height:158px; object-fit:cover; border-radius:8px; }
+  #escribir { position:absolute; left:10px; right:68px; bottom:16px; height:50px; padding:13px 16px; border-radius:25px; background:#fff; color:#667781; font-size:17px; box-shadow:0 1px 1px rgba(0,0,0,.1); }
+
+  .vuelta { position:absolute; left:14px; top:48px; width:24px; height:24px; color:#444; }
+  .puntos-v { position:absolute; right:12px; top:48px; width:24px; height:24px; color:#444; }
+  #c-foto img { position:absolute; left:0; top:276px; width:360px; height:225px; object-fit:cover; }
+  #btn-compartir { position:absolute; left:0; right:0; top:716px; text-align:center; font-size:13px; color:#333; }
+  #btn-compartir svg { display:block; margin:0 auto 3px; width:24px; height:24px; }
+  #toast { position:absolute; left:50%; top:640px; transform:translateX(-50%); display:flex; align-items:center; gap:8px; padding:9px 16px; border-radius:20px; background:#3c4043; color:#fff; font-size:13px; white-space:nowrap; }
+
+  #c-hoja { background:#fff; }
+  #c-hoja .cierra { position:absolute; left:16px; top:46px; width:26px; height:26px; color:#333; }
+  #c-hoja .sel { position:absolute; left:56px; top:45px; font-size:19px; }
+  #vista { position:absolute; left:28px; top:88px; width:304px; height:370px; padding:9px; border-radius:6px; background:#e8f0fe; }
+  #vista img { display:block; width:100%; height:100%; object-fit:cover; border-radius:14px; }
+  #vista i { position:absolute; left:-1px; top:-1px; width:22px; height:22px; border-radius:50%; background:#1a73e8; color:#fff; display:grid; place-items:center; border:2px solid #fff; }
+  #bandeja { position:absolute; left:0; right:0; top:460px; height:317px; border-radius:24px 24px 0 0; background:#f6f8fc; box-shadow:0 -1px 3px rgba(0,0,0,.08); }
+  #bandeja .asa { position:absolute; left:164px; top:8px; width:32px; height:4px; border-radius:2px; background:#c4c7cc; }
+  #bandeja .tit { position:absolute; left:14px; top:26px; font-size:16px; }
+  #bandeja .vinculo { position:absolute; left:14px; top:58px; display:flex; gap:7px; align-items:center; padding:5px 12px; border:1px solid #5f6368; border-radius:7px; font-size:14px; color:#333; }
+  #bandeja .linea { position:absolute; left:0; right:0; top:100px; height:1px; background:#e0e3e7; }
+  .app { position:absolute; width:90px; margin-left:-45px; text-align:center; font-size:12.500px; color:#333; }
+  .app .bola { display:grid; place-items:center; width:44px; height:44px; margin:0 auto 5px; border-radius:50%; color:#fff; }
+  .app .bola svg { width:24px; height:24px; }
+
+  /* Pantallas del chat al compartir: elegir a quién y mandar */
+  #c-contactos .cab-c { height:82px; padding:32px 16px 0; display:flex; align-items:center; gap:18px; background:#fff; color:#111b21; font-size:19px; font-weight:500; border-bottom:1px solid #e9edef; }
+  .fila-chat { display:flex; align-items:center; gap:14px; height:72px; padding:0 16px; font-size:16px; border-bottom:1px solid #eef0f1; }
+  .fila-chat i { flex:none; width:48px; height:48px; border-radius:50%; background:#a9b7c6; }
+  .fila-chat small { display:block; color:#667781; font-size:13px; }
+  #c-previa { background:#0b141a; color:#e9edef; }
+  #c-previa img { position:absolute; left:0; top:230px; width:360px; height:225px; object-fit:cover; }
+  #c-previa .comenta { position:absolute; left:12px; right:12px; top:640px; height:46px; padding:12px 18px; border-radius:23px; background:#202c33; color:#8696a0; font-size:15px; }
+  #c-previa .manda { position:absolute; right:14px; top:696px; width:56px; height:56px; border-radius:50%; background:#1daa61; color:#fff; display:grid; place-items:center; }
+  #c-previa .para { position:absolute; left:14px; top:708px; padding:6px 12px; border-radius:14px; background:#202c33; font-size:13px; }
+  /* Lo que explica: el foco oscurece el resto, el dedo se ve llegar y el círculo marca el toque */
+  #foco { position:absolute; width:100px; height:100px; margin:-50px 0 0 -50px; border-radius:50%; border:3px solid var(--accent); box-shadow:0 0 0 900px rgba(0,0,0,.42); z-index:7; }
+  #dedo { position:absolute; width:46px; height:46px; margin:-23px 0 0 -23px; border-radius:50%; background:rgba(40,44,50,.55); box-shadow:0 0 0 3px rgba(255,255,255,.95),0 6px 14px rgba(0,0,0,.4); z-index:9; }
+  .toque { position:absolute; width:46px; height:46px; margin:-23px 0 0 -23px; border-radius:50%; border:4px solid var(--accent); z-index:8; }
+  #clic { position:absolute; left:0; top:0; width:36px; height:36px; margin:-18px 0 0 -18px; border-radius:50%; border:4px solid #f2a33a; z-index:9; }
+  #enviar { position:absolute; right:12px; bottom:16px; width:50px; height:50px; border-radius:50%; background:#1daa61; color:#fff; display:grid; place-items:center; }
+
+  #cierre { inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; padding:0 40px; background:var(--ground); text-align:center; }
+  #cierre h1 { margin:0; font:800 130px/1 "Bricolage Grotesque", sans-serif; }
+  #cierre p { margin:0; font:700 44px/1.15 "Bricolage Grotesque", sans-serif; text-wrap:balance; }
+  #cierre span { color:var(--muted); font-size:30px; }
+  #cierre small { margin-top:18px; color:var(--accent); font:600 34px "JetBrains Mono", monospace; }
+  /* Pase entre aparatos: la foto viaja del celular a la PC */
+  #pase { inset:0; background:var(--ground); }
+  #pase-txt { position:absolute; left:40px; right:40px; top:290px; text-align:center; font:800 66px/1.08 "Bricolage Grotesque", sans-serif; text-wrap:balance; color:var(--ink); }
+  #pase .ap-celu { position:absolute; left:84px; top:640px; width:120px; height:210px; border:7px solid var(--ink); border-radius:22px; }
+  #pase .ap-pc { position:absolute; left:400px; top:655px; width:250px; height:160px; border:7px solid var(--ink); border-radius:12px; }
+  #pase .ap-base { position:absolute; left:470px; top:815px; width:110px; height:34px; border-bottom:7px solid var(--ink); }
+  #pase .ap-base:before { content:""; position:absolute; left:47px; top:0; width:16px; height:27px; background:var(--ink); }
+  #pase-ruta { position:absolute; left:0; top:0; }
+  #pase-foto { position:absolute; left:0; top:0; width:112px; height:70px; margin:-35px 0 0 -56px; object-fit:cover; border-radius:6px; box-shadow:0 6px 20px rgba(0,0,0,.6); }
+  #fundido { inset:0; background:var(--ground); }
+  /* En el anuncio no se explica dónde tocar: el título sube y sin foco */
+  .anuncio #foco { display:none; }
+  .anuncio #titulo { top:24px; height:190px; font-size:56px; }
+  .anuncio #titulo span { display:inline-block; font-size:84px; }
+  .anuncio #titulo b { display:inline-block; font-size:120px; font-weight:800; color:var(--accent); }
+</style>
+</head>
+<body>
+<div id="lugar" class="a"></div>
+<div id="titulo" class="a"></div>
+
+<div id="pantalla" class="a"><div id="escritorio">
+  <div id="v-chat" class="ventana">
+    <div id="pestana"><div class="tab"><span id="pest-fav" class="fav"></span><span id="pest-txt"></span><span class="cierra-t">✕</span></div><span class="mas-t">+</span><div class="ctrl"><span>─</span><span>☐</span><span>✕</span></div></div>
+    <div id="direccion">
+      <svg viewBox="0 0 24 24"><path d="M20 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="#b0b3b8" stroke-width="2"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2-5M19 3v5h-5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      <div class="omni"><svg viewBox="0 0 24 24"><path d="M4 8h9M17 8h3M4 16h3M11 16h9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="15" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="16" r="2" fill="none" stroke="currentColor" stroke-width="2"/></svg><span id="dir-txt"></span><svg style="margin-left:auto" viewBox="0 0 24 24"><path d="m12 4 2.500 5.500 6 .6-4.500 4 1.300 5.900L12 17l-5.300 3 1.300-5.900-4.500-4 6-.6z" fill="none" stroke="currentColor" stroke-width="1.800"/></svg></div>
+      <div class="avatar"></div>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.800" fill="currentColor"/><circle cx="12" cy="12" r="1.800" fill="currentColor"/><circle cx="12" cy="19" r="1.800" fill="currentColor"/></svg>
+    </div>
+    <div id="pc-vacia">
+      <div class="arriba"><span>Gmail</span><span data-t="ntp_imagenes"></span><svg width="18" height="18" viewBox="0 0 18 18"><g fill="#5f6368"><circle cx="3" cy="3" r="2"/><circle cx="9" cy="3" r="2"/><circle cx="15" cy="3" r="2"/><circle cx="3" cy="9" r="2"/><circle cx="9" cy="9" r="2"/><circle cx="15" cy="9" r="2"/><circle cx="3" cy="15" r="2"/><circle cx="9" cy="15" r="2"/><circle cx="15" cy="15" r="2"/></g></svg><i></i></div>
+      <div class="google"><span style="color:#4285f4">G</span><span style="color:#ea4335">o</span><span style="color:#fbbc05">o</span><span style="color:#4285f4">g</span><span style="color:#34a853">l</span><span style="color:#ea4335">e</span></div>
+      <div class="buscar-g" data-t="omni_vacio"></div>
+      <div class="atajos"><i>+</i><span data-t="agregar_atajo"></span></div>
+      <div class="personalizar" data-t="personalizar"></div>
+    </div>
+    <div id="pc-riel"><span class="sel"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="currentColor"/></svg></span><span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="6 3"/></svg></span><span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></span><span><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 19c1-4 9-4 10 0M12 15c2-1 8-1 9 4" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></div>
+    <div id="pc-lista"><div class="marca">WhatsApp</div><div class="busca-w" data-t="wa_buscar"></div><div class="chips"><span class="sel" data-t="wa_todos"></span><span data-t="wa_noleidos"></span><span data-t="wa_favoritos"></span><span data-t="wa_grupos"></span></div>
+      <div id="pc-fila" class="contacto"><i></i><span><span data-t="yo"></span><small data-t="yo_nota"></small></span></div>
+      <div class="contacto"><i></i><span><span data-t="ej_familia"></span><small>…</small></span></div>
+      <div class="contacto"><i></i><span><span data-t="ej_trabajo"></span><small>…</small></span></div>
+      <div class="contacto"><i></i><span><span data-t="ej_amigos"></span><small>…</small></span></div></div>
+    <div id="pc-cab"><i></i><span data-t="yo"></span></div>
+    <div id="pc-escribe"><span>+</span><span>☺</span><span data-t="wa_escribe"></span></div>
+    <div id="pc-mens"><img src="foto.jpg" alt=""></div>
+    <div id="pc-bajar"><svg width="20" height="20"><use href="#i-bajar"/></svg></div>
+    <div id="dialogo" class="ventana a">
+      <div class="d-tit"><i></i><span data-t="guardar_como"></span><span class="x">✕</span></div>
+      <div id="d-nav"><span>←</span><span>→</span><span>↑</span><div class="ruta"><span data-t="este_equipo"></span> &nbsp;›&nbsp; <span data-t="carpeta1"></span> &nbsp;›</div><div class="busca" data-t="buscar_en"></div></div>
+      <div id="d-cmd"><span data-t="organizar"></span><span data-t="nueva_carpeta"></span><span class="ayuda">?</span></div>
+      <div id="d-arbol">
+        <div><svg viewBox="0 0 24 24"><path d="M2 5h8l3 3h9v12H2z" fill="#4a90d9"/></svg><span data-t="este_equipo"></span></div>
+        <div><svg viewBox="0 0 24 24"><path d="M2 5h8l3 3h9v12H2z" fill="#f2cf73"/></svg><span data-t="carpeta2"></span></div>
+        <div class="sel"><svg viewBox="0 0 24 24"><path d="M2 5h8l3 3h9v12H2z" fill="#2f80d0"/></svg><span data-t="carpeta1"></span></div>
+        <div><svg viewBox="0 0 24 24"><path d="M2 5h8l3 3h9v12H2z" fill="#4aa3df"/></svg><span data-t="escritorio"></span></div>
+        <div><svg viewBox="0 0 24 24"><path d="M2 5h8l3 3h9v12H2z" fill="#5fb0c9"/></svg><span data-t="carpeta3"></span></div>
+        <div><svg viewBox="0 0 24 24"><path d="M2 5h8l3 3h9v12H2z" fill="#e0935a"/></svg><span data-t="musica"></span></div>
+        <div><svg viewBox="0 0 24 24"><path d="M2 5h8l3 3h9v12H2z" fill="#6f8fd9"/></svg><span data-t="videos"></span></div>
+        <div><svg viewBox="0 0 24 24"><path d="M2 5h8l3 3h9v12H2z" fill="#9aa4ad"/></svg><span data-t="disco"></span></div>
+        <div><svg viewBox="0 0 24 24"><path d="M2 5h8l3 3h9v12H2z" fill="#7aa0c4"/></svg><span data-t="red"></span></div>
+      </div>
+      <div id="d-lista">
+        <div class="grupo"><span data-t="hoy"></span></div>
+        <div class="fila-a"><div class="arch"><svg viewBox="0 0 66 56"><path d="M4 8h22l6 6h30v36H4z" fill="#f2cf73"/><path d="M4 18h58v32H4z" fill="#ffe08a"/></svg><span data-t="carpeta3"></span></div></div>
+        <div class="grupo"><span data-t="semana"></span></div>
+        <div class="fila-a"><div class="arch"><img src="foto.jpg" alt="" style="filter:hue-rotate(12deg);object-position:10% 50%">IMG_2035</div><div class="arch"><img src="foto.jpg" alt="" style="filter:hue-rotate(-20deg) saturate(.8);object-position:40% 80%">IMG_2036</div><div class="arch"><img src="foto.jpg" alt="" style="filter:brightness(1.15);object-position:70% 30%">IMG_2037</div><div class="arch"><img src="foto.jpg" alt="" style="filter:hue-rotate(20deg) brightness(.85);object-position:90% 60%">IMG_2038</div><div class="arch"><img src="foto.jpg" alt="" style="filter:sepia(.5);object-position:20% 20%">IMG_2039</div><div class="arch"><img src="foto.jpg" alt="" style="filter:hue-rotate(-30deg) brightness(1.1);object-position:60% 90%">IMG_2040</div></div>
+        <div class="grupo"><span data-t="mes"></span></div>
+        <div class="fila-a"><div class="arch"><img src="foto.jpg" alt="" style="filter:brightness(.8) saturate(1.2);object-position:30% 40%">IMG_2011</div><div class="arch"><img src="foto.jpg" alt="" style="filter:saturate(.5);object-position:80% 40%">IMG_2012</div><div class="arch"><img src="foto.jpg" alt="" style="filter:hue-rotate(-12deg) contrast(1.15);object-position:50% 70%">IMG_2013</div></div>
+      </div>
+      <div id="d-barra"><i></i></div>
+      <div id="d-campos">
+        <div class="fila-c"><label data-t="nombre"></label><div class="campo foco-n"><span>IMG_2041</span></div></div>
+        <div class="fila-c"><label data-t="tipo"></label><div class="campo lista" data-t="tipo_v"></div></div>
+      </div>
+      <div id="d-pie"><span class="ocultar" data-t="ocultar"></span><div class="boton-w prim" data-t="guardar"></div><div class="boton-w" data-t="cancelar_w"></div></div>
+    </div>
+  </div>
+  <div id="v-doc" class="ventana">
+    <div class="azul"><div class="titulo-v"><span data-t="doc_titulo"></span><div class="ctrl"><span>─</span><span>☐</span><span>✕</span></div></div></div>
+    <div id="cinta"><span class="fuente">Calibri</span><span class="tam">11</span><b>N</b><em>K</em><u>S</u></div>
+    <div id="lienzo"><div id="hoja-doc"><h2 data-t="doc_h"></h2><span id="tipeo"></span><img id="pegada" src="foto.jpg" alt=""></div></div>
+  </div>
+  <div id="v-expl" class="ventana">
+    <div class="titulo-v"><span data-t="carpeta1"></span><div class="ctrl"><span>─</span><span>☐</span><span>✕</span></div></div>
+    <div class="cinta-e"><b data-t="archivo_e"></b><span data-t="inicio_e"></span><span data-t="compartir_e"></span><span data-t="vista_e"></span></div>
+    <div class="ruta-e"><span data-t="este_equipo"></span> &nbsp;›&nbsp; <span data-t="carpeta1"></span></div>
+    <div class="lado"><div data-t="escritorio"></div><div class="sel" data-t="carpeta1"></div><div data-t="carpeta2"></div><div data-t="carpeta3"></div><div data-t="musica"></div><div data-t="videos"></div><div data-t="disco"></div></div>
+    <div class="grupo-e" data-t="hoy"></div>
+    <div class="arch sel" style="left:140px;top:120px"><img src="foto.jpg" alt="" style="filter:none">IMG_2041</div>
+    <div class="grupo-e" style="top:232px" data-t="semana"></div>
+    <div class="arch" style="left:140px;top:258px"><img src="foto.jpg" alt="" style="filter:hue-rotate(12deg)">IMG_2035</div><div class="arch" style="left:250px;top:258px"><img src="foto.jpg" alt="" style="filter:hue-rotate(-20deg) saturate(.8)">IMG_2036</div><div class="arch" style="left:360px;top:258px"><img src="foto.jpg" alt="" style="filter:brightness(1.15)">IMG_2037</div>
+    <div class="arch" style="left:140px;top:354px"><img src="foto.jpg" alt="" style="filter:hue-rotate(20deg) brightness(.85)">IMG_2038</div><div class="arch" style="left:250px;top:354px"><img src="foto.jpg" alt="" style="filter:sepia(.5)">IMG_2039</div><div class="arch" style="left:360px;top:354px"><img src="foto.jpg" alt="" style="filter:hue-rotate(-30deg) brightness(1.1)">IMG_2040</div>
+  </div>
+  <div id="barra">
+    <div class="inicio"><svg width="15" height="15" viewBox="0 0 15 15"><path d="M0 0h7v7H0zM8 0h7v7H8zM0 8h7v7H0zM8 8h7v7H8z" fill="#fff"/></svg></div>
+    <div class="busca" data-t="buscar"></div>
+    <div class="prog"><i></i></div>
+    <div class="prog" style="border:0;background:none"><i style="background:#f2cf73"></i></div>
+    <div class="prog" style="border:0;background:none"><i style="width:20px;height:20px;border-radius:50%;background:radial-gradient(circle,#4285f4 0 27%,#fff 28% 38%,transparent 39%),conic-gradient(from 30deg,#ea4335 0 120deg,#fbbc05 120deg 240deg,#34a853 240deg)"></i></div>
+    <div class="hora">10:24<br>2/11/2026</div>
+  </div>
+  <div id="aviso" class="a"><img src="foto.jpg" alt="">
+    <div class="pie-a"><svg class="ok"><use href="#i-ok"/></svg><svg><use href="#i-copiar"/></svg><svg><use href="#i-carpeta"/></svg></div></div>
+  <div id="fantasma" class="a"><img src="foto.jpg" alt=""><span data-t="copiar_a"></span></div>
+  <div id="clic"></div>
+  <svg id="puntero" class="a" viewBox="0 0 24 24"><path d="M5 2v18l5-4.500 3.200 7 3-1.400-3.200-6.800H20z" fill="#fff" stroke="#000" stroke-width="1.300" stroke-linejoin="round"/></svg>
+</div></div>
+<div id="teclas" class="a"><span id="k1" class="tecla">Ctrl</span> + <span id="k2" class="tecla">V</span></div>
+
+<div id="celu" class="a"><div id="vidrio"><div id="android">
+  <div id="estado"><span>10:24</span><div class="der"><svg width="15" height="12" viewBox="0 0 15 12"><path d="M7.500 12 0 3.500C4-.8 11-.8 15 3.500z" fill="currentColor"/></svg><span class="pila"><i></i></span></div></div>
+  <div id="c-chat" class="capa">
+    <div class="cab"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M20 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg><i></i><span><span data-t="yo"></span><small data-t="yo_nota"></small></span><div class="iconos"><svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="19" r="2" fill="currentColor"/></svg></div></div>
+    <div id="burbuja"><img src="foto.jpg" alt=""><span class="hora">10:24<b>✓✓</b></span></div>
+    <div id="escribir" data-t="mensaje"></div>
+    <div id="enviar"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 12 21 4l-5 17-4-7z" fill="currentColor"/></svg></div>
+  </div>
+  <div id="c-foto" class="capa">
+    <svg class="vuelta" viewBox="0 0 24 24"><path d="M20 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    <svg class="puntos-v" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="19" r="2" fill="currentColor"/></svg>
+    <img src="foto.jpg" alt="">
+    <div id="btn-compartir"><svg><use href="#i-compartir"/></svg><span data-t="compartir"></span></div>
+    <div id="toast"><svg width="18" height="18"><use href="#icono"/></svg><span data-t="compartiendo"></span></div>
+  </div>
+  <div id="c-hoja" class="capa">
+    <svg class="cierra" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    <div class="sel" data-t="seleccionado"></div>
+    <div id="vista"><img src="foto.jpg" alt=""><i><svg width="14" height="14"><use href="#i-ok"/></svg></i></div>
+    <div id="bandeja">
+      <div class="asa"></div>
+      <div class="tit" data-t="compartir_foto"></div>
+      <div class="vinculo"><svg width="17" height="17" viewBox="0 0 24 24"><path d="M9 7H7a5 5 0 0 0 0 10h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8" fill="none" stroke="currentColor" stroke-width="2"/></svg><span data-t="crear_vinculo"></span></div>
+      <div class="linea"></div>
+      <div class="app" style="left:45px;top:118px"><div class="bola" style="background:#25d366"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="currentColor"/></svg></div>WhatsApp</div>
+      <div class="app" style="left:135px;top:118px"><div class="bola" style="background:#ea6a5e"><svg viewBox="0 0 24 24"><path d="M3 6h18v12H3zM3 7l9 6 9-6" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><span data-t="correo"></span></div>
+      <div class="app" style="left:225px;top:118px"><div class="bola"><svg style="width:44px;height:44px"><use href="#icono"/></svg></div>Tachán</div>
+      <div class="app" style="left:315px;top:118px"><div class="bola" style="background:#f2b53c"><svg viewBox="0 0 24 24"><path d="M6 3h12v18H6zM9 8h6M9 12h6M9 16h4" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><span data-t="notas_app"></span></div>
+      <div class="app" style="left:45px;top:216px"><div class="bola" style="background:#4a8df0"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><span data-t="cerca"></span></div>
+      <div class="app" style="left:135px;top:216px"><div class="bola" style="background:#39a9c9"><svg viewBox="0 0 24 24"><path d="M3 12 21 4l-5 17-4-7z" fill="currentColor"/></svg></div>Chat</div>
+      <div class="app" style="left:225px;top:216px"><div class="bola" style="background:#8a6fd1"><svg viewBox="0 0 24 24"><path d="M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v5H4zM13 14h7v5h-7z" fill="currentColor"/></svg></div><span data-t="equipo"></span></div>
+      <div class="app" style="left:315px;top:216px"><div class="bola" style="background:#fff;color:#555;box-shadow:inset 0 0 0 1px #c4c7cc"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.800" fill="currentColor"/><circle cx="12" cy="12" r="1.800" fill="currentColor"/><circle cx="18" cy="12" r="1.800" fill="currentColor"/></svg></div><span data-t="mas"></span></div>
+    </div>
+  </div>
+  <div id="c-contactos" class="capa">
+    <div class="cab-c"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M20 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg><span data-t="enviar_a"></span></div>
+    <div class="fila-chat"><i></i><span><span data-t="yo"></span><small data-t="yo_nota"></small></span></div>
+    <div class="fila-chat"><i style="background:#c9b8a8"></i><span data-t="ej_familia"></span></div>
+    <div class="fila-chat"><i style="background:#b7c9a8"></i><span data-t="ej_trabajo"></span></div>
+    <div class="fila-chat"><i style="background:#a8bcc9"></i><span data-t="ej_amigos"></span></div>
+  </div>
+  <div id="c-previa" class="capa">
+    <img src="foto.jpg" alt="">
+    <div class="comenta" data-t="comentario"></div>
+    <div class="para" data-t="yo"></div>
+    <div class="manda"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M3 12 21 4l-5 17-4-7z" fill="currentColor"/></svg></div>
+  </div>
+  <div id="foco"></div>
+  <div id="toque" class="toque"></div>
+  <div id="dedo"></div>
+</div></div></div>
+
+<div id="forma" class="a"></div>
+<div id="fundido" class="a"></div>
+<div id="pase" class="a">
+  <div id="pase-txt"></div>
+  <div class="ap-celu"></div><div class="ap-pc"></div><div class="ap-base"></div>
+  <svg id="pase-ruta" width="720" height="1280"><path d="M144 745C260 560 400 560 525 735" fill="none" stroke="var(--accent)" stroke-width="5" stroke-dasharray="4 16" stroke-linecap="round"/></svg>
+  <img id="pase-foto" src="foto.jpg" alt="">
+</div>
+<div id="cierre" class="a">
+  <svg width="110" height="110"><use href="#icono"/></svg>
+  <h1>Tachán</h1>
+  <p data-t="frase"></p>
+  <span data-t="datos"></span>
+  <small>kvothesson.com/tachan</small>
+</div>
+
+<script src="comun.js"></script>
+<script>
+const TEXTOS = {
+  es: {
+    chat_pc:"Chat", guardar_como:"Guardar como", carpeta1:"Descargas", carpeta2:"Documentos", carpeta3:"Imágenes", guardar:"Guardar", cancelar_w:"Cancelar", este_equipo:"Este equipo", buscar_en:"Buscar en Descargas", organizar:"Organizar ▾", nueva_carpeta:"Nueva carpeta", escritorio:"Escritorio", musica:"Música", videos:"Vídeos", disco:"Disco local (C:)", red:"Red", hoy:"hoy (1)", archivo_e:"Archivo", inicio_e:"Inicio", compartir_e:"Compartir", vista_e:"Vista", copiar_a:"+ Copiar", semana:"la semana pasada (6)", mes:"El mes pasado (3)", nombre:"Nombre:", tipo:"Tipo:", tipo_v:"JPEG Image", ocultar:"⌃  Ocultar carpetas", buscar:"Escribe aquí para buscar",
+    doc_titulo:"Viaje al sur - Documento", doc_h:"Viaje al sur", tipeo:"Llegamos al lago justo para el atardecer. Esta foto la saqué desde la ruta:",
+    yo:"Yo (Tú)", yo_nota:"Envíate un mensaje", omni_vacio:"Buscar con Google o ingresar URL", ntp_imagenes:"Imágenes", agregar_atajo:"Agregar acceso directo", personalizar:"Personalizar Chrome", wa_buscar:"Buscar un chat o iniciar uno nuevo", wa_todos:"Todos", wa_noleidos:"No leídos", wa_favoritos:"Favoritos", wa_grupos:"Grupos", wa_escribe:"Escribe un mensaje", mensaje:"Mensaje", compartir:"Compartir", seleccionado:"1 elemento seleccionado", compartir_foto:"Compartir 1 foto", crear_vinculo:"Crear vínculo", compartiendo:"Compartiendo con Tachán…",
+    compu:"Mi PC", celu:"Mi celular", mensajes:"Mensajes", correo:"Correo", notas_app:"Notas", cerca:"Cerca", equipo:"Equipo", mas:"Más",
+    frase:"Pasá fotos y archivos del celular a la PC, sin cable.", datos:"Gratis, sin cuenta. Android y Windows.",
+    lugar_celu:"En el celular", lugar_pc:"En la PC", sin:"Sin Tachán", con:"Con Tachán", paso:"paso",
+    enviar_a:"Enviar a…", ej_familia:"Familia", ej_trabajo:"Trabajo", ej_amigos:"Amigos", comentario:"Escribí un comentario",
+    t:["Te queda en tu chat","La bajás y elegís dónde guardarla","10 pasos. Con Tachán, 3.","Abrí la foto","Tocá Compartir","Tocá Tachán","Se está enviando","Aparece en la PC","Y seguís escribiendo","Ya está copiada: apretá Ctrl+V","Listo, ya la pegaste","La buscás en Descargas","Y recién ahí la arrastrás al documento","Hoy abrís la foto y tocás Compartir","Elegís WhatsApp","Buscás tu propio chat","La enviás","Después vas a la PC","Viaja sola a tu PC, por tu wifi","Abrís Chrome","Entrás a WhatsApp Web","Abrís tu chat"], pest_nueva:"Nueva pestaña",
+  },
+  en: {
+    chat_pc:"Chat", guardar_como:"Save as", carpeta1:"Downloads", carpeta2:"Documents", carpeta3:"Pictures", guardar:"Save", cancelar_w:"Cancel", este_equipo:"This PC", buscar_en:"Search Downloads", organizar:"Organize ▾", nueva_carpeta:"New folder", escritorio:"Desktop", musica:"Music", videos:"Videos", disco:"Local Disk (C:)", red:"Network", hoy:"today (1)", archivo_e:"File", inicio_e:"Home", compartir_e:"Share", vista_e:"View", copiar_a:"+ Copy", semana:"last week (6)", mes:"Last month (3)", nombre:"File name:", tipo:"Save as type:", tipo_v:"JPEG Image", ocultar:"⌃  Hide Folders", buscar:"Type here to search",
+    doc_titulo:"Trip south - Document", doc_h:"Trip south", tipeo:"We reached the lake just in time for the sunset. I took this photo from the road:",
+    yo:"Me (You)", yo_nota:"Message yourself", omni_vacio:"Search Google or type a URL", ntp_imagenes:"Images", agregar_atajo:"Add shortcut", personalizar:"Customize Chrome", wa_buscar:"Search or start a new chat", wa_todos:"All", wa_noleidos:"Unread", wa_favoritos:"Favorites", wa_grupos:"Groups", wa_escribe:"Type a message", mensaje:"Message", compartir:"Share", seleccionado:"1 item selected", compartir_foto:"Share 1 photo", crear_vinculo:"Create link", compartiendo:"Sharing with Tachán…",
+    compu:"My PC", celu:"My phone", mensajes:"Messages", correo:"Mail", notas_app:"Notes", cerca:"Nearby", equipo:"Team", mas:"More",
+    frase:"Send photos and files from your phone to your PC, no cable.", datos:"Free, no account. Android and Windows.",
+    lugar_celu:"On your phone", lugar_pc:"On your PC", sin:"Without Tachán", con:"With Tachán", paso:"step",
+    enviar_a:"Send to…", ej_familia:"Family", ej_trabajo:"Work", ej_amigos:"Friends", comentario:"Add a caption",
+    t:["It's now in your chat","You download it and pick where to save it","10 steps. With Tachán, 3.","Open the photo","Tap Share","Tap Tachán","It's on its way","It shows up on your PC","And you keep typing","It's already copied: press Ctrl+V","Done, it's pasted","You find it in Downloads","And only then you drag it into the document","Today you open the photo and tap Share","You pick WhatsApp","You find your own chat","You send it","Then you go to your PC","It travels to your PC by itself, over your wifi","You open Chrome","You go to WhatsApp Web","You open your chat"], pest_nueva:"New tab",
+  },
+};
+const L = armarTextos(TEXTOS[new URLSearchParams(location.search).get("lang") || "es"]);
+
+// El camino a mano sigue después de Guardar: esos segundos se suman y lo de Tachán corre igual, más tarde.
+const PREVIO = 7, ENTRA = 1.2;  // el tramo de compartir al chat; después sigue en el segundo 1,2, cuando sale la burbuja
+const PASE = 2;  // cada vez que se va del celular a la PC
+const WEB = 5.4;  // abrir el navegador y llegar al chat
+const DIRECCION = "web.whatsapp.com";
+const MANO = 6, EXTRA = 5.5, DURACION = 27 + EXTRA + PREVIO - ENTRA + 2 * PASE + WEB;
+// Más lento que un envío real (tarda medio segundo), para que se entienda cada paso.
+const A_PC = 3, FORMA = 6.6, A_CELU = 8.2, COMPARTE = 11.4, ELIGE = 13.8, A_DOC = 15.2, LLEGA = 16, PEGA = 21.6, CIERRE = 24;
+const TITULOS = [[.1,A_PC,0],[A_PC,FORMA,1],[A_CELU,10,3],[10,12.1,4],[12.1,14,5],[14,A_DOC,6],[A_DOC,17.6,7],[17.6,19.9,8],[19.9,PEGA + .5,9],[PEGA + .5,CIERRE,10]];
+// Cámara sobre la compu: x, y, escala. Primero la pantalla entera, después el aviso, después el documento.
+const ENTERA = [0, 305, .6587], AVISO = [-264, 225, .9], DOC = [-88, 30, 1.15];
+const TOQUES = [[1.1,328,736],[COMPARTE,180,728],[ELIGE,225,600]];
+const CLICS = [[4.2,984,202],[5.8,829,570]];
+
+function base(t) {
+  let txt = "", vis = 0;
+  for (const [a, b, i] of TITULOS) if (t >= a && t < b + .12) { txt = L.t[i]; vis = ventana(t, a, b, .12); }
+  $("titulo").textContent = txt;
+  $("titulo").style.color = `color-mix(in srgb, var(--ink) ${vis * 100}%, transparent)`;
+
+  // Un solo aparato a la vez.
+  const enCompu = (t >= A_PC && t < FORMA) || t >= A_DOC;
+  mostrar("pantalla", enCompu ? 1 : 0);
+  mostrar("celu", enCompu ? 0 : 1);
+  $("lugar").textContent = enCompu ? L.lugar_pc : L.lugar_celu;
+  $("forma").innerHTML = L.t[2].replace(". ", ".<br>");
+  mostrar("forma", t >= FORMA && t < A_CELU ? 1 : 0);
+
+  const [cx, cy, cz] = t < FORMA
+    ? pista(t, [[4.3, -482, 150, 1.1], [4.7, -48, 110, .75]])
+    : pista(t, [[LLEGA + .9, ...ENTERA], [LLEGA + 1.7, ...AVISO], [19.5, ...AVISO], [20.3, ...DOC]]);
+  $("escritorio").style.transform = `translate(${cx}px,${cy}px) scale(${cz})`;
+
+  // Antes: mandársela a uno mismo, abrirla en la PC, bajarla y elegir dónde.
+  const antes = t < A_CELU;
+  mostrar("c-chat", antes ? 1 : 0);
+  mostrar("burbuja", suave(prog(t, 1.25, 1.5)));
+  $("burbuja").style.transform = `translateY(${(1 - suave(prog(t, 1.25, 1.5))) * 18}px)`;
+  mostrar("v-chat", antes ? 1 : 0);
+  mostrar("pc-mens", 1);
+  mostrar("pc-bajar", 1);
+  mostrar("dialogo", t >= 4.4 && t < 6 ? 1 : 0);
+  const [px, py] = pista(t, [[3.2,560,520],[4,984,202],[4.6,984,202],[5.6,829,570]]);
+  mostrar("puntero", t >= 3 && t < FORMA ? 1 : 0);
+  $("puntero").style.transform = `translate(${px}px,${py}px)`;
+  let cl = 0;
+  for (const [a, x, y] of CLICS) if (t >= a && t < a + .4) { cl = 1 - prog(t, a, a + .4); $("clic").style.left = x + 8 + "px"; $("clic").style.top = y + 8 + "px"; $("clic").style.transform = `scale(${.5 + prog(t, a, a + .4)})`; }
+  mostrar("clic", cl);
+
+  // Con Tachán: el documento sigue escribiéndose mientras llega la foto.
+  mostrar("v-doc", antes ? 0 : 1);
+  const n = Math.round(L.tipeo.length * prog(t, 12, 19.9));
+  $("tipeo").textContent = L.tipeo.slice(0, n);
+  $("tipeo").style.setProperty("--cursor", t < 19.9 || (t * 2 % 1) < .6 ? 1 : 0);
+  mostrar("c-foto", antes ? 0 : 1);
+
+  const sube = suave(prog(t, COMPARTE + .1, COMPARTE + .5));
+  const baja = prog(t, ELIGE + .1, ELIGE + .3);
+  $("c-hoja").style.transform = `translateY(${(1 - sube) * 777}px)`;
+  mostrar("c-hoja", t >= COMPARTE + .1 && t < ELIGE + .3 ? 1 - baja : 0);
+  mostrar("toast", t >= ELIGE + .2 && t < A_DOC ? prog(t, ELIGE + .2, ELIGE + .35) : 0);
+
+  // Foco sobre lo que hay que tocar.
+  let fo = 0, fx = 0, fy = 0;
+  if (t >= 10.1 && t < COMPARTE + .1) { fo = Math.min(prog(t, 10.1, 10.4), 1 - prog(t, COMPARTE, COMPARTE + .1)); fx = 180; fy = 735; }
+  if (t >= 12.3 && t < ELIGE + .1) { fo = Math.min(prog(t, 12.3, 12.6), 1 - prog(t, ELIGE, ELIGE + .1)); fx = 225; fy = 612; }
+  mostrar("foco", fo);
+  $("foco").style.left = fx + "px"; $("foco").style.top = fy + "px";
+
+  // El dedo llega un segundo antes de cada toque y se queda un momento.
+  let de = 0, dx = 0, dy = 0, tq = 0, tx = 0, ty = 0;
+  for (const [a, x, y] of TOQUES) {
+    if (t >= a - 1.1 && t < a + .25) {
+      const k = curva(prog(t, a - 1.1, a - .25));
+      de = Math.min(prog(t, a - 1.1, a - .9), 1 - prog(t, a + .1, a + .25));
+      dx = x + (1 - k) * 90; dy = y + (1 - k) * 130;
+    }
+    if (t >= a && t < a + .4) { tq = 1 - prog(t, a, a + .4); tx = x; ty = y; $("toque").style.transform = `scale(${1 + prog(t, a, a + .4) * 1.3})`; }
+  }
+  mostrar("dedo", de);
+  $("dedo").style.left = dx + "px"; $("dedo").style.top = dy + "px";
+  $("dedo").style.transform = t % 100 && TOQUES.some(([a]) => t >= a - .08 && t < a + .1) ? "scale(.82)" : "";
+  mostrar("toque", tq);
+  $("toque").style.left = tx + "px"; $("toque").style.top = ty + "px";
+
+  // El aviso dura 6 segundos, como en la app.
+  const v = suave(prog(t, LLEGA, LLEGA + .18));
+  mostrar("aviso", t >= LLEGA && t < LLEGA + 6 ? v : 0);
+  $("aviso").style.transform = `translateY(${(1 - v) * 16}px)`;
+
+  const apretado = t >= PEGA - .4 && t < PEGA + .1;
+  mostrar("teclas", ventana(t, 20.3, 23.2, .2));
+  for (const k of ["k1", "k2"]) $(k).style.transform = apretado ? "translateY(3px)" : "";
+  $("k1").style.borderBottomWidth = $("k2").style.borderBottomWidth = apretado ? "3px" : "";
+  $("k1").style.background = $("k2").style.background = apretado ? "var(--accent)" : "";
+  const pego = prog(t, PEGA, PEGA + .15);
+  $("pegada").style.display = t >= PEGA ? "block" : "none";
+  $("pegada").style.opacity = pego;
+
+  mostrar("fundido", Math.max(1 - prog(t, 0, .2), prog(t, CIERRE + .3, CIERRE + .35)));
+  mostrar("cierre", prog(t, CIERRE, CIERRE + .35) * (1 - prog(t, 26.75, 27)));
+}
+// Abre Descargas desde la barra, encuentra la foto y la arrastra al documento.
+function aMano(m) {
+  base(MANO);
+  const i = m < 2.1 ? 11 : 12, de = m < 2.1 ? 0 : 2.1, a = m < 2.1 ? 2.1 : 6.1;
+  $("titulo").textContent = L.t[i];
+  $("titulo").style.color = `color-mix(in srgb, var(--ink) ${ventana(m, de, a - .12, .12) * 100}%, transparent)`;
+  const abierto = m >= .8;
+  mostrar("v-chat", abierto ? 0 : 1);
+  mostrar("v-doc", abierto ? 1 : 0);
+  mostrar("v-expl", abierto ? 1 : 0);
+  $("tipeo").textContent = L.tipeo;
+  $("tipeo").style.setProperty("--cursor", 0);
+  const suelta = m >= 3.7;
+  $("pegada").style.display = suelta ? "block" : "none";
+  $("pegada").style.opacity = prog(m, 3.7, 3.85);
+  const [cx, cy, cz] = pista(m, [[.7, -48, 110, .75], [1.1, ...ENTERA]]);
+  $("escritorio").style.transform = `translate(${cx}px,${cy}px) scale(${cz})`;
+  const [px, py] = pista(m, [[.05,829,570],[.6,320,660],[.9,320,660],[1.8,795,178],[2.2,795,178],[3.6,290,330]]);
+  mostrar("puntero", 1);
+  $("puntero").style.transform = `translate(${px}px,${py}px)`;
+  const arrastra = m >= 2.2 && m < 3.7;
+  mostrar("fantasma", arrastra ? 1 : 0);
+  $("fantasma").style.transform = `translate(${px + 12}px,${py + 16}px)`;
+  let cl = 0;
+  for (const [c, x, y] of [[.7,320,660],[2.05,795,178]]) if (m >= c && m < c + .4) { cl = 1 - prog(m, c, c + .4); $("clic").style.left = x + 8 + "px"; $("clic").style.top = y + 8 + "px"; $("clic").style.transform = `scale(${.5 + prog(m, c, c + .4)})`; }
+  mostrar("clic", cl);
+}
+
+// Abre la foto, toca Compartir, elige el chat, elige su propio chat y la manda.
+function alChat(m) {
+  base(A_CELU + .1);
+  $("c-chat").style.visibility = "hidden";
+  $("estado").style.color = m >= 5.3 ? "#fff" : "";
+  const CUATRO = [[0, 1.6, 13], [1.6, 3.5, 14], [3.5, 5.3, 15], [5.3, PREVIO, 16]];
+  for (const [a, b, i] of CUATRO) if (m >= a && m < b) {
+    $("titulo").textContent = L.t[i];
+    $("titulo").style.color = `color-mix(in srgb, var(--ink) ${ventana(m, a, b - .1, .1) * 100}%, transparent)`;
+  }
+  const sube = suave(prog(m, 1.55, 1.95));
+  $("c-hoja").style.transform = `translateY(${(1 - sube) * 777}px)`;
+  mostrar("c-hoja", m >= 1.55 && m < 3.5 ? 1 : 0);
+  mostrar("c-contactos", m >= 3.5 && m < 5.3 ? 1 : 0);
+  mostrar("c-previa", m >= 5.3 ? 1 : 0);
+  // tap, x, y, foco desde, foco x, foco y
+  const PASOS = [[1.5,180,728,.6,180,735],[3.4,45,600,2.3,45,612],[5.2,140,120,4,44,118],[6.85,332,724,5.9,332,724]];
+  let fo = 0, fx = 0, fy = 0, de = 0, dx = 0, dy = 0, tq = 0, tx = 0, ty = 0;
+  for (const [a, x, y, f, gx, gy] of PASOS) {
+    if (m >= f && m < a + .1) { fo = Math.min(prog(m, f, f + .25), 1 - prog(m, a, a + .1)); fx = gx; fy = gy; }
+    if (m >= a - 1 && m < a + .2) {
+      const k = curva(prog(m, a - 1, a - .25));
+      de = Math.min(prog(m, a - 1, a - .8), 1 - prog(m, a + .05, a + .2));
+      dx = x + (1 - k) * 70; dy = y + (1 - k) * 110;
+    }
+    if (m >= a && m < a + .35) { tq = 1 - prog(m, a, a + .35); tx = x; ty = y; $("toque").style.transform = `scale(${1 + prog(m, a, a + .35) * 1.3})`; }
+  }
+  mostrar("foco", fo);
+  $("foco").style.left = fx + "px"; $("foco").style.top = fy + "px";
+  mostrar("dedo", de);
+  $("dedo").style.left = dx + "px"; $("dedo").style.top = dy + "px";
+  $("dedo").style.transform = "";
+  mostrar("toque", tq);
+  $("toque").style.left = tx + "px"; $("toque").style.top = ty + "px";
+  mostrar("fundido", 1 - prog(m, 0, .2));
+}
+
+function pase(m, texto) {
+  mostrar("pase", Math.min(prog(m, 0, .2), 1 - prog(m, PASE - .2, PASE)));
+  $("pase-txt").textContent = texto;
+  const k = curva(prog(m, .35, 1.55)), u = 1 - k;
+  // La misma curva que la ruta punteada.
+  const x = u * u * u * 144 + 3 * u * u * k * 260 + 3 * u * k * k * 400 + k * k * k * 525;
+  const y = u * u * u * 745 + 3 * u * u * k * 560 + 3 * u * k * k * 560 + k * k * k * 735;
+  $("pase-foto").style.transform = `translate(${x}px,${y}px)`;
+}
+
+// Abre el navegador desde la barra, escribe la dirección y entra a su propio chat.
+function alaWeb(m) {
+  const i = m < 1.6 ? 19 : m < 3.5 ? 20 : 21, de = m < 1.6 ? 0 : m < 3.5 ? 1.6 : 3.5, a = m < 1.6 ? 1.6 : m < 3.5 ? 3.5 : WEB;
+  $("titulo").textContent = L.t[i];
+  $("titulo").style.color = `color-mix(in srgb, var(--ink) ${ventana(m, de, a - .1, .1) * 100}%, transparent)`;
+  const abierto = m >= 1.1, cargado = m >= 3.4, enChat = m >= 4.6;
+  mostrar("pc-escribe", enChat ? 1 : 0);
+  $("pc-fila").style.background = enChat ? "" : "transparent";
+  mostrar("v-chat", abierto ? 1 : 0);
+  mostrar("pc-vacia", cargado ? 0 : 1);
+  mostrar("pc-cab", enChat ? 1 : 0);
+  mostrar("pc-mens", enChat ? prog(m, 4.6, 4.8) : 0);
+  mostrar("pc-bajar", enChat ? prog(m, 4.6, 4.8) : 0);
+  $("pest-txt").textContent = cargado ? "WhatsApp" : L.pest_nueva;
+  $("pest-fav").className = cargado ? "fav" : "fav ntp";
+  const tipeado = DIRECCION.slice(0, Math.round(DIRECCION.length * prog(m, 1.8, 3.1)));
+  $("dir-txt").textContent = tipeado || (m < 1.8 ? L.omni_vacio : "");
+  $("dir-txt").className = tipeado ? "" : "vacio";
+  $("dir-txt").style.setProperty("--cursor", abierto && !cargado ? 1 : 0);
+  const [cx, cy, cz] = pista(m, [[1.2, ...ENTERA], [1.6, -20, 150, 1.1], [4.95, -20, 150, 1.1], [5.4, -482, 150, 1.1]]);
+  $("escritorio").style.transform = `translate(${cx}px,${cy}px) scale(${cz})`;
+  const [px, py] = pista(m, [[.1,620,520],[.75,360,660],[1.2,360,660],[1.55,300,70],[3.5,300,70],[4.3,270,262],[4.9,270,262],[5.4,560,520]]);
+  mostrar("puntero", 1);
+  $("puntero").style.transform = `translate(${px}px,${py}px)`;
+  let cl = 0;
+  for (const [c, x, y] of [[.9,360,660],[1.65,300,70],[4.45,270,262]]) if (m >= c && m < c + .4) { cl = 1 - prog(m, c, c + .4); $("clic").style.left = x + 8 + "px"; $("clic").style.top = y + 8 + "px"; $("clic").style.transform = `scale(${.5 + prog(m, c, c + .4)})`; }
+  mostrar("clic", cl);
+}
+
+// Título -> paso. El mismo contador en los dos caminos deja ver la diferencia.
+const A_MANO = { 13: 1, 14: 2, 15: 3, 16: 4, 0: 4, 19: 5, 20: 6, 21: 7, 1: 8, 11: 9, 12: 10 };
+const CON_TACHAN = { 3: 0, 4: 1, 5: 2, 6: 2, 7: 2, 8: 2, 9: 3, 10: 3 };
+let camino = "", numero = 0;
+function render(t) {
+  dibujar(t);
+  const i = L.t.indexOf($("titulo").textContent);
+  if (i in A_MANO) { camino = L.sin; numero = A_MANO[i]; }
+  else if (i in CON_TACHAN) { camino = L.con; numero = CON_TACHAN[i]; }
+  $("lugar").textContent = [camino, $("lugar").textContent, numero ? L.paso + " " + numero : ""].filter(Boolean).join(" · ");
+}
+
+function dibujar(t) {
+  mostrar("pase", 0);
+  // Fuera de la entrada al chat, el navegador está en el chat.
+  mostrar("pc-vacia", 0);
+  mostrar("pc-cab", 1);
+  mostrar("pc-escribe", 1);
+  $("pc-fila").style.background = "";
+  $("pest-txt").textContent = "WhatsApp";
+  $("pest-fav").className = "fav";
+  $("dir-txt").textContent = DIRECCION;
+  $("dir-txt").className = "";
+  $("dir-txt").style.setProperty("--cursor", 0);
+  const q1 = PREVIO + A_PC - ENTRA, q2 = PREVIO - ENTRA + EXTRA + A_DOC;
+  if (t < q1) return sinPase(t);
+  if (t < q1 + PASE) { sinPase(q1 - .01); return pase(t - q1, L.t[17]); }
+  t -= PASE;
+  if (t < q1 + WEB) { sinPase(q1 + .01); return alaWeb(t - q1); }
+  t -= WEB;
+  if (t < q2) return sinPase(t);
+  if (t < q2 + PASE) { sinPase(q2 - .01); return pase(t - q2, L.t[18]); }
+  sinPase(t - PASE);
+}
+
+function sinPase(t) {
+  mostrar("v-expl", 0);
+  mostrar("fantasma", 0);
+  mostrar("c-contactos", 0);
+  mostrar("c-previa", 0);
+  if (t < PREVIO) return alChat(t);
+  t = t - PREVIO + ENTRA;
+  if (t < MANO) base(t);
+  else if (t < FORMA + EXTRA) aMano(t - MANO);
+  else base(t - EXTRA);
+}
+window.render = render;
+window.DURACION = DURACION;
+window.LLEGADAS = [LLEGA + EXTRA + PREVIO - ENTRA + 2 * PASE + WEB];
+render(8);
+
+// El anuncio: remonta las mismas escenas. Los diez pasos a mano corren como un chiste y después Tachán, en calma.
+// Cada toma: desde, hasta (tiempo del tutorial), duración, texto.
+if (new URLSearchParams(location.search).get("corte") === "anuncio") {
+  document.body.classList.add("anuncio");
+  const A = {
+    es: { camino: "Del celu a tu documento:", paso: "paso", o: "O dos toques<br>y Ctrl+V.", uno: "Un toque", dos: "Dos toques", listo: "Listo." },
+    en: { camino: "Phone to your doc:", paso: "step", o: "Or two taps<br>and Ctrl+V.", uno: "One tap", dos: "Two taps", listo: "Done." },
+  }[new URLSearchParams(location.search).get("lang") || "es"];
+  const TOMAS = [
+    [.6, 1.7, .9], [2.5, 3.5, .7], [4.2, 5.3, .65], [6, 7, .6], [11.4, 12.4, .55],
+    [12.4, 14.3, .55], [14.8, 16, .5], [16.9, 19, .55], [19.3, 21.1, .5], [21.4, 23.1, .8],
+  ].map(([a, b, d], i) => [a, b, d, `${A.camino}<br><span style="color:var(--accent)">${A.paso} ${i + 1}</span>`]);
+  TOMAS.push(
+    [0, 0, 1.2, null],
+    [29.2, 30.5, 1, A.uno],
+    [31.6, 32.75, 1, A.dos],
+    [36.7, 38.5, 1.7, "<b>Tachán.</b>"],
+    [41.6, 42.3, .7, `<span>Ctrl+V</span>`],
+    [42.3, 43.1, 1, `<b>${A.listo}</b>`],
+    [45.1, 47.4, 2.8, ""],
+  );
+  let suma = 0;
+  const CORTE = TOMAS.map(([a, b, d, txt]) => { const toma = { de: suma, a, b, d, txt }; suma += d; return toma; });
+  const cuando = (i, fuente) => CORTE[i].de + (fuente - CORTE[i].a) / (CORTE[i].b - CORTE[i].a) * CORTE[i].d;
+  window.DURACION = suma;
+  window.LLEGADAS = [CORTE[13].de];
+  window.MUSICA = { tics: CORTE.slice(0, 10).map(c => c.de), corte: CORTE[10].de, toques: [cuando(11, 30.1), cuando(12, 32.5)], llegada: CORTE[13].de };
+  window.render = t => {
+    const i = CORTE.findLastIndex(c => t >= c.de), toma = CORTE[Math.max(i, 0)], dt = t - toma.de;
+    if (toma.txt === null) {
+      dibujar(29.2);
+      mostrar("forma", 1);
+      $("forma").innerHTML = A.o;
+    } else {
+      dibujar(toma.a + (toma.b - toma.a) * dt / toma.d);
+      $("titulo").innerHTML = toma.txt;
+      $("titulo").style.color = "var(--ink)";
+      // Lo que cambia entra con un golpe y cada toma a mano se acerca un poco.
+      const golpe = $("titulo").querySelector("span, b");
+      if (golpe) golpe.style.transform = `scale(${1 + (i === 13 ? .4 : .18) * (1 - curva(prog(dt, 0, .18)))})`;
+      const cerca = i < 10 ? 1 + .035 * dt / toma.d : 1;
+      $("celu").style.transform = $("pantalla").style.transform = `scale(${cerca})`;
+      if (i === 5) $("escritorio").style.transform = `translate(${ENTERA[0]}px,${ENTERA[1]}px) scale(${ENTERA[2]})`;
+    }
+    $("lugar").textContent = "";
+    mostrar("fundido", 0);
+  };
+  window.render(0);
+}
+</script>
+</body>
+</html>

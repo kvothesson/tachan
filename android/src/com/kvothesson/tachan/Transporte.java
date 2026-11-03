@@ -17,7 +17,9 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,8 +43,8 @@ public final class Transporte {
         Rechazado(String mensaje) { super(mensaje); }
     }
 
-    /** El certificado no es el de la compu vinculada: alguien se está haciendo pasar. */
-    public static class Impostor extends IOException {
+    /** El certificado no es el de la compu vinculada. Cualquiera en la red puede provocarlo: no se manda nada, pero el vínculo sigue. */
+    public static class Impostor extends NoLlega {
         Impostor(String mensaje) { super(mensaje); }
     }
 
@@ -70,6 +72,7 @@ public final class Transporte {
 
     private static final String ALFABETO = "abcdefghijklmnopqrstuvwxyz234567";
     private static final int LARGO_ENLACE = 22;
+    private static final long MAXIMO_BUSQUEDA_MS = 10000;
 
     /** Acepta el enlace completo del QR o solo el código. Devuelve null si no es válido. */
     public static Enlace leerEnlace(String crudo) {
@@ -91,7 +94,7 @@ public final class Transporte {
         }
         if (texto == null) return null;
         byte[] d = base32(texto.replace(" ", "").replace("-", "").toLowerCase(Locale.ROOT));
-        if (d == null || d.length != LARGO_ENLACE) return null;
+        if (d == null || d.length != LARGO_ENLACE || !esRedLocal(d)) return null;
         Enlace e = new Enlace();
         e.host = (d[0] & 255) + "." + (d[1] & 255) + "." + (d[2] & 255) + "." + (d[3] & 255);
         e.puerto = ((d[4] & 255) << 8) | (d[5] & 255);
@@ -99,6 +102,13 @@ public final class Transporte {
         e.huellaParcial = Arrays.copyOfRange(d, 12, 22);
         e.nombre = nombre;
         return e;
+    }
+
+    /** Tachán no sale de la red local: un link que apunte a internet no es de una compu tuya. */
+    private static boolean esRedLocal(byte[] ip) {
+        if (ip.length < 4) return false;
+        int a = ip[0] & 255, b = ip[1] & 255;
+        return a == 10 || (a == 172 && b >= 16 && b <= 31) || (a == 192 && b == 168) || (a == 169 && b == 254);
     }
 
     private static byte[] base32(String s) {
@@ -179,8 +189,9 @@ public final class Transporte {
             compu.token = campo(json, "token");
             compu.huella = campo(json, "huella");
             compu.nombre = campo(json, "nombre");
+            if (!compu.huella.matches("[0-9a-fA-F]{64}")) throw new Impostor("huella inconsistente");
             byte[] completa = desdeHex(compu.huella);
-            if (completa.length != 32 || !MessageDigest.isEqual(Arrays.copyOf(completa, enlace.huellaParcial.length), enlace.huellaParcial))
+            if ( !MessageDigest.isEqual(Arrays.copyOf(completa, enlace.huellaParcial.length), enlace.huellaParcial))
                 throw new Impostor("huella inconsistente");
             return compu;
         } catch (Rechazado | Impostor e) {
@@ -270,13 +281,15 @@ public final class Transporte {
         }
     }
 
-    /** Busca la compu en la red si cambió de dirección. Devuelve su nuevo host o null. */
+    /** Busca la compu en la red si cambió de dirección. Cualquiera puede contestar: solo vale la que muestra su certificado. Devuelve su nuevo host o null. */
     public static String descubrir(Compu compu, int puertoUdp) {
         byte[] pedido = ("TCHN?" + compu.huella.substring(0, 16)).getBytes();
         try (DatagramSocket s = new DatagramSocket()) {
             s.setBroadcast(true);
             s.setSoTimeout(700);
             String[] destinos = {"255.255.255.255", subred(compu.host)};
+            Set<String> probadas = new HashSet<>();
+            long limite = System.currentTimeMillis() + MAXIMO_BUSQUEDA_MS;
             for (int intento = 0; intento < 3; intento++) {
                 for (String destino : destinos) {
                     if (destino == null) continue;
@@ -284,22 +297,44 @@ public final class Transporte {
                     catch (IOException ignorado) { }
                 }
                 try {
-                    DatagramPacket respuesta = new DatagramPacket(new byte[64], 64);
-                    s.receive(respuesta);
-                    String texto = new String(respuesta.getData(), 0, respuesta.getLength());
-                    if (texto.startsWith("TCHN!")) {
-                        compu.puerto = Integer.parseInt(texto.substring(5));
-                        compu.host = respuesta.getAddress().getHostAddress();
-                        return compu.host;
+                    while (System.currentTimeMillis() < limite) {
+                        DatagramPacket respuesta = new DatagramPacket(new byte[64], 64);
+                        s.receive(respuesta);
+                        String texto = new String(respuesta.getData(), 0, respuesta.getLength());
+                        if (!texto.startsWith("TCHN!") || !esRedLocal(respuesta.getAddress().getAddress())) continue;
+                        String host = respuesta.getAddress().getHostAddress(), puerto = texto.substring(5);
+                        if (!probadas.add(host + ":" + puerto)) continue;
+                        Compu candidata = new Compu();
+                        candidata.host = host;
+                        candidata.huella = compu.huella;
+                        candidata.token = compu.token;
+                        try { candidata.puerto = Integer.parseInt(puerto); }
+                        catch (NumberFormatException raro) { continue; }
+                        if (esElla(candidata)) {
+                            compu.puerto = candidata.puerto;
+                            compu.host = host;
+                            return host;
+                        }
                     }
                 } catch (SocketTimeoutException esperar) {
                     // otro intento
                 }
             }
-        } catch (IOException | NumberFormatException e) {
+        } catch (IOException e) {
             return null;
         }
         return null;
+    }
+
+    private static boolean esElla(Compu candidata) {
+        try {
+            hola(candidata);
+            return true;
+        } catch (Rechazado e) {
+            return true;  // pasó la huella: es ella, aunque ya no nos reconozca
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     private static String subred(String host) {

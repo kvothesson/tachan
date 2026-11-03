@@ -211,7 +211,7 @@ namespace Tachan
             espera.Tick += (s, a) => Entregar();
             aviso.VisibleChanged += (s, a) => { if (!aviso.Visible) hilo.BeginInvoke((Action)MostrarDemorados); };
 
-            var menu = new ContextMenuStrip { Renderer = Tema.Oscuro ? new RendererOscuro() : null };
+            var menu = new ContextMenuStrip { Renderer = new RendererOscuro() };
             menu.Items.Add(Textos.T("vincular"), null, (s, a) => AbrirVinculo());
             menuCelus = new ToolStripMenuItem(Textos.T("vinculados"));
             menu.Items.Add(menuCelus);
@@ -343,7 +343,8 @@ namespace Tachan
                     var sinVer = aviso.TextoDemoradoSinVer;
                     if (sinVer != null) demorados.Insert(0, sinVer);
                     aviso.Mostrar(copia, seCopio, miniatura);
-                    if (seCopio && Datos.PegarSolo) Portapapeles.ApretarPegar();
+                    // Un salto de línea en una terminal abierta ejecutaría lo recibido: eso se pega a mano.
+                    if (seCopio && Datos.PegarSolo && !copia.Any(r => r.Texto != null && r.Texto.IndexOfAny(new[] { '\r', '\n' }) >= 0)) Portapapeles.ApretarPegar();
                 }));
             });
         }
@@ -441,6 +442,9 @@ namespace Tachan
         readonly Button red = new Button { FlatStyle = FlatStyle.System };
         readonly System.Windows.Forms.Timer renovar = new System.Windows.Forms.Timer { Interval = MinutosValidez * 60 * 1000 };
 
+        [DllImport("dwmapi.dll")]
+        static extern int DwmSetWindowAttribute(IntPtr ventana, int atributo, ref int valor, int tamano);
+
         public VentanaVinculo(Servidor servidor)
         {
             this.servidor = servidor;
@@ -487,6 +491,9 @@ namespace Tachan
                 red.Visible = !Firewall.Permitido();
             };
             Controls.AddRange(new Control[] { qr, frase, verCodigo, codigo, red });
+            // Barra de título oscura también con Windows en tema claro. Donde no exista, se ignora.
+            var oscura = 1;
+            DwmSetWindowAttribute(Handle, 20, ref oscura, sizeof(int));
 
             renovar.Tick += (s, a) => Refrescar();
             renovar.Start();

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Tema" parent="@android:style/Theme.Material.Light.NoActionBar">
+    <style name="Tema" parent="@android:style/Theme.Material.NoActionBar">
         <item name="android:colorPrimary">@color/kvo_accent</item>
         <item name="android:colorAccent">@color/kvo_accent</item>
         <item name="android:windowBackground">@color/kvo_ground</item>
         <item name="android:statusBarColor">@color/kvo_ground</item>
         <item name="android:navigationBarColor">@color/kvo_ground</item>
         <item name="android:textColorPrimary">@color/kvo_ink</item>
-        <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

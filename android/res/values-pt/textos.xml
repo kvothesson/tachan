@@ -36,6 +36,8 @@
     <string name="hay_version">Há uma nova versão</string>
     <string name="bajar">Baixar</string>
     <string name="texto_enviado">Texto</string>
+    <string name="reemplaza">Substitui %1$s</string>
+    <string name="otra_compu">Não parece o seu computador. Se o reinstalou, vincule de novo</string>
     <string name="escribi_texto">Escreva ou cole um texto</string>
     <string name="mandar">Enviar</string>
 </resources>

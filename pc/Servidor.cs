@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -27,10 +28,13 @@ namespace Tachan
         const int MaximoTexto = 2 * 1024 * 1024;
         const int MaximoCabecera = 16 * 1024;
         const int MaximoIntentos = 5;
+        const int MaximoPorDireccion = 4;
+        const int PlazoCabeceraMs = 10000;
 
         readonly X509Certificate2 identidad;
         readonly byte[] huella;
-        readonly SemaphoreSlim cupos = new SemaphoreSlim(8);
+        readonly SemaphoreSlim cupos = new SemaphoreSlim(16);
+        readonly Dictionary<IPAddress, int> porDireccion = new Dictionary<IPAddress, int>();
         TcpListener oyente;
         UdpClient udp;
         volatile bool apagando;
@@ -118,8 +122,15 @@ namespace Tachan
                 TcpClient cliente;
                 try { cliente = oyente.AcceptTcpClient(); }
                 catch (Exception) { return; }
+                var direccion = ((IPEndPoint)cliente.Client.RemoteEndPoint).Address;
+                if (!Entrar(direccion))
+                {
+                    cliente.Close();
+                    continue;
+                }
                 if (!cupos.Wait(0))
                 {
+                    Salir(direccion);
                     cliente.Close();
                     continue;
                 }
@@ -130,9 +141,30 @@ namespace Tachan
                     finally
                     {
                         cliente.Close();
+                        Salir(direccion);
                         cupos.Release();
                     }
                 });
+            }
+        }
+
+        // Una sola máquina no puede ocupar todos los lugares.
+        bool Entrar(IPAddress direccion)
+        {
+            lock (porDireccion)
+            {
+                porDireccion.TryGetValue(direccion, out var n);
+                if (n >= MaximoPorDireccion) return false;
+                porDireccion[direccion] = n + 1;
+                return true;
+            }
+        }
+
+        void Salir(IPAddress direccion)
+        {
+            lock (porDireccion)
+            {
+                if (--porDireccion[direccion] == 0) porDireccion.Remove(direccion);
             }
         }
 
@@ -142,9 +174,14 @@ namespace Tachan
             cliente.SendTimeout = 30000;
             using (var ssl = new SslStream(cliente.GetStream(), false))
             {
-                ssl.AuthenticateAsServer(identidad, false, SslProtocols.Tls12, false);
                 var cabeceras = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                var primera = LeerCabecera(ssl, cabeceras).Split(' ');
+                string[] primera;
+                // Sin este plazo, mandar un byte cada tanto alcanza para ocupar un lugar para siempre.
+                using (new Timer(_ => cliente.Close(), null, PlazoCabeceraMs, Timeout.Infinite))
+                {
+                    ssl.AuthenticateAsServer(identidad, false, SslProtocols.Tls12, false);
+                    primera = LeerCabecera(ssl, cabeceras).Split(' ');
+                }
                 if (primera.Length < 2)
                 {
                     Responder(ssl, 400, "{}");
@@ -334,6 +371,7 @@ namespace Tachan
             string nombre;
             try { nombre = Uri.UnescapeDataString(crudo ?? ""); }
             catch (Exception) { nombre = ""; }
+            nombre = new string(nombre.Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.Format).ToArray());  // los invisibles pueden disfrazar la extensión
             nombre = nombre.Replace('\\', '/');
             nombre = nombre.Substring(nombre.LastIndexOf('/') + 1);
             var invalidos = Path.GetInvalidFileNameChars();

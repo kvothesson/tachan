@@ -10,29 +10,19 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Kvothesson;
-using Microsoft.Win32;
 
 namespace Tachan
 {
     static class Tema
     {
-        public static bool Oscuro
-        {
-            get
-            {
-                using (var k = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
-                    return (k?.GetValue("AppsUseLightTheme") as int?) == 0;
-            }
-        }
-
-        // Los valores salen de marca/project/tokens.json del taller: ver MarcaColores.cs.
-        public static Color Acento => Oscuro ? MarcaColores.Noche.Accent : MarcaColores.Dia.Accent;
-        public static Color Ok => Oscuro ? MarcaColores.Noche.Ok : MarcaColores.Dia.Ok;
-        public static Color Suelo => Oscuro ? MarcaColores.Noche.Ground : MarcaColores.Dia.Ground;
-        public static Color Fondo => Oscuro ? MarcaColores.Noche.Surface : MarcaColores.Dia.Surface;
-        public static Color Fondo2 => Oscuro ? MarcaColores.Noche.SurfaceRaised : MarcaColores.Dia.SurfaceRaised;
-        public static Color Texto => Oscuro ? MarcaColores.Noche.Ink : MarcaColores.Dia.Ink;
-        public static Color Tenue => Oscuro ? MarcaColores.Noche.Muted : MarcaColores.Dia.Muted;
+        // Siempre de noche, con cualquier tema de Windows. Los valores salen de marca/project/tokens.json del taller: ver MarcaColores.cs.
+        public static Color Acento => MarcaColores.Noche.Accent;
+        public static Color Ok => MarcaColores.Noche.Ok;
+        public static Color Suelo => MarcaColores.Noche.Ground;
+        public static Color Fondo => MarcaColores.Noche.Surface;
+        public static Color Fondo2 => MarcaColores.Noche.SurfaceRaised;
+        public static Color Texto => MarcaColores.Noche.Ink;
+        public static Color Tenue => MarcaColores.Noche.Muted;
 
         public static GraphicsPath Redondeado(RectangleF r, float radio)
         {

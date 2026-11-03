@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /** Recibe lo que se comparte desde cualquier app y se lo pasa al servicio. Sin pantalla. */
 public class Compartir extends Activity {
@@ -42,6 +43,9 @@ public class Compartir extends Activity {
         if (lista.isEmpty() && clip != null)
             for (int i = 0; i < clip.getItemCount(); i++)
                 if (clip.getItemAt(i).getUri() != null) lista.add(clip.getItemAt(i).getUri());
+        // Otra app podría pedirnos file:// para que mandemos nuestros propios datos: solo se acepta lo que comparte ella.
+        for (Iterator<Uri> i = lista.iterator(); i.hasNext(); )
+            if (!"content".equals(i.next().getScheme())) i.remove();
         return lista;
     }
 

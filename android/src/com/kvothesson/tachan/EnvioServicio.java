@@ -145,13 +145,13 @@ public class EnvioServicio extends Service {
                 p.prepararHeic(this);
                 intentar(compu, p, bytes -> mostrarAvance(orden, total, p.largo, bytes));
                 p.borrarTemporal();
-                Almacen.agregarReciente(this, p.etiqueta());
+                Almacen.agregarReciente(this, p.etiqueta(this));
                 hechas++;
             } catch (SecurityException e) {
                 // Se venció o nunca hubo permiso sobre el original: reintentar no lo va a arreglar.
                 p.borrarTemporal();
                 resultado(getString(R.string.fallo), true);
-            } catch (Transporte.Rechazado | Transporte.Impostor e) {
+            } catch (Transporte.Rechazado e) {
                 for (Pieza resto : piezas) resto.borrarTemporal();
                 Almacen.olvidar(this);
                 resultado(getString(R.string.revincular), true);
@@ -257,7 +257,6 @@ public class EnvioServicio extends Service {
             p.texto = t.getBytes(StandardCharsets.UTF_8);
             p.largo = p.texto.length;
             p.clase = "texto";
-            p.nombre = t.length() > 60 ? t.substring(0, 60) + "…" : t;
             return p;
         }
 
@@ -276,7 +275,11 @@ public class EnvioServicio extends Service {
             return p;
         }
 
-        String etiqueta() { return nombre.isEmpty() ? "…" : nombre; }
+        /** Un texto puede ser una contraseña: en Recientes no se muestra. */
+        String etiqueta(Context c) {
+            if (texto != null) return c.getString(R.string.texto_enviado);
+            return nombre.isEmpty() ? "…" : nombre;
+        }
 
         InputStream abrir(Context c) throws IOException {
             if (texto != null) return new ByteArrayInputStream(texto);

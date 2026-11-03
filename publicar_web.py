@@ -11,6 +11,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+from firmar import firmar
+from generar_en import generar
+
 WEB = Path(__file__).resolve().parent / "web"
 PUBLICO = Path(r"D:\repos\tachan-web")
 SALVAR = {".git", "README.md", ".nojekyll"}
@@ -21,11 +24,15 @@ def git(*a):
     subprocess.run(["git", "-C", str(PUBLICO), *a], check=True)
 
 
+generar()
 manifiesto = (WEB.parent / "android" / "AndroidManifest.xml").read_text(encoding="utf-8")
+codigo = int(re.search(r'versionCode="(\d+)"', manifiesto)[1])
+sha256 = hashlib.sha256((WEB / "Tachan.exe").read_bytes()).hexdigest()
 (WEB / "version.json").write_text(json.dumps({
-    "codigo": int(re.search(r'versionCode="(\d+)"', manifiesto)[1]),
+    "codigo": codigo,
     "nombre": re.search(r'versionName="([^"]+)"', manifiesto)[1],
-    "exe_sha256": hashlib.sha256((WEB / "Tachan.exe").read_bytes()).hexdigest(),
+    "exe_sha256": sha256,
+    "firma": firmar(codigo, sha256),
 }, indent=2), encoding="utf-8")
 for viejo in PUBLICO.iterdir():
     if viejo.name not in SALVAR:
