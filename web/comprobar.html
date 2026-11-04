@@ -57,14 +57,14 @@
     <p>El código todavía no es público. Está previsto abrirlo, para que cualquiera pueda leerlo y comprobar que el programa sale de ahí.</p>
 
     <h2>Si encontrás una falla</h2>
-    <p>Contanos en privado por GitHub. Solo lo vemos nosotros hasta que esté arreglado.</p>
+    <p>Contanos en privado por GitHub. Solo lo ven vos y Kvothesson hasta que esté arreglado.</p>
     <p><a class="reportar" href="https://github.com/kvothesson/tachan/security/advisories/new">Reportar una falla</a></p>
   </section>
   <section lang="en">
     <h2>How to check it, in English</h2>
     <p>You don't have to take our word for it. Cut your router's internet and keep the wifi on: sharing still works, because it goes straight from one device to the other. On the computer, <code>Get-NetTCPConnection -OwningProcess (Get-Process Tachan).Id</code> in PowerShell shows Tachán only listening on port 47810, or connected to your phone while sending. It only goes online if you tap Check for updates.</p>
     <p>To check the Windows program, compare <code>Get-FileHash Tachan.exe</code> with <code>exe_sha256</code> in <a href="version.json">version.json</a>. Since 1.3, updates must be signed with a key that isn't on this site. The Android APK is always signed with the key whose SHA-256 fingerprint is shown above.</p>
-    <p>Tachán is built with AI help. A security review by the same AI on November 2, 2026 found 10 issues, 2 serious, all fixed in 1.3. That isn't enough: it still needs an outside reviewer. Known limits: someone on your wifi can craft a fake link, so the phone always asks you to confirm and shows the computer's address; another app on your phone can send things through Tachán, which you'll see arrive; and the first download depends on this site. The code isn't public yet; we plan to open it. If you find an issue, <a href="https://github.com/kvothesson/tachan/security/advisories/new">report it privately on GitHub</a>.</p>
+    <p>Tachán is built with AI help. A security review by the same AI on November 2, 2026 found 10 issues, 2 serious, all fixed in 1.3. That isn't enough: it still needs an outside reviewer. Known limits: someone on your wifi can craft a fake link, so the phone always asks you to confirm and shows the computer's address; another app on your phone can send things through Tachán, which you'll see arrive; and the first download depends on this site. The code isn't public yet; we plan to open it. If you find an issue, <a href="https://github.com/kvothesson/tachan/security/advisories/new">report it privately on GitHub</a>: only you and Kvothesson see it until it's fixed.</p>
   </section>
   <p><a href="./">Tachán</a></p>
 </main>
