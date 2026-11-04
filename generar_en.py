@@ -38,7 +38,8 @@ def generar():
     cambiar(r'aria-label="Cómo funciona Tachán"', 'aria-label="How Tachán works"')
     cambiar(r'aria-label="Foto recibida"', 'aria-label="Photo received"')
     cambiar(r'<a href="en\.html" hreflang="en">English</a>', '<a href="./" hreflang="es">Español</a>')
-    html = re.sub(r'<span lang="es">[^<]*</span>', "", html)
+    # Acepta etiquetas adentro, como un link, mientras no sean otro span.
+    html = re.sub(r'<span lang="es">(?:[^<]|<(?!/?span\b))*</span>', "", html)
     if 'lang="es"' in html.replace('hreflang="es"', ""):
         raise SystemExit('generar_en: quedó texto en español')
     (WEB / "en.html").write_bytes(html.encode("utf-8"))
