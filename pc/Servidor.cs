@@ -37,6 +37,7 @@ namespace Tachan
         readonly Dictionary<IPAddress, int> porDireccion = new Dictionary<IPAddress, int>();
         TcpListener oyente;
         UdpClient udp;
+        const int IntentosPuerto = 20, EsperaPuertoMs = 500;
         volatile bool apagando;
         byte[] secretoVinculo;
         int intentosVinculo;
@@ -56,11 +57,26 @@ namespace Tachan
         public void Arrancar()
         {
             var puerto = int.TryParse(Environment.GetEnvironmentVariable("TACHAN_PUERTO"), out var p) ? p : Marca.PuertoTcp;
-            oyente = new TcpListener(IPAddress.Any, puerto);
-            oyente.Start();
+            // Si la versión vieja todavía está soltando el puerto, se espera un poco en vez de caerse.
+            for (var intento = 1; ; intento++)
+            {
+                try
+                {
+                    oyente = new TcpListener(IPAddress.Any, puerto);
+                    oyente.Start();
+                    udp = new UdpClient(new IPEndPoint(IPAddress.Any, puerto + 1));
+                    break;
+                }
+                catch (SocketException) when (intento < IntentosPuerto)
+                {
+                    oyente?.Stop();
+                    udp?.Close();
+                    udp = null;
+                    Thread.Sleep(EsperaPuertoMs);
+                }
+            }
             Puerto = ((IPEndPoint)oyente.LocalEndpoint).Port;
             new Thread(BucleTcp) { IsBackground = true }.Start();
-            udp = new UdpClient(new IPEndPoint(IPAddress.Any, puerto + 1));
             new Thread(BucleUdp) { IsBackground = true }.Start();
         }
 

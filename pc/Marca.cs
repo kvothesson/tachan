@@ -24,7 +24,7 @@ namespace Tachan
                 ["carpeta"] = "Open folder", ["pegar"] = "Paste automatically", ["sonido"] = "Sound",
                 ["inicio"] = "Start with Windows", ["salir"] = "Quit", ["escanea"] = "Scan with your phone",
                 ["red"] = "Allow on network", ["codigo"] = "Show code", ["copiar"] = "Copy",
-                ["abrir"] = "Open", ["ninguno"] = "None", ["listo"] = "Linked", ["firma"] = "made by Kvothesson", ["buscar"] = "Check for updates", ["ultima"] = "You have the latest version", ["actualizando"] = "Updating…", ["sinred"] = "Couldn't check. Try again later.", ["demorado"] = "Sent earlier",
+                ["abrir"] = "Open", ["ninguno"] = "None", ["listo"] = "Linked", ["firma"] = "made by Kvothesson", ["buscar"] = "Check for updates", ["ultima"] = "You have the latest version", ["actualizando"] = "Updating…", ["sinred"] = "Couldn't check. Try again later.", ["demorado"] = "Sent earlier", ["ocupado"] = "Another program is using Tachán's connection. Close it and open Tachán again.",
             },
             ["es"] = new Dictionary<string, string>
             {
@@ -32,7 +32,7 @@ namespace Tachan
                 ["carpeta"] = "Abrir carpeta", ["pegar"] = "Pegar solo", ["sonido"] = "Sonido",
                 ["inicio"] = "Iniciar con Windows", ["salir"] = "Salir", ["escanea"] = "Escaneá con el celu",
                 ["red"] = "Permitir en la red", ["codigo"] = "Ver código", ["copiar"] = "Copiar",
-                ["abrir"] = "Abrir", ["ninguno"] = "Ninguno", ["listo"] = "Vinculado", ["firma"] = "hecho por Kvothesson", ["buscar"] = "Buscar actualización", ["ultima"] = "Tenés la última versión", ["actualizando"] = "Actualizando…", ["sinred"] = "No se pudo buscar. Probá más tarde.", ["demorado"] = "Mandado antes",
+                ["abrir"] = "Abrir", ["ninguno"] = "Ninguno", ["listo"] = "Vinculado", ["firma"] = "hecho por Kvothesson", ["buscar"] = "Buscar actualización", ["ultima"] = "Tenés la última versión", ["actualizando"] = "Actualizando…", ["sinred"] = "No se pudo buscar. Probá más tarde.", ["demorado"] = "Mandado antes", ["ocupado"] = "Otro programa está usando la conexión de Tachán. Cerralo y abrí Tachán de nuevo.",
             },
             ["pt"] = new Dictionary<string, string>
             {
@@ -40,7 +40,7 @@ namespace Tachan
                 ["carpeta"] = "Abrir pasta", ["pegar"] = "Colar automaticamente", ["sonido"] = "Som",
                 ["inicio"] = "Iniciar com o Windows", ["salir"] = "Sair", ["escanea"] = "Escaneie com o celular",
                 ["red"] = "Permitir na rede", ["codigo"] = "Ver código", ["copiar"] = "Copiar",
-                ["abrir"] = "Abrir", ["ninguno"] = "Nenhum", ["listo"] = "Vinculado", ["firma"] = "feito por Kvothesson", ["buscar"] = "Procurar atualização", ["ultima"] = "Você tem a versão mais recente", ["actualizando"] = "Atualizando…", ["sinred"] = "Não foi possível procurar. Tente mais tarde.", ["demorado"] = "Enviado antes",
+                ["abrir"] = "Abrir", ["ninguno"] = "Nenhum", ["listo"] = "Vinculado", ["firma"] = "feito por Kvothesson", ["buscar"] = "Procurar atualização", ["ultima"] = "Você tem a versão mais recente", ["actualizando"] = "Atualizando…", ["sinred"] = "Não foi possível procurar. Tente mais tarde.", ["demorado"] = "Enviado antes", ["ocupado"] = "Outro programa está usando a conexão do Tachán. Feche-o e abra o Tachán de novo.",
             },
             ["fr"] = new Dictionary<string, string>
             {
@@ -48,7 +48,7 @@ namespace Tachan
                 ["carpeta"] = "Ouvrir le dossier", ["pegar"] = "Coller automatiquement", ["sonido"] = "Son",
                 ["inicio"] = "Lancer avec Windows", ["salir"] = "Quitter", ["escanea"] = "Scannez avec le téléphone",
                 ["red"] = "Autoriser sur le réseau", ["codigo"] = "Voir le code", ["copiar"] = "Copier",
-                ["abrir"] = "Ouvrir", ["ninguno"] = "Aucun", ["listo"] = "Associé", ["firma"] = "fait par Kvothesson", ["buscar"] = "Rechercher une mise à jour", ["ultima"] = "Vous avez la dernière version", ["actualizando"] = "Mise à jour…", ["sinred"] = "Recherche impossible. Réessayez plus tard.", ["demorado"] = "Envoyé plus tôt",
+                ["abrir"] = "Ouvrir", ["ninguno"] = "Aucun", ["listo"] = "Associé", ["firma"] = "fait par Kvothesson", ["buscar"] = "Rechercher une mise à jour", ["ultima"] = "Vous avez la dernière version", ["actualizando"] = "Mise à jour…", ["sinred"] = "Recherche impossible. Réessayez plus tard.", ["demorado"] = "Envoyé plus tôt", ["ocupado"] = "Un autre programme utilise la connexion de Tachán. Fermez-le et rouvrez Tachán.",
             },
             ["de"] = new Dictionary<string, string>
             {
@@ -56,7 +56,7 @@ namespace Tachan
                 ["carpeta"] = "Ordner öffnen", ["pegar"] = "Automatisch einfügen", ["sonido"] = "Ton",
                 ["inicio"] = "Mit Windows starten", ["salir"] = "Beenden", ["escanea"] = "Mit dem Handy scannen",
                 ["red"] = "Im Netzwerk erlauben", ["codigo"] = "Code anzeigen", ["copiar"] = "Kopieren",
-                ["abrir"] = "Öffnen", ["ninguno"] = "Keine", ["listo"] = "Verbunden", ["firma"] = "von Kvothesson", ["buscar"] = "Nach Updates suchen", ["ultima"] = "Du hast die neueste Version", ["actualizando"] = "Wird aktualisiert…", ["sinred"] = "Suche nicht möglich. Versuch es später.", ["demorado"] = "Früher gesendet",
+                ["abrir"] = "Öffnen", ["ninguno"] = "Keine", ["listo"] = "Verbunden", ["firma"] = "von Kvothesson", ["buscar"] = "Nach Updates suchen", ["ultima"] = "Du hast die neueste Version", ["actualizando"] = "Wird aktualisiert…", ["sinred"] = "Suche nicht möglich. Versuch es später.", ["demorado"] = "Früher gesendet", ["ocupado"] = "Ein anderes Programm nutzt die Verbindung von Tachán. Schließ es und öffne Tachán erneut.",
             },
             ["it"] = new Dictionary<string, string>
             {
@@ -64,7 +64,7 @@ namespace Tachan
                 ["carpeta"] = "Apri cartella", ["pegar"] = "Incolla automaticamente", ["sonido"] = "Suono",
                 ["inicio"] = "Avvia con Windows", ["salir"] = "Esci", ["escanea"] = "Scansiona con il telefono",
                 ["red"] = "Consenti in rete", ["codigo"] = "Mostra codice", ["copiar"] = "Copia",
-                ["abrir"] = "Apri", ["ninguno"] = "Nessuno", ["listo"] = "Collegato", ["firma"] = "fatto da Kvothesson", ["buscar"] = "Cerca aggiornamenti", ["ultima"] = "Hai l'ultima versione", ["actualizando"] = "Aggiornamento…", ["sinred"] = "Ricerca non riuscita. Riprova più tardi.", ["demorado"] = "Inviato prima",
+                ["abrir"] = "Apri", ["ninguno"] = "Nessuno", ["listo"] = "Collegato", ["firma"] = "fatto da Kvothesson", ["buscar"] = "Cerca aggiornamenti", ["ultima"] = "Hai l'ultima versione", ["actualizando"] = "Aggiornamento…", ["sinred"] = "Ricerca non riuscita. Riprova più tardi.", ["demorado"] = "Inviato prima", ["ocupado"] = "Un altro programma usa la connessione di Tachán. Chiudilo e riapri Tachán.",
             },
         };
 
