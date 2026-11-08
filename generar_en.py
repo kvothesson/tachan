@@ -9,6 +9,7 @@ WEB = Path(__file__).resolve().parent / "web"
 TITULO = "Tachán: transfer photos and files from Android to PC wirelessly"
 DESCRIPCION = "Transfer photos, videos and files from your Android phone to your Windows PC wirelessly. Encrypted over your wifi, with no account and no servers."
 AL_COMPARTIR = "Transfer photos, videos and files from your Android phone to your Windows PC wirelessly."
+FICHA = "Transfer photos, videos, files and text from your Android phone to your Windows PC wirelessly. It arrives copied, ready to paste."
 
 
 def generar():
@@ -28,6 +29,8 @@ def generar():
     cambiar(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{TITULO}">')
     cambiar(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{AL_COMPARTIR}">')
     cambiar(r'<meta property="og:url" content="[^"]*">', '<meta property="og:url" content="https://kvothesson.com/tachan/en.html">')
+    cambiar(r'"url": "https://kvothesson\.com/tachan/", "inLanguage": "es", "description": "[^"]*"',
+            f'"url": "https://kvothesson.com/tachan/en.html", "inLanguage": "en", "description": "{FICHA}"')
     cambiar(r'  html:lang\(es\) \[lang="en"\][^\n]*\n', "")
     cambiar(r'  \.otroidioma[^\n]*\n', "")
     cambiar(r'<script>if \(/\(\^\|&\)c=/[^\n]*</script>\n', "")
