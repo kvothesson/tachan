@@ -13,8 +13,8 @@ from pathlib import Path
 AQUI = Path(__file__).resolve().parent
 SDK = Path(r"D:\dev\android-sdk")
 JDK = Path(r"D:\dev\jdk17")
-HERRAMIENTAS = SDK / "build-tools" / "35.0.0"
-ANDROID_JAR = SDK / "platforms" / "android-35" / "android.jar"
+HERRAMIENTAS = SDK / "build-tools" / "36.0.0"
+ANDROID_JAR = SDK / "platforms" / "android-36" / "android.jar"
 SALIDA = AQUI / "compilado"
 LLAVE = AQUI / "tachan.keystore"
 APK = AQUI / "tachan.apk"
