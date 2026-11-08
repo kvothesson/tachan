@@ -63,7 +63,15 @@ namespace Tachan
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Datos.Cargar();
-            Application.Run(new Bandeja(senal, argumentos.Contains("--oculto")));
+            Bandeja bandeja;
+            try { bandeja = new Bandeja(senal, argumentos.Contains("--oculto")); }
+            catch (System.Net.Sockets.SocketException)
+            {
+                // Sin puerto no puede recibir nada: avisar en vez de caerse en silencio.
+                MessageBox.Show(Textos.T("ocupado"), Marca.Visible, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            Application.Run(bandeja);
         }
 
         public static string NombreUnico(string que)
