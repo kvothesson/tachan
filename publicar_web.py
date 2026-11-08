@@ -24,6 +24,26 @@ def git(*a):
     subprocess.run(["git", "-C", str(PUBLICO), *a], check=True)
 
 
+def release(nombre):
+    """Deja el exe y el APK en la release v<nombre> de kvothesson/tachan, de donde bajan los botones de la web.
+
+    GitHub cuenta las descargas de cada archivo. Solo se vuelve a subir uno si cambió, porque al reemplazarlo
+    su cuenta vuelve a cero. Va antes de subir la web, para que los botones nunca apunten a algo que no está.
+    """
+    tag = "v" + nombre
+    archivos = [WEB / "Tachan.exe", WEB / "tachan.apk"]
+    hay = subprocess.run(["gh", "api", f"repos/kvothesson/tachan/releases/tags/{tag}"], capture_output=True, text=True)
+    if hay.returncode:
+        subprocess.run(["gh", "release", "create", tag, "-R", "kvothesson/tachan", "--title", f"Tachán {nombre}",
+                        "--notes", "Descargas de Tachán. Cómo se instala y cómo comprobarlo: https://kvothesson.com/tachan/",
+                        *map(str, archivos)], check=True)
+        return
+    subidos = {a["name"]: a.get("digest") for a in json.loads(hay.stdout)["assets"]}
+    cambiados = [f for f in archivos if subidos.get(f.name) != "sha256:" + hashlib.sha256(f.read_bytes()).hexdigest()]
+    if cambiados:
+        subprocess.run(["gh", "release", "upload", tag, "-R", "kvothesson/tachan", "--clobber", *map(str, cambiados)], check=True)
+
+
 generar()
 manifiesto = (WEB.parent / "android" / "AndroidManifest.xml").read_text(encoding="utf-8")
 codigo = int(re.search(r'versionCode="(\d+)"', manifiesto)[1])
@@ -34,6 +54,7 @@ sha256 = hashlib.sha256((WEB / "Tachan.exe").read_bytes()).hexdigest()
     "exe_sha256": sha256,
     "firma": firmar(codigo, sha256),
 }, indent=2), encoding="utf-8")
+release(re.search(r'versionName="([^"]+)"', manifiesto)[1])
 for viejo in PUBLICO.iterdir():
     if viejo.name not in SALVAR:
         viejo.unlink()

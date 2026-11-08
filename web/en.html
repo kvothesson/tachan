@@ -12,6 +12,9 @@
 <link rel="alternate" hreflang="es" href="https://kvothesson.com/tachan/">
 <link rel="alternate" hreflang="en" href="https://kvothesson.com/tachan/en.html">
 <link rel="alternate" hreflang="x-default" href="https://kvothesson.com/tachan/en.html">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Tachán", "url": "https://kvothesson.com/tachan/en.html", "inLanguage": "en", "description": "Transfer photos, videos, files and text from your Android phone to your Windows PC wirelessly. It arrives copied, ready to paste.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Windows, Android", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "author": {"@type": "Organization", "name": "Kvothesson", "url": "https://kvothesson.com/"}}
+</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="marca.css">
 <style>
@@ -53,8 +56,12 @@
   .enlaces { display: flex; gap: var(--space-3); }
   .firma { display: inline-flex; align-items: center; gap: var(--space-2); }
   .firma svg { width: 16px; height: 16px; }
+  .preguntas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); margin: 0; }
+  .preguntas dt { margin-bottom: var(--space-1); font: 700 18px/1.2 var(--font-display); }
+  .preguntas dd { margin: 0; color: var(--muted); }
+  .preguntas a { color: var(--accent); }
   a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  @media (max-width: 700px) { .cabeza, .puntos, .pasos { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 700px) { .cabeza, .puntos, .pasos, .preguntas { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
 <body>
@@ -63,15 +70,15 @@
     <h2><span lang="en">Link your phone</span></h2>
     <p id="vincular-android"><span lang="en">If you don't have the app yet, it downloads on its own. Install it and come back to tap the button again. This code lasts 5 minutes.</span></p>
     <p id="vincular-otro" hidden><span lang="en">Open this QR with the camera of an Android phone. Tachán isn't available for iPhone yet.</span></p>
-    <a class="bajar" id="continuar" href="tachan.apk"><span lang="en">Link or install</span></a>
+    <a class="bajar" id="continuar" href="https://github.com/kvothesson/tachan/releases/latest/download/tachan.apk"><span lang="en">Link or install</span></a>
   </section>
   <section class="cabeza">
     <div>
       <h1>Tachán</h1>
       <p class="frase"><span lang="en">Share on your phone. It shows up on your computer.</span></p>
       <div class="acciones">
-        <a class="bajar" id="b-primero" href="Tachan.exe" download><span lang="en">Download for Windows</span></a>
-        <a class="bajar otra" id="b-segundo" href="tachan.apk" download><span lang="en">Download for Android</span></a>
+        <a class="bajar" id="b-primero" href="https://github.com/kvothesson/tachan/releases/latest/download/Tachan.exe"><span lang="en">Download for Windows</span></a>
+        <a class="bajar otra" id="b-segundo" href="https://github.com/kvothesson/tachan/releases/latest/download/tachan.apk"><span lang="en">Download for Android</span></a>
       </div>
       <p class="pronto"><span lang="en">Free, no account. You need both parts.</span></p>
       <p class="alcelu" id="alcelu"><img src="qr-android.png" alt="" width="104" height="104"><span lang="en">For your phone: point your camera to download the app.</span></p>
@@ -104,6 +111,19 @@
       <li><b><span lang="en">Link them</span></b><span lang="en">Confirm on your phone and you're done. Both must be on the same wifi.</span></li>
     </ol>
   </section>
+  <section>
+    <h2><span lang="en">Questions</span></h2>
+    <dl class="preguntas">
+      <div><dt><span lang="en">How do I transfer photos from my phone to my PC wirelessly?</span></dt>
+        <dd><span lang="en">In your gallery, tap Share and pick Tachán. It reaches your computer over your wifi, at full size. <a href="transfer-photos-android-to-pc.html">Every way to do it</a>.</span></dd></div>
+      <div><dt><span lang="en">Can I copy text on my phone and paste it on my PC?</span></dt>
+        <dd><span lang="en">Yes. Share the text or link with Tachán and it's already copied on your computer: Ctrl+V. <a href="copy-text-phone-to-pc.html">How, and with which other apps</a>.</span></dd></div>
+      <div><dt><span lang="en">Do I need internet or an account?</span></dt>
+        <dd><span lang="en">No. Your phone and computer must be on the same wifi, and what you send goes through no server.</span></dd></div>
+      <div><dt><span lang="en">Does it work with iPhone or Mac?</span></dt>
+        <dd><span lang="en">Not yet. For now it's for Android and Windows, free and without ads.</span></dd></div>
+    </dl>
+  </section>
   <footer>
     <span class="firma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.500 20.200 7.200v9.600L12 21.500l-8.200-4.700V7.200z"/><circle cx="12" cy="12" r="2.200" fill="currentColor" stroke="none"/></svg><span lang="en">made by <a href="https://kvothesson.com/">Kvothesson</a></span></span>
     <span class="enlaces"><a href="./" hreflang="es">Español</a><a href="comprobar.html"><span lang="en">How to check it</span></a><a href="privacidad.html"><span lang="en">Privacy</span></a></span>
@@ -113,11 +133,13 @@
   (function () {
     var demo = document.getElementById("demo");
     if (!matchMedia("(prefers-reduced-motion: reduce)").matches) demo.autoplay = true;
+    // Las descargas salen de la release de GitHub, que cuenta cuántas veces se baja cada archivo.
+    var exe = "https://github.com/kvothesson/tachan/releases/latest/download/Tachan.exe", apk = "https://github.com/kvothesson/tachan/releases/latest/download/tachan.apk";
     var android = /android/i.test(navigator.userAgent);
     if (android) {
       document.getElementById("alcelu").hidden = true;
       var a = document.getElementById("b-primero"), b = document.getElementById("b-segundo");
-      a.href = "tachan.apk"; b.href = "Tachan.exe";
+      a.href = apk; b.href = exe;
       a.innerHTML = '<span lang="en">Download for Android</span>';
       b.innerHTML = '<span lang="en">Download for Windows</span>';
     }
@@ -131,7 +153,7 @@
       return;
     }
     // Abre la app si está. Si no, Chrome va al respaldo, que baja el APK.
-    var respaldo = new URL("tachan.apk", location.href).href;
+    var respaldo = apk;
     var destino = "intent://v?" + datos + "#Intent;scheme=tachan;package=com.kvothesson.tachan;S.browser_fallback_url=" + encodeURIComponent(respaldo) + ";end";
     var boton = document.getElementById("continuar");
     boton.href = destino;
