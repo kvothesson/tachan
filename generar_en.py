@@ -39,7 +39,6 @@ def generar():
     cambiar(r'    if \(document\.documentElement\.lang === "en"\) \{.*?\n    \}\n', "")
     cambiar(r'src="tachan-es\.mp4" poster="tachan-es\.jpg"', 'src="tachan-en.mp4" poster="tachan-en.jpg"')
     cambiar(r'aria-label="Cómo funciona Tachán"', 'aria-label="How Tachán works"')
-    cambiar(r'aria-label="Foto recibida"', 'aria-label="Photo received"')
     cambiar(r'<a href="en\.html" hreflang="en">English</a>', '<a href="./" hreflang="es">Español</a>')
     # Acepta etiquetas adentro, como un link, mientras no sean otro span.
     html = re.sub(r'<span lang="es">(?:[^<]|<(?!/?span\b))*</span>', "", html)

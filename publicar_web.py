@@ -63,6 +63,6 @@ for nuevo in WEB.iterdir():
 git("add", "-A")
 if subprocess.run(["git", "-C", str(PUBLICO), "diff", "--cached", "--quiet"]).returncode:
     mensaje = sys.argv[1] if len(sys.argv) > 1 else "Actualiza la web de Tachán"
-    git(*IDENTIDAD, "commit", "-q", "-m", mensaje + "\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>")
+    git(*IDENTIDAD, "commit", "-q", "-m", mensaje + "\n\nCo-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>")
     git("push", "-q", "origin", "main")
 print("publicado")

@@ -13,6 +13,12 @@
 <link rel="stylesheet" href="marca.css">
 <style>
   body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.55 var(--font-sans); }
+  body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .55;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='41.57' height='72'%3E%3Cpath d='M20.78 0 41.57 12v24L20.78 48 0 36V12zM20.78 48v24' fill='none' stroke='%2316303f'/%3E%3C/svg%3E");
+    -webkit-mask-image: radial-gradient(120% 70% at 50% 0, #000, transparent); mask-image: radial-gradient(120% 70% at 50% 0, #000, transparent); }
+  .sello { display: flex; align-items: center; gap: var(--space-2); margin: 0 0 var(--space-5); color: var(--muted); font: 400 12px/1.45 var(--font-mono); letter-spacing: .2em; text-transform: uppercase; }
+  .sello svg { width: 28px; height: 28px; flex: none; color: var(--accent); }
+  .sello a { color: var(--ink); text-decoration: none; }
   main { max-width: 65ch; margin: 0 auto; padding: var(--space-5) max(var(--space-3), env(safe-area-inset-right)) var(--space-5) max(var(--space-3), env(safe-area-inset-left)); }
   h1 { margin: 0 0 var(--space-3); font: 800 40px/1.05 var(--font-display); text-wrap: balance; }
   h2 { margin: var(--space-5) 0 var(--space-2); font: 800 24px/1.15 var(--font-display); }
@@ -26,6 +32,7 @@
 </head>
 <body>
 <main>
+  <p class="sello"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.500 20.200 7.200v9.600L12 21.500l-8.200-4.700V7.200z"/><circle cx="12" cy="12" r="2.200" fill="currentColor" stroke="none"/></svg><span><a href="https://kvothesson.com/">Kvothesson</a> · <a href="./">Tachán</a></span></p>
   <h1>Cómo copiar texto del celular y pegarlo en la PC</h1>
   <p>Un código, una dirección, un link o un mensaje largo: lo tenés en el celular y lo necesitás en la compu. Estas son las formas de pasarlo, de la más común a la más directa.</p>
 
