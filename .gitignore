@@ -11,3 +11,5 @@ android/prueba/compilado/
 android/prueba/compilado_lector/
 # Lleva un QR real, aunque ya vencido
 diseno/muestras/vinculo.png
+# Notas internas: no se publican
+privado/

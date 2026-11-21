@@ -1,10 +1,10 @@
 # Revisión de seguridad de Tachán 1.2
 
-Fecha: 2026-11-02. Sobre el código de la versión 1.2 de este repo. **No publicar hasta que la 1.3 esté en línea:** describe cómo aprovechar fallas de la 1.2, que es la que usa la gente hoy.
+Fecha: 2026-11-02. Sobre el código de la versión 1.2 de este repo. Describe fallas de la 1.2 que la 1.3, en línea desde el 2026-11-02, ya arregla: si todavía tenés la 1.2, actualizá desde https://kvothesson.com/tachan/
 
 **Quién la hizo:** Claude, la misma IA que ayudó a escribir el código, así que no cuenta como revisión independiente. Sirve para encontrar y arreglar fallas, pero para generar confianza hace falta que la mire una persona de afuera.
 
-## Estado en la versión 1.3 (compilada, sin publicar)
+## Estado en la versión 1.3
 
 | # | Arreglo | Comprobado | Lo que queda |
 |---|---|---|---|
@@ -17,7 +17,7 @@ Fecha: 2026-11-02. Sobre el código de la versión 1.2 de este repo. **No public
 | 7 | Se sacan los caracteres invisibles del nombre | Sin probar | Nada conocido |
 | 8 | Recientes muestra "Texto" | Sin probar en un celu | Un texto en cola sigue guardado sin cifrar en la memoria privada de la app hasta salir |
 | 9 | Se pide no subir a la nube de Windows | Marca leída del portapapeles, en prueba | El historial local sigue activo si lo usás: se dejó así a propósito |
-| 10 | La página de privacidad lo dice | Texto agregado, sin publicar | La web sigue usando las fuentes de Google |
+| 10 | La página de privacidad lo dice | Texto agregado y publicado | La web sigue usando las fuentes de Google |
 
 `pruebas/prueba_e2e.py` da todo bien con la 1.3 en la compu.
 
@@ -27,7 +27,7 @@ El detalle de abajo describe la 1.2.
 
 ## Qué falla
 
-Las pruebas corrieron con una instancia aislada (`TACHAN_DATOS`, puerto 47950). No se usó el celu de la persona ni un emulador.
+Las pruebas corrieron con una instancia aislada (`TACHAN_DATOS`, puerto 47950). No se usó un celu ni un emulador.
 
 | # | Gravedad | Qué pasa | Quién puede | Comprobado |
 |---|---|---|---|---|
@@ -119,12 +119,12 @@ Comprobado leyendo el código. Lo marcado con * también lo cubre `pruebas/prueb
 - Las pruebas 3, 4 y 7 no se ejecutaron en un aparato real.
 - La seguridad de la cuenta de GitHub y del dominio.
 - Los cifrados TLS que negocia cada versión de Windows.
-- Celus y versiones de Windows distintos de los de la persona.
+- Celus y versiones de Windows distintos de los de prueba.
 
 ## Orden de arreglo propuesto
 
 1. Fallas 1, 4, 5 y 6, y lo de pegar solo de la 3: son cambios chicos en el código.
 2. Falla 2: la firma necesita una llave nueva, guardada aparte, y hacer el cambio con cuidado.
 3. Fallas 7, 8 y 10, más la decisión sobre la 9.
-4. Sacar la versión 1.3 con lo anterior, previo OK de la persona para publicar.
+4. Sacar la versión 1.3 con lo anterior, previo OK para publicar.
 5. Pedirle a una persona técnica de afuera que revise el resultado.

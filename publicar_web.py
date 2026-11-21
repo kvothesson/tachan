@@ -1,6 +1,6 @@
 """Copia web/ al repo público kvothesson/tachan, el único que sirve kvothesson.com/tachan, y lo sube.
 
-El código sigue en el repo privado kvothesson/tachan-app.
+El código está en kvothesson/tachan-app.
 python publicar_web.py "mensaje del commit"
 """
 import hashlib
@@ -15,7 +15,7 @@ from firmar import firmar
 from generar_en import generar
 
 WEB = Path(__file__).resolve().parent / "web"
-PUBLICO = Path(r"D:\repos\tachan-web")
+PUBLICO = Path(r"D:\repos\tachan-web")  # copia local de kvothesson/tachan
 SALVAR = {".git", "README.md", ".nojekyll"}
 IDENTIDAD = ["-c", "user.email=46162626+kvothesson@users.noreply.github.com", "-c", "user.name=Kvothesson"]
 
