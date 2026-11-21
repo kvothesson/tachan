@@ -1,12 +1,12 @@
-"""Copia web/ al repo público kvothesson/tachan, el único que sirve kvothesson.com/tachan, y lo sube.
+"""Publica web/ en kvothesson.com/tachan: escribe version.json, sube las descargas y sube el commit.
 
-El código está en kvothesson/tachan-app.
+GitHub despliega la carpeta web/ cuando el cambio llega a main (.github/workflows/web.yml).
+Solo commitea web/: el resto del repo se commitea aparte.
 python publicar_web.py "mensaje del commit"
 """
 import hashlib
 import json
 import re
-import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -14,14 +14,13 @@ from pathlib import Path
 from firmar import firmar
 from generar_en import generar
 
-WEB = Path(__file__).resolve().parent / "web"
-PUBLICO = Path(r"D:\repos\tachan-web")  # copia local de kvothesson/tachan
-SALVAR = {".git", "README.md", ".nojekyll"}
+RAIZ = Path(__file__).resolve().parent
+WEB = RAIZ / "web"
 IDENTIDAD = ["-c", "user.email=46162626+kvothesson@users.noreply.github.com", "-c", "user.name=Kvothesson"]
 
 
 def git(*a):
-    subprocess.run(["git", "-C", str(PUBLICO), *a], check=True)
+    subprocess.run(["git", "-C", str(RAIZ), *a], check=True)
 
 
 def release(nombre):
@@ -55,14 +54,9 @@ sha256 = hashlib.sha256((WEB / "Tachan.exe").read_bytes()).hexdigest()
     "firma": firmar(codigo, sha256),
 }, indent=2), encoding="utf-8")
 release(re.search(r'versionName="([^"]+)"', manifiesto)[1])
-for viejo in PUBLICO.iterdir():
-    if viejo.name not in SALVAR:
-        viejo.unlink()
-for nuevo in WEB.iterdir():
-    shutil.copy(nuevo, PUBLICO / nuevo.name)
-git("add", "-A")
-if subprocess.run(["git", "-C", str(PUBLICO), "diff", "--cached", "--quiet"]).returncode:
+git("add", "web")
+if subprocess.run(["git", "-C", str(RAIZ), "diff", "--cached", "--quiet", "--", "web"]).returncode:
     mensaje = sys.argv[1] if len(sys.argv) > 1 else "Actualiza la web de Tachán"
-    git(*IDENTIDAD, "commit", "-q", "-m", mensaje + "\n\nCo-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>")
-    git("push", "-q", "origin", "main")
-print("publicado")
+    git(*IDENTIDAD, "commit", "-q", "-m", mensaje + "\n\nCo-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>", "--", "web")
+git("push", "-q", "origin", "main")
+print("subido: la web se despliega sola en uno o dos minutos (gh run list -w web.yml)")

@@ -7,8 +7,8 @@ Leé esto antes de tocar nada. `README.md` explica el producto; este archivo tie
 Compartís algo en el celu y aparece en la compu, por la red local, cifrado y sin servidores ni cuenta. Queda copiado para Ctrl+V y aparece un aviso con un ta-chán que no saca el foco.
 
 - **En producción:** versión 1.3, en https://kvothesson.com/tachan/
-- **Este repo:** `kvothesson/tachan-app`, público desde el 2026-11-21, con licencia GPLv3.
-- **Web pública:** `kvothesson/tachan`. Solo lleva la web y las descargas. No se edita a mano: la genera `publicar_web.py`.
+- **Este repo:** `kvothesson/tachan`, público desde el 2026-11-21, con licencia GPLv3. Tiene el código, la web y las descargas.
+- **Web:** la carpeta `web/` se publica sola en https://kvothesson.com/tachan/ cuando un cambio suyo llega a `main` (`.github/workflows/web.yml`). El nombre del repo no se puede cambiar: las apps instaladas y los QR tienen fija esa dirección.
 - **Diseño:** sale de un sistema de marca común a varias apps, que vive fuera de este repo.
 - **Notas internas:** si existe la carpeta `privado/`, leerla también. No se versiona.
 
@@ -56,7 +56,7 @@ La versión se decide en un solo lugar: `versionCode` y `versionName` de `androi
 ```bash
 python pc/compilar.py                # genera VersionApp.cs y copia el exe a web/
 python android/compilar.py --tienda  # APK de prueba, AAB y web/tachan.apk con la llave definitiva
-python publicar_web.py "mensaje"     # escribe version.json y sube la web pública
+python publicar_web.py "mensaje"     # escribe version.json, sube las descargas y publica web/
 ```
 
 **Web en inglés:** `web/en.html` se genera desde `web/index.html` con `generar_en.py`, y `publicar_web.py` lo corre solo. No se edita a mano: el texto va en los `<span lang="en">` de `index.html`, y el título y la descripción en `generar_en.py`. `index.html` queda siempre en español para que Google lo lea así; solo cambia al idioma del navegador cuando se llega por el QR.
@@ -67,7 +67,7 @@ python publicar_web.py "mensaje"     # escribe version.json y sube la web públi
 - La compu se llama "Mi compu" o "Mi PC": nunca poner nombres reales.
 
 - Para compilar el exe hay que cerrar Tachán si corre desde `pc/compilado`. La copia instalada no molesta.
-- Después de publicar, comprobar que los archivos en línea son iguales a los locales. La web tarda menos de un minuto.
+- Después de publicar, comprobar que los archivos en línea son iguales a los del commit. La web tarda uno o dos minutos; `gh run list -w web.yml` dice si el despliegue terminó.
 
 **Llave de actualizaciones:** `~/.tachan/actualizar.pem`, fuera del repo. `publicar_web.py` firma `version.json` con ella (`firmar.py`) y su parte pública va en `pc/Actualizador.cs`. Si se pierde, las compus ya instaladas no aceptan más actualizaciones por el botón.
 
