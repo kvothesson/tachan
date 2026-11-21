@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Portada del README de Tachán</title>
+<link rel="stylesheet" href="comun.css">
+<style>
+  /* La foto del video (diseno/video) sale del celu y cae en la compu, lista para Ctrl+V. */
+  .lienzo { height: 620px; --mascara: radial-gradient(70% 90% at 72% 45%, #000, transparent); }
+  .lienzo::after { content: ""; position: absolute; z-index: -1; left: 560px; top: 40px; width: 640px; height: 560px;
+    background: radial-gradient(closest-side, rgba(255, 179, 71, .13), transparent); }
+  .texto { position: absolute; left: 64px; top: 56px; bottom: 60px; width: 440px; display: flex; flex-direction: column; }
+  h1 { margin: 54px 0 0; font: 800 132px/.9 var(--font-display); letter-spacing: -.01em; }
+  .frase { margin: 22px 0 0; font: 700 34px/1.12 var(--font-display); }
+  .frase span { color: var(--accent); }
+  .que { margin: 18px 0 0; color: var(--muted); font-size: 21px; line-height: 1.45; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; padding: 0; list-style: none; }
+  .chips li { padding: 7px 14px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--ink); font: 400 17px/1 var(--font-mono); }
+  .chips li.abierto { border-color: var(--accent); color: var(--accent); }
+  svg.dibujo { position: absolute; left: 520px; top: 0; width: 680px; height: 620px; }
+</style>
+</head>
+<body>
+<div class="lienzo" id="lienzo">
+  <div class="texto">
+    <p class="sello"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2.5 20.2 7.2v9.6L12 21.5l-8.2-4.7V7.2z"/><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/></svg><b>Kvothesson</b> · del celu a la compu</p>
+    <h1>Tachán</h1>
+    <p class="frase">Compartís en el celu.<br><span>Aparece en la compu.</span></p>
+    <p class="que">Fotos, videos, archivos, texto y links, cifrados por tu wifi y sin servidores. Llegan copiados, listos para Ctrl+V.</p>
+    <ul class="chips"><li>Android</li><li>Windows</li><li class="abierto">código abierto</li></ul>
+  </div>
+
+  <svg class="dibujo" viewBox="0 0 680 620" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3a78"/><stop offset=".55" stop-color="#ff7a59"/><stop offset="1" stop-color="#ffc56b"/></linearGradient>
+      <symbol id="foto" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice">
+        <rect width="320" height="200" fill="url(#cielo)"/>
+        <circle cx="205" cy="118" r="30" fill="#fff0c2"/>
+        <path d="M0 140 70 96l56 40 62-52 132 74v42H0z" fill="#3a2a56"/>
+        <path d="M0 172l86-34 92 28 72-24 70 26v32H0z" fill="#1c1833"/>
+      </symbol>
+      <linearGradient id="pantalla" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d4556"/><stop offset="1" stop-color="#0b1c25"/></linearGradient>
+      <linearGradient id="estela" gradientUnits="userSpaceOnUse" x1="150" y1="0" x2="560" y2="0"><stop offset="0" stop-color="#ffb347" stop-opacity=".15"/><stop offset=".55" stop-color="#ffb347"/><stop offset="1" stop-color="#ffb347" stop-opacity=".9"/></linearGradient>
+      <filter id="sombra" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#000" flood-opacity=".55"/></filter>
+      <filter id="brillo" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="9"/></filter>
+      <clipPath id="recorteAviso"><rect x="468" y="232" width="172" height="128" rx="12"/></clipPath>
+      <clipPath id="recorteVuelo"><rect x="-34" y="-23" width="68" height="46" rx="5"/></clipPath>
+      <symbol id="ok" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="copiar" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M15 5.5A1.5 1.5 0 0 0 13.5 4h-8A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15"/></g></symbol>
+      <symbol id="carpeta" viewBox="0 0 24 24"><path d="M3.5 6H9l2 2.5h9.5V19h-17z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+      <symbol id="icono" viewBox="0 0 108 108"><path d="M54 21 82.6 37.5v33L54 87 25.4 70.5v-33z" fill="#ffb347"/><g transform="translate(36 36) scale(1.5)" fill="none" stroke="#04080d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18C6 9 13 5 20 7"/><path d="M15.5 3.5 20.5 7l-3.2 5"/></g></symbol>
+    </defs>
+
+    <!-- Compu -->
+    <g filter="url(#sombra)">
+      <path d="M418 400h44l14 40h-72z" fill="#122029"/>
+      <rect x="384" y="436" width="112" height="9" rx="4.5" fill="#1b2e3a"/>
+      <rect x="206" y="106" width="458" height="298" rx="20" fill="#0d1a22" stroke="#2a4556" stroke-width="5"/>
+    </g>
+    <rect x="218" y="118" width="434" height="274" rx="10" fill="url(#pantalla)"/>
+    <rect x="218" y="370" width="434" height="22" fill="#08131a" opacity=".85"/>
+    <g fill="#5ce1ff" opacity=".55"><rect x="414" y="377" width="8" height="8" rx="2"/><rect x="428" y="377" width="8" height="8" rx="2"/><rect x="442" y="377" width="8" height="8" rx="2"/></g>
+    <!-- Una nota con la foto ya pegada -->
+    <g filter="url(#sombra)"><rect x="236" y="138" width="222" height="214" rx="10" fill="#0b1219"/></g>
+    <rect x="236" y="138" width="222" height="26" rx="10" fill="#111b24"/><rect x="236" y="154" width="222" height="10" fill="#111b24"/>
+    <rect x="250" y="148" width="70" height="7" rx="3.5" fill="#7f9fb3" opacity=".5"/>
+    <rect x="252" y="180" width="168" height="8" rx="4" fill="#d8f3ff" opacity=".75"/>
+    <rect x="252" y="196" width="120" height="8" rx="4" fill="#d8f3ff" opacity=".45"/>
+    <svg x="252" y="216" width="150" height="94"><use href="#foto"/></svg>
+    <rect x="252" y="216" width="150" height="94" rx="4" fill="none" stroke="#2a4556"/>
+    <rect x="402" y="218" width="2.5" height="90" fill="#ffb347"/>
+    <!-- El aviso de Tachán, abajo a la derecha, sin sacar el foco -->
+    <g filter="url(#sombra)"><rect x="468" y="232" width="172" height="128" rx="12" fill="#0b1219" stroke="#4a7084" stroke-width="1.5"/></g>
+    <g clip-path="url(#recorteAviso)"><svg x="468" y="232" width="172" height="92"><use href="#foto"/></svg></g>
+    <use href="#ok" x="478" y="331" width="20" height="20" color="#2fbf71"/>
+    <use href="#copiar" x="588" y="332" width="18" height="18" color="#7f9fb3"/>
+    <use href="#carpeta" x="612" y="332" width="18" height="18" color="#7f9fb3"/>
+    <!-- Destellos del ta-chán -->
+    <g fill="#ffb347">
+      <path d="M648 208l4 10 10 4-10 4-4 10-4-10-10-4 10-4z"/>
+      <path d="M628 186l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" opacity=".7"/>
+      <path d="M662 250l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" opacity=".55"/>
+    </g>
+    <!-- Ctrl + V -->
+    <g font-family="JetBrains Mono, monospace" font-weight="600" text-anchor="middle">
+      <rect x="470" y="460" width="78" height="50" rx="10" fill="#0d1a22" stroke="#4a7084" stroke-width="2"/>
+      <rect x="470" y="504" width="78" height="6" rx="3" fill="#4a7084" opacity=".6"/>
+      <text x="509" y="493" font-size="22" fill="#d8f3ff">Ctrl</text>
+      <text x="566" y="493" font-size="22" fill="#7f9fb3">+</text>
+      <rect x="584" y="460" width="50" height="50" rx="10" fill="#0d1a22" stroke="#ffb347" stroke-width="2"/>
+      <rect x="584" y="504" width="50" height="6" rx="3" fill="#ffb347" opacity=".6"/>
+      <text x="609" y="493" font-size="22" fill="#ffb347">V</text>
+    </g>
+
+    <!-- El viaje: del ícono de Tachán al aviso, por arriba de todo -->
+    <path id="viaje" d="M106 418C110 120 300 20 440 40S560 150 556 226" fill="none" stroke="url(#estela)" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="2 11"/>
+    <g transform="translate(250 74) rotate(-14)">
+      <rect x="-40" y="-29" width="80" height="58" rx="8" fill="#ffb347" opacity=".45" filter="url(#brillo)"/>
+      <rect x="-38" y="-27" width="76" height="54" rx="7" fill="#d8f3ff"/>
+      <g clip-path="url(#recorteVuelo)"><svg x="-34" y="-23" width="68" height="46"><use href="#foto"/></svg></g>
+    </g>
+    <g font-family="JetBrains Mono, monospace" font-size="16">
+      <rect x="296" y="58" width="196" height="32" rx="16" fill="#04080d" stroke="#5ce1ff" stroke-opacity=".6"/>
+      <text x="394" y="79" text-anchor="middle" fill="#5ce1ff">tu wifi · cifrado</text>
+    </g>
+    <!-- Celu -->
+    <g filter="url(#sombra)"><rect x="18" y="176" width="176" height="392" rx="30" fill="#0a1118" stroke="#2a4556" stroke-width="5"/></g>
+    <rect x="28" y="186" width="156" height="372" rx="22" fill="#000"/>
+    <rect x="84" y="196" width="44" height="7" rx="3.5" fill="#16303f"/>
+    <svg x="28" y="222" width="156" height="104"><use href="#foto"/></svg>
+    <!-- Hoja de Compartir -->
+    <path d="M28 380a20 20 0 0 1 20-20h116a20 20 0 0 1 20 20v156a22 22 0 0 1-22 22H50a22 22 0 0 1-22-22z" fill="#121c25"/>
+    <rect x="88" y="370" width="36" height="5" rx="2.5" fill="#4a7084"/>
+    <text x="44" y="404" font-family="system-ui, Segoe UI, sans-serif" font-size="17" fill="#7f9fb3">Compartir</text>
+    <circle cx="62" cy="452" r="20" fill="#1b2a36"/>
+    <circle cx="150" cy="452" r="20" fill="#1b2a36"/>
+    <circle cx="106" cy="452" r="30" fill="#ffb347" opacity=".35" filter="url(#brillo)"/>
+    <circle cx="106" cy="452" r="25" fill="#04080d" stroke="#ffb347" stroke-width="2.5"/>
+    <use href="#icono" x="84" y="430" width="44" height="44"/>
+    <text x="106" y="500" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="700" font-size="18" fill="#d8f3ff">Tachán</text>
+
+  </svg>
+</div>
+</body>
+</html>

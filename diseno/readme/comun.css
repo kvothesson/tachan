@@ -1,0 +1,22 @@
+/* Base de las imágenes del README. Siempre de noche, como la app. Se dibujan a 1200 px de ancho y se
+   sacan al doble: en el README de GitHub se ven a unos 880 px, así que ningún texto baja de 18 px acá. */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap");
+@import url("../../web/marca.css");
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: transparent; }
+body { color: var(--ink); font: 400 20px/1.4 var(--font-sans); -webkit-font-smoothing: antialiased; }
+
+/* El lienzo tiene esquinas redondeadas y fondo transparente afuera: queda bien en GitHub claro y oscuro. */
+.lienzo { position: relative; width: 1200px; overflow: hidden; border: 1px solid var(--line); border-radius: 28px; background: var(--ground); isolation: isolate; }
+.lienzo::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .7;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='41.57' height='72'%3E%3Cpath d='M20.78 0 41.57 12v24L20.78 48 0 36V12zM20.78 48v24' fill='none' stroke='%2316303f'/%3E%3C/svg%3E");
+  -webkit-mask-image: var(--mascara, radial-gradient(90% 80% at 50% 0, #000, transparent)); }
+
+.sello { display: flex; align-items: center; gap: 10px; margin: 0; color: var(--muted); font: 400 15px/1 var(--font-mono); letter-spacing: .2em; text-transform: uppercase; }
+.sello svg { width: 30px; height: 30px; color: var(--accent); }
+.sello b { color: var(--ink); font-weight: 400; }
+.mono { font-family: var(--font-mono); }
+.ambar { color: var(--accent); }
+.hielo { color: var(--ice); }
+.tenue { color: var(--muted); }
