@@ -402,7 +402,7 @@ const TEXTOS = {
     doc_titulo:"Viaje al sur - Documento", doc_h:"Viaje al sur", tipeo:"Llegamos al lago justo para el atardecer. Esta foto la saqué desde la ruta:",
     yo:"Yo (Tú)", yo_nota:"Envíate un mensaje", omni_vacio:"Buscar con Google o ingresar URL", ntp_imagenes:"Imágenes", agregar_atajo:"Agregar acceso directo", personalizar:"Personalizar Chrome", wa_buscar:"Buscar un chat o iniciar uno nuevo", wa_todos:"Todos", wa_noleidos:"No leídos", wa_favoritos:"Favoritos", wa_grupos:"Grupos", wa_escribe:"Escribe un mensaje", mensaje:"Mensaje", compartir:"Compartir", seleccionado:"1 elemento seleccionado", compartir_foto:"Compartir 1 foto", crear_vinculo:"Crear vínculo", compartiendo:"Compartiendo con Tachán…",
     compu:"Mi PC", celu:"Mi celular", mensajes:"Mensajes", correo:"Correo", notas_app:"Notas", cerca:"Cerca", equipo:"Equipo", mas:"Más",
-    frase:"Pasá fotos y archivos del celular a la PC, sin cable.", datos:"Gratis, sin cuenta. Android y Windows.",
+    frase:"Pasá fotos y archivos del celular a la PC, sin cable.", datos:"Gratis y de código abierto. Android y Windows.",
     lugar_celu:"En el celular", lugar_pc:"En la PC", sin:"Sin Tachán", con:"Con Tachán", paso:"paso",
     enviar_a:"Enviar a…", ej_familia:"Familia", ej_trabajo:"Trabajo", ej_amigos:"Amigos", comentario:"Escribí un comentario",
     t:["Te queda en tu chat","La bajás y elegís dónde guardarla","10 pasos. Con Tachán, 3.","Abrí la foto","Tocá Compartir","Tocá Tachán","Se está enviando","Aparece en la PC","Y seguís escribiendo","Ya está copiada: apretá Ctrl+V","Listo, ya la pegaste","La buscás en Descargas","Y recién ahí la arrastrás al documento","Hoy abrís la foto y tocás Compartir","Elegís WhatsApp","Buscás tu propio chat","La enviás","Después vas a la PC","Viaja sola a tu PC, por tu wifi","Abrís Chrome","Entrás a WhatsApp Web","Abrís tu chat"], pest_nueva:"Nueva pestaña",
@@ -412,7 +412,7 @@ const TEXTOS = {
     doc_titulo:"Trip south - Document", doc_h:"Trip south", tipeo:"We reached the lake just in time for the sunset. I took this photo from the road:",
     yo:"Me (You)", yo_nota:"Message yourself", omni_vacio:"Search Google or type a URL", ntp_imagenes:"Images", agregar_atajo:"Add shortcut", personalizar:"Customize Chrome", wa_buscar:"Search or start a new chat", wa_todos:"All", wa_noleidos:"Unread", wa_favoritos:"Favorites", wa_grupos:"Groups", wa_escribe:"Type a message", mensaje:"Message", compartir:"Share", seleccionado:"1 item selected", compartir_foto:"Share 1 photo", crear_vinculo:"Create link", compartiendo:"Sharing with Tachán…",
     compu:"My PC", celu:"My phone", mensajes:"Messages", correo:"Mail", notas_app:"Notes", cerca:"Nearby", equipo:"Team", mas:"More",
-    frase:"Send photos and files from your phone to your PC, no cable.", datos:"Free, no account. Android and Windows.",
+    frase:"Send photos and files from your phone to your PC, no cable.", datos:"Free and open source. Android and Windows.",
     lugar_celu:"On your phone", lugar_pc:"On your PC", sin:"Without Tachán", con:"With Tachán", paso:"step",
     enviar_a:"Send to…", ej_familia:"Family", ej_trabajo:"Work", ej_amigos:"Friends", comentario:"Add a caption",
     t:["It's now in your chat","You download it and pick where to save it","10 steps. With Tachán, 3.","Open the photo","Tap Share","Tap Tachán","It's on its way","It shows up on your PC","And you keep typing","It's already copied: press Ctrl+V","Done, it's pasted","You find it in Downloads","And only then you drag it into the document","Today you open the photo and tap Share","You pick WhatsApp","You find your own chat","You send it","Then you go to your PC","It travels to your PC by itself, over your wifi","You open Chrome","You go to WhatsApp Web","You open your chat"], pest_nueva:"New tab",
@@ -682,8 +682,8 @@ render(8);
 if (new URLSearchParams(location.search).get("corte") === "anuncio") {
   document.body.classList.add("anuncio");
   const A = {
-    es: { camino: "Del celu a tu documento:", paso: "paso", o: "O dos toques<br>y Ctrl+V.", uno: "Un toque", dos: "Dos toques", listo: "Listo." },
-    en: { camino: "Phone to your doc:", paso: "step", o: "Or two taps<br>and Ctrl+V.", uno: "One tap", dos: "Two taps", listo: "Done." },
+    es: { camino: "Foto del celu a la PC:", paso: "paso", o: "O dos toques<br>y Ctrl+V.", uno: "Un toque", dos: "Dos toques", listo: "Listo." },
+    en: { camino: "Photo from phone to PC:", paso: "step", o: "Or two taps<br>and Ctrl+V.", uno: "One tap", dos: "Two taps", listo: "Done." },
   }[new URLSearchParams(location.search).get("lang") || "es"];
   const TOMAS = [
     [.6, 1.7, .9], [2.5, 3.5, .7], [4.2, 5.3, .65], [6, 7, .6], [11.4, 12.4, .55],

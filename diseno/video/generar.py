@@ -121,7 +121,7 @@ def video(navegador, pieza, idioma):
 
 
 with sync_playwright() as p:
-    navegador = p.chromium.launch()
+    navegador = p.chromium.launch(channel="msedge")  # el Edge de Windows: no hace falta bajar el Chromium de Playwright
     if "--cuadros" in sys.argv:
         i = sys.argv.index("--cuadros")
         carpeta = Path(sys.argv[i + 2])
