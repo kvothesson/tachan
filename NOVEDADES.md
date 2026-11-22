@@ -8,6 +8,7 @@ Cómo se escribe: cada versión es un título `## 1.5` con la fecha en que se pu
 
 - El celu puede tener varias compus vinculadas a la vez, por ejemplo la PC y la Mac. Vincular una nueva ya no desvincula la otra.
 - En Compartir aparece cada compu con su nombre: tocás a cuál va.
+- En la app, tocás la tarjeta de una compu y queda marcada: el + manda ahí. Las opciones de cada compu están en su ⋯.
 - Si tocás Tachán sin elegir, va a la última que usaste si está prendida; si no, a la primera que conteste.
 - Lo que espera en la cola recuerda a qué compu iba: si una está apagada, lo de la otra sale igual.
 - La lista del celu muestra arriba, con un reloj, lo que todavía espera, y se puede tocar para cancelarlo. Al lado de cada cosa dice a qué compu fue.

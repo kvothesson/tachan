@@ -43,4 +43,5 @@
     <string name="cancelar_envio">Cancelar o envio de %1$s para %2$s?</string>
     <string name="quitar_cola">Cancelar envio</string>
     <string name="dejar_cola">Manter</string>
+    <string name="opciones">Opções</string>
 </resources>

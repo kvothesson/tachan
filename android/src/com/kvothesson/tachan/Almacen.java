@@ -22,8 +22,8 @@ final class Almacen {
         return c.getSharedPreferences("tachan", Context.MODE_PRIVATE);
     }
 
-    /** Todas las compus, la última usada primero. */
-    static synchronized List<Transporte.Compu> compus(Context c) {
+    /** Todas las compus, en el orden en que se vincularon: así las tarjetas no saltan al elegir una. */
+    static synchronized List<Transporte.Compu> guardadas(Context c) {
         SharedPreferences p = prefs(c);
         migrar(p);
         List<Transporte.Compu> lista = new ArrayList<>();
@@ -42,7 +42,13 @@ final class Almacen {
         } catch (JSONException e) {
             return lista;
         }
-        String ultima = p.getString("ultima", "");
+        return lista;
+    }
+
+    /** Todas las compus, la última usada primero: es la marcada en la pantalla y adonde va lo que no elige. */
+    static synchronized List<Transporte.Compu> compus(Context c) {
+        List<Transporte.Compu> lista = guardadas(c);
+        String ultima = prefs(c).getString("ultima", "");
         for (int i = 0; i < lista.size(); i++)
             if (lista.get(i).huella.equals(ultima)) lista.add(0, lista.remove(i));
         return lista;

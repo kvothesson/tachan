@@ -156,16 +156,21 @@ public class Principal extends Activity {
         raiz.addView(cabeza, separada);
 
         final int esteDibujo = ++dibujo;
-        List<Transporte.Compu> compus = Almacen.compus(this);
+        List<Transporte.Compu> compus = Almacen.guardadas(this);
         publicarAtajos(compus);
+        // Con más de una, la marcada (borde ámbar) es adonde manda el +. Tocar otra la marca.
+        final boolean varias = compus.size() > 1;
+        final Transporte.Compu marcada = Almacen.compu(this);
         for (int i = 0; i < compus.size(); i++) {
             final Transporte.Compu compu = compus.get(i);
+            final boolean esta = varias && marcada != null && compu.huella.equals(marcada.huella);
             LinearLayout tarjeta = new LinearLayout(this);
             tarjeta.setGravity(Gravity.CENTER_VERTICAL);
-            tarjeta.setPadding(dp(14), dp(12), dp(14), dp(12));
+            tarjeta.setPadding(dp(14), dp(12), varias ? dp(4) : dp(14), dp(12));
             GradientDrawable borde = redondeado(getColor(R.color.kvo_ground), 14);
-            borde.setStroke(dp(1), getColor(R.color.kvo_line));
+            borde.setStroke(dp(esta ? 2 : 1), getColor(esta ? R.color.kvo_accent : R.color.kvo_line));
             tarjeta.setBackground(conToque(borde));
+            tarjeta.setSelected(esta);
             LinearLayout datos = new LinearLayout(this);
             datos.setOrientation(LinearLayout.VERTICAL);
             TextView nombre = texto(compu.nombre, 15, getColor(R.color.kvo_ink));
@@ -180,7 +185,22 @@ public class Principal extends Activity {
             View punto = new View(this);
             punto.setBackground(circulo(getColor(R.color.kvo_line_strong)));
             tarjeta.addView(punto, new LinearLayout.LayoutParams(dp(10), dp(10)));
-            tarjeta.setOnClickListener(v -> opcionesCompu(compu));
+            if (varias) {
+                TextView mas = texto("⋯", 22, getColor(R.color.kvo_muted));
+                mas.setGravity(Gravity.CENTER);
+                mas.setContentDescription(getString(R.string.opciones));
+                mas.setBackground(conToque(redondeado(getColor(R.color.kvo_ground), 20)));
+                mas.setOnClickListener(v -> opcionesCompu(compu));
+                LinearLayout.LayoutParams lado = new LinearLayout.LayoutParams(dp(44), dp(44));
+                lado.leftMargin = dp(6);
+                tarjeta.addView(mas, lado);
+                tarjeta.setOnClickListener(v -> {
+                    Almacen.usar(this, compu);
+                    dibujar();
+                });
+            } else {
+                tarjeta.setOnClickListener(v -> opcionesCompu(compu));
+            }
             LinearLayout.LayoutParams ancho = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             ancho.topMargin = dp(i == 0 ? 0 : 8);
             raiz.addView(tarjeta, ancho);
@@ -483,7 +503,7 @@ public class Principal extends Activity {
         campo.requestFocus();
         AlertDialog dialogo = new AlertDialog.Builder(this)
                 .setView(marco)
-                .setPositiveButton(R.string.mandar, (d, w) -> EnvioServicio.iniciar(this, new ArrayList<>(), campo.getText().toString()))
+                .setPositiveButton(R.string.mandar, (d, w) -> EnvioServicio.iniciar(this, new ArrayList<>(), campo.getText().toString(), Almacen.compu(this)))
                 .setNegativeButton(R.string.cancelar, null)
                 .create();
         dialogo.setCanceledOnTouchOutside(false);  // un roce no puede borrar lo que escribiste
@@ -530,7 +550,7 @@ public class Principal extends Activity {
         if (datos.getData() != null) elegidos.add(datos.getData());
         ClipData clip = datos.getClipData();
         if (clip != null) for (int i = 0; i < clip.getItemCount(); i++) elegidos.add(clip.getItemAt(i).getUri());
-        EnvioServicio.iniciar(this, elegidos, null);
+        EnvioServicio.iniciar(this, elegidos, null, Almacen.compu(this));  // a la marcada, aunque esté apagada: queda en cola para ella
     }
 
     private void pedirNotificaciones() {
