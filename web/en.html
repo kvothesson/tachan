@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tachán: transfer photos and files from Android to PC wirelessly</title>
-<meta name="description" content="Transfer photos, videos and files from your Android phone to your Windows PC wirelessly. Encrypted over your wifi, with no account and no servers.">
+<meta name="description" content="Transfer photos, videos and files from your Android phone to your Windows PC or Mac wirelessly. Encrypted over your wifi, with no account and no servers.">
 <link rel="canonical" href="https://kvothesson.com/tachan/en.html">
 <meta property="og:title" content="Tachán: transfer photos and files from Android to PC wirelessly">
-<meta property="og:description" content="Transfer photos, videos and files from your Android phone to your Windows PC wirelessly.">
+<meta property="og:description" content="Transfer photos, videos and files from your Android phone to your Windows PC or Mac wirelessly.">
 <meta property="og:url" content="https://kvothesson.com/tachan/en.html">
 <link rel="alternate" hreflang="es" href="https://kvothesson.com/tachan/">
 <link rel="alternate" hreflang="en" href="https://kvothesson.com/tachan/en.html">
 <link rel="alternate" hreflang="x-default" href="https://kvothesson.com/tachan/en.html">
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Tachán", "url": "https://kvothesson.com/tachan/en.html", "inLanguage": "en", "description": "Transfer photos, videos, files and text from your Android phone to your Windows PC wirelessly. It arrives copied, ready to paste.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Windows, Android", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "author": {"@type": "Organization", "name": "Kvothesson", "url": "https://kvothesson.com/"}}
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Tachán", "url": "https://kvothesson.com/tachan/en.html", "inLanguage": "en", "description": "Transfer photos, videos, files and text from your Android phone to your Windows PC or Mac wirelessly. It arrives copied, ready to paste.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Windows, macOS, Android", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "author": {"@type": "Organization", "name": "Kvothesson", "url": "https://kvothesson.com/"}}
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="marca.css">
@@ -85,6 +85,7 @@
       <div class="acciones">
         <a class="bajar" id="b-primero" href="https://github.com/kvothesson/tachan/releases/latest/download/Tachan.exe"><span lang="en">Download for Windows</span></a>
         <a class="bajar otra" id="b-segundo" href="https://github.com/kvothesson/tachan/releases/latest/download/tachan.apk"><span lang="en">Download for Android</span></a>
+        <a class="bajar otra" id="b-tercero" href="https://github.com/kvothesson/tachan/releases/latest/download/Tachan-mac.zip"><span lang="en">Download for Mac</span></a>
       </div>
       <p class="pronto"><span lang="en">Free, no account, <a href="https://github.com/kvothesson/tachan">open source</a>. You need both parts.</span></p>
       <p class="alcelu" id="alcelu"><img src="qr-android.png" alt="" width="144" height="144"><span lang="en">For your phone: point your camera to download the app.</span></p>
@@ -92,7 +93,7 @@
     <video class="demo" id="demo" src="tachan-en.mp4" poster="tachan-en.jpg" width="1280" height="800" controls muted loop playsinline preload="metadata" aria-label="How Tachán works"></video>
   </section>
   <ul class="puntos">
-    <li><b><span lang="en">Ready to paste</span></b><span lang="en">It arrives copied: press Ctrl+V where you are, or drag it.</span></li>
+    <li><b><span lang="en">Ready to paste</span></b><span lang="en">It arrives copied: press Ctrl+V (Cmd+V on a Mac) where you are, or drag it.</span></li>
     <li><b><span lang="en">Anything you can share</span></b><span lang="en">Photos, videos, files, text and links.</span></li>
     <li><b><span lang="en">No servers</span></b><span lang="en">Encrypted over your wifi, from your phone to your computer. No account.</span></li>
   </ul>
@@ -100,7 +101,8 @@
     <h2><span lang="en">How to install</span></h2>
     <ol class="pasos">
       <li><b><span lang="en">On your computer</span></b><span lang="en">Open Tachan.exe: it installs itself. Allow it on your network and a QR code appears.</span>
-        <small><span lang="en">If Windows warns you: More info, Run anyway.</span></small></li>
+        <small><span lang="en">If Windows warns you: More info, Run anyway.</span></small>
+        <small><span lang="en">On a Mac (macOS 15 or newer): open Tachan.app. Since it isn't verified by Apple, macOS stops it the first time: System Settings, Privacy &amp; Security, Open Anyway.</span></small></li>
       <li><b><span lang="en">On your phone</span></b><span lang="en">Point your camera at the computer's QR. If you don't have the app, it downloads on its own.</span>
         <small><span lang="en">Android asks you to allow the install because it isn't on Google Play yet.</span></small></li>
       <li><b><span lang="en">Link them</span></b><span lang="en">Confirm on your phone and you're done. Both must be on the same wifi.</span></li>
@@ -115,8 +117,8 @@
         <dd><span lang="en">Yes. Share the text or link with Tachán and it's already copied on your computer: Ctrl+V. <a href="copy-text-phone-to-pc.html">How, and with which other apps</a>.</span></dd></div>
       <div><dt><span lang="en">Do I need internet or an account?</span></dt>
         <dd><span lang="en">No. Your phone and computer must be on the same wifi, and what you send goes through no server.</span></dd></div>
-      <div><dt><span lang="en">Does it work with iPhone or Mac?</span></dt>
-        <dd><span lang="en">Not yet. For now it's for Android and Windows, free and without ads.</span></dd></div>
+      <div><dt><span lang="en">Does it work with Mac or iPhone?</span></dt>
+        <dd><span lang="en">Mac, yes, from macOS 15: your Android phone sends and your Mac receives. iPhone, not yet. Free and without ads.</span></dd></div>
     </dl>
   </section>
   <footer>
@@ -130,7 +132,15 @@
     if (!matchMedia("(prefers-reduced-motion: reduce)").matches) demo.autoplay = true;
     // Las descargas salen de la release de GitHub, que cuenta cuántas veces se baja cada archivo.
     var exe = "https://github.com/kvothesson/tachan/releases/latest/download/Tachan.exe", apk = "https://github.com/kvothesson/tachan/releases/latest/download/tachan.apk";
+    var zip = "https://github.com/kvothesson/tachan/releases/latest/download/Tachan-mac.zip";
     var android = /android/i.test(navigator.userAgent);
+    // En una Mac va primero el botón de Mac. Un iPad también dice Macintosh, pero tiene pantalla táctil.
+    if (/Macintosh/.test(navigator.userAgent) && !(navigator.maxTouchPoints > 1)) {
+      var m = document.getElementById("b-primero"), w = document.getElementById("b-tercero");
+      m.href = zip; w.href = exe;
+      m.innerHTML = '<span lang="en">Download for Mac</span>';
+      w.innerHTML = '<span lang="en">Download for Windows</span>';
+    }
     if (android) {
       document.getElementById("alcelu").hidden = true;
       var a = document.getElementById("b-primero"), b = document.getElementById("b-segundo");
