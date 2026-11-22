@@ -1,6 +1,6 @@
 """Firma lo que dice version.json con una llave que no está en el sitio: quien controle la web no puede hacer pasar otro programa.
 
-La llave vive en ~/.tachan/actualizar.pem, junto a la de Android. La parte pública va adentro del programa (pc/Actualizador.cs).
+La llave vive en ~/.tachan/actualizar.pem, junto a la de Android. La parte pública va adentro del programa (pc/Actualizador.cs; mac/compilar.py la toma de ahí).
 """
 import base64
 import sys
@@ -13,7 +13,9 @@ LLAVE = Path.home() / ".tachan" / "actualizar.pem"
 
 
 def firmar(codigo, sha256, llave=LLAVE):
-    """Cubre el número de versión y el hash del exe, para que no se pueda hacer pasar una versión vieja por nueva."""
+    """Cubre el número de versión y el hash del exe (o del zip de Mac), para que no se pueda hacer pasar una versión vieja por nueva.
+
+    La misma llave firma los dos: Windows verifica "firma" y la Mac "firma_mac" (mac/Actualizador.swift)."""
     privada = serialization.load_pem_private_key(Path(llave).read_bytes(), None)
     return base64.b64encode(privada.sign(f"{codigo}\n{sha256}".encode(), padding.PKCS1v15(), hashes.SHA256())).decode()
 

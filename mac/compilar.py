@@ -4,7 +4,11 @@ Lee la versión de android/AndroidManifest.xml, los colores de pc/marca.json, lo
 pc/Marca.cs y la llave pública de pc/Actualizador.cs: nada de eso se copia a mano. Deja la app universal
 (arm64 + x86_64) en mac/compilado/Tachan.app, firmada ad hoc, y el zip en web/Tachan-mac.zip.
 python3 mac/compilar.py
+
+Para pruebas: --salida DIR compila aparte (app y zip en DIR) y --llave-prueba MODULO pone otra llave pública
+(módulo RSA en base64, exponente 65537), para probar el actualizador sin la llave real. Ver pruebas/prueba_actualizar_mac.py.
 """
+import argparse
 import json
 import re
 import shutil
@@ -19,6 +23,7 @@ APP = SALIDA / "Tachan.app"
 ZIP = RAIZ / "web" / "Tachan-mac.zip"
 MINIMO = "15.0"
 ARQUITECTURAS = ["arm64", "x86_64"]
+LLAVE_PRUEBA = None
 
 
 def leer(ruta):
@@ -46,7 +51,7 @@ def generar():
     rgb = lambda h: "srgbRed: {:.4f}, green: {:.4f}, blue: {:.4f}".format(*(int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)))
 
     actualizador = leer("pc/Actualizador.cs")
-    modulo = re.search(r"<Modulus>([^<]+)</Modulus>", actualizador)[1]
+    modulo = LLAVE_PRUEBA or re.search(r"<Modulus>([^<]+)</Modulus>", actualizador)[1]
     exponente = re.search(r"<Exponent>([^<]+)</Exponent>", actualizador)[1]
 
     lineas = ["// Generado por mac/compilar.py: no editar a mano.", "import AppKit", "",
@@ -73,7 +78,7 @@ def generar():
         pares = ", ".join(f"{cadena(k)}: {cadena(v)}" for k, v in tabla.items())
         lineas.append(f"    {cadena(idioma)}: [{pares}],")
     lineas += ["]", ""]
-    SALIDA.mkdir(exist_ok=True)
+    SALIDA.mkdir(parents=True, exist_ok=True)
     (SALIDA / "Generado.swift").write_text("\n".join(lineas), encoding="utf-8")
     return codigo, nombre
 
@@ -121,6 +126,15 @@ INFOPLIST_EN = '"NSLocalNetworkUsageDescription" = "Tachán receives what you se
 
 
 def main():
+    global SALIDA, APP, ZIP, LLAVE_PRUEBA
+    opciones = argparse.ArgumentParser()
+    opciones.add_argument("--salida")
+    opciones.add_argument("--llave-prueba")
+    a = opciones.parse_args()
+    if a.salida:
+        SALIDA = Path(a.salida).resolve()
+        APP, ZIP = SALIDA / "Tachan.app", SALIDA / "Tachan-mac.zip"
+    LLAVE_PRUEBA = a.llave_prueba
     codigo, nombre = generar()
     fuentes = [str(p) for p in sorted(AQUI.glob("*.swift"))] + [str(SALIDA / "Generado.swift")]
     extra = overlay()
