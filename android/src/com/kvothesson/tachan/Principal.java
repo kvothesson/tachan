@@ -359,13 +359,17 @@ public class Principal extends Activity {
     private void buscarActualizacion() {
         new Thread(() -> {
             int publicado = -1;
+            String nombre = "";
             try {
                 HttpsURLConnection c = (HttpsURLConnection) new URL(WEB + "version.json?t=" + System.currentTimeMillis()).openConnection();
                 c.setConnectTimeout(8000);
                 c.setReadTimeout(8000);
                 try (java.util.Scanner lector = new java.util.Scanner(c.getInputStream(), "UTF-8")) {
-                    Matcher m = Pattern.compile("\"codigo\"\\s*:\\s*(\\d+)").matcher(lector.useDelimiter("\\A").next());
+                    String datos = lector.useDelimiter("\\A").next();
+                    Matcher m = Pattern.compile("\"codigo\"\\s*:\\s*(\\d+)").matcher(datos);
                     if (m.find()) publicado = Integer.parseInt(m.group(1));
+                    Matcher n = Pattern.compile("\"nombre\"\\s*:\\s*\"(\\d+(?:\\.\\d+)*)\"").matcher(datos);
+                    if (n.find()) nombre = n.group(1);
                 } finally {
                     c.disconnect();
                 }
@@ -373,13 +377,17 @@ public class Principal extends Activity {
                 publicado = -1;
             }
             final int encontrado = publicado;
+            // El APK nuevo sale de la release en GitHub, en un archivo aparte del que bajan los botones de la web.
+            // GitHub cuenta cuántas veces se baja: así sabemos cuántos lo siguen usando, sin que Tachán mande nada.
+            final String apk = nombre.isEmpty() ? WEB + "tachan.apk"
+                    : "https://github.com/kvothesson/tachan/releases/download/v" + nombre + "/actualizar-tachan.apk";
             runOnUiThread(() -> {
                 if (!visible) return;
                 if (encontrado < 0) aviso(R.string.sin_conexion);
                 else if (encontrado <= codigoVersion()) aviso(R.string.ultima_version);
                 else new AlertDialog.Builder(this)
                         .setMessage(R.string.hay_version)
-                        .setPositiveButton(R.string.bajar, (d, w) -> abrirLink(WEB + "tachan.apk"))
+                        .setPositiveButton(R.string.bajar, (d, w) -> abrirLink(apk))
                         .setNegativeButton(R.string.cancelar, null)
                         .show();
             });

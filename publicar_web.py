@@ -7,8 +7,10 @@ python publicar_web.py "mensaje del commit"
 import hashlib
 import json
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 from firmar import firmar
@@ -30,7 +32,12 @@ def release(nombre):
     su cuenta vuelve a cero. Va antes de subir la web, para que los botones nunca apunten a algo que no está.
     """
     tag = "v" + nombre
-    archivos = [WEB / "Tachan.exe", WEB / "tachan.apk"]
+    # Las apps bajan la actualización de copias aparte (desde la 1.4): así su cuenta dice cuántos siguen usando
+    # Tachán, sin mezclarse con quienes lo bajan de la web. Las copias de web/ quedan para las 1.3 instaladas.
+    copias = Path(tempfile.mkdtemp())
+    for f in ("Tachan.exe", "tachan.apk"):
+        shutil.copy(WEB / f, copias / ("actualizar-" + f))
+    archivos = [WEB / "Tachan.exe", WEB / "tachan.apk", copias / "actualizar-Tachan.exe", copias / "actualizar-tachan.apk"]
     hay = subprocess.run(["gh", "api", f"repos/kvothesson/tachan/releases/tags/{tag}"], capture_output=True, text=True)
     if hay.returncode:
         subprocess.run(["gh", "release", "create", tag, "-R", "kvothesson/tachan", "--title", f"Tachán {nombre}",

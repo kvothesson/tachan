@@ -55,7 +55,7 @@ def buscar(codigo, sha):
     time.sleep(8)
 
 
-shutil.copy(nuevo, SITIO / "Tachan.exe")
+shutil.copy(nuevo, SITIO / "actualizar-Tachan.exe")
 preparar_instalada()
 buscar(1, huella(nuevo))
 print("sin novedades no cambia nada:", huella(DEST) == huella(base), len(corriendo()) == 1)

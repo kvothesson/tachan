@@ -24,7 +24,7 @@ class Registra(http.server.SimpleHTTPRequestHandler):
 
 servidor = socketserver.ThreadingTCPServer(("127.0.0.1", PUERTO), partial(Registra, directory=str(SITIO)))
 threading.Thread(target=servidor.serve_forever, daemon=True).start()
-(SITIO / "Tachan.exe").write_bytes(EXE.read_bytes())
+(SITIO / "actualizar-Tachan.exe").write_bytes(EXE.read_bytes())
 sha = hashlib.sha256(EXE.read_bytes()).hexdigest()
 ajena = SITIO.parent / ("ajena_" + SITIO.name + ".pem")
 crear(ajena)
@@ -41,7 +41,7 @@ def probar(version):
     p.kill()
     p.wait()
     time.sleep(.5)
-    return "/Tachan.exe" in pedidos, vivo
+    return "/actualizar-Tachan.exe" in pedidos, vivo
 
 
 casos = [

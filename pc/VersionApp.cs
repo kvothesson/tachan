@@ -3,7 +3,7 @@ namespace Tachan
 {
     static class VersionApp
     {
-        public const int Codigo = 7;
-        public const string Nombre = "1.3";
+        public const int Codigo = 8;
+        public const string Nombre = "1.4";
     }
 }

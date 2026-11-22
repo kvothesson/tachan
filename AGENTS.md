@@ -112,7 +112,7 @@ Corren con datos aislados por `TACHAN_DATOS`, salvo las marcadas como reales.
 
 - **Nombre:** Tachán. No proponer un barco ni volver sobre eso.
 - **Distribución:** primero la web. Google Play pide 12 testers reales durante 14 días de prueba cerrada. No pagar testers ni crear cuentas propias para eso.
-- **Actualizaciones:** manuales, con botón, para no tener conexiones automáticas.
+- **Actualizaciones:** manuales, con botón, para no tener conexiones automáticas. Desde la 1.4 las apps bajan el programa nuevo de la release `v<nombre>` en GitHub, de las copias `actualizar-Tachan.exe` y `actualizar-tachan.apk` que sube `publicar_web.py`. Su cuenta de descargas es la única medida de cuántos siguen usando Tachán (columna `usan` de `scripts/metricas_tachan.py` en el taller). No sacar `Tachan.exe` ni `tachan.apk` de `web/`: las 1.3 instaladas se actualizan desde ahí.
 - **Código:** abierto con GPLv3 desde el 2026-11-21. Los cambios de afuera entran por pull request.
 
 ## Velocidad y consumo de referencia
