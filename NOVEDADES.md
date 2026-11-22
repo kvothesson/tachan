@@ -4,7 +4,7 @@ Lo que cambia en cada versión, contado para quien lo usa. La más nueva va arri
 
 Cómo se escribe: cada versión es un título `## 1.5` con la fecha en que se publicó (`## 1.5 · 2026-11-30`) o `sin publicar` mientras se prepara, y abajo una lista corta. `publicar_web.py` toma de acá la página `web/novedades.html` y las notas de la release de GitHub, y no muestra una versión que todavía no está en el manifiesto de Android.
 
-## 1.5 · sin publicar
+## 1.5 · 2026-11-22
 
 - El celu puede tener varias compus vinculadas a la vez, por ejemplo la PC y la Mac. Vincular una nueva ya no desvincula la otra.
 - En Compartir aparece cada compu con su nombre: tocás a cuál va.
