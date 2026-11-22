@@ -7,9 +7,9 @@ from pathlib import Path
 
 WEB = Path(__file__).resolve().parent / "web"
 TITULO = "Tachán: transfer photos and files from Android to PC wirelessly"
-DESCRIPCION = "Transfer photos, videos and files from your Android phone to your Windows PC wirelessly. Encrypted over your wifi, with no account and no servers."
-AL_COMPARTIR = "Transfer photos, videos and files from your Android phone to your Windows PC wirelessly."
-FICHA = "Transfer photos, videos, files and text from your Android phone to your Windows PC wirelessly. It arrives copied, ready to paste."
+DESCRIPCION = "Transfer photos, videos and files from your Android phone to your Windows PC or Mac wirelessly. Encrypted over your wifi, with no account and no servers."
+AL_COMPARTIR = "Transfer photos, videos and files from your Android phone to your Windows PC or Mac wirelessly."
+FICHA = "Transfer photos, videos, files and text from your Android phone to your Windows PC or Mac wirelessly. It arrives copied, ready to paste."
 
 
 def generar():

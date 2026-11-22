@@ -39,18 +39,22 @@
     <p>Cortale internet al router, o desenchufá el cable que viene de la calle, y dejá el wifi prendido. Mandá algo desde el celu: llega igual, porque va directo de un aparato al otro.</p>
     <p>En la compu, con Tachán abierto, esto en PowerShell muestra sus conexiones. En reposo solo espera en el puerto 47810, y durante un envío ves la dirección de tu celu, nunca una de internet:</p>
     <pre><code>Get-NetTCPConnection -OwningProcess (Get-Process Tachan).Id</code></pre>
+    <p>En una Mac, lo mismo desde la Terminal:</p>
+    <pre><code>lsof -nP -i -a -p $(pgrep -x Tachan)</code></pre>
     <p>Tachán solo sale a internet si tocás Buscar actualización.</p>
 
     <h2>Que el programa es el original</h2>
     <p><b>Windows:</b> calculá la huella del archivo y comparala con <code>exe_sha256</code> de <a href="version.json">version.json</a>. Tienen que ser iguales.</p>
     <pre><code>Get-FileHash Tachan.exe</code></pre>
-    <p>Desde la 1.3, Buscar actualización solo instala versiones firmadas con una llave que no está en este sitio.</p>
+    <p><b>Mac:</b> lo mismo con el zip y <code>mac_sha256</code>:</p>
+    <pre><code>shasum -a 256 Tachan-mac.zip</code></pre>
+    <p>Desde la 1.3, Buscar actualización solo instala versiones firmadas con una llave que no está en este sitio. En Mac, con la misma llave.</p>
     <p><b>Android:</b> el APK está firmado siempre con la misma llave. Su huella SHA-256 es:</p>
     <pre><code>4F:2C:96:BE:94:EA:AF:30:5A:1F:BC:C1:0F:54:96:4C:CE:16:36:1D:3C:F9:EF:E4:93:BA:23:D0:04:D4:E0:8D</code></pre>
     <p>Se ve con <code>keytool -printcert -jarfile tachan.apk</code> o <code>apksigner verify --print-certs tachan.apk</code>. Android no deja instalar encima una versión firmada con otra llave.</p>
 
     <h2>Qué se guarda</h2>
-    <p>En la compu, lo que recibís queda en <code>Descargas\Tachan</code> y los vínculos en <code>%APPDATA%\Tachan</code>, y el programa en <code>%LOCALAPPDATA%\Programs\Tachan</code>. El detalle está en <a href="privacidad.html">Privacidad</a>.</p>
+    <p>En la compu, lo que recibís queda en <code>Descargas\Tachan</code> y los vínculos en <code>%APPDATA%\Tachan</code>, y el programa en <code>%LOCALAPPDATA%\Programs\Tachan</code>. En Mac: <code>~/Downloads/Tachan</code>, <code>~/Library/Application Support/Tachan</code> y <code>~/Applications/Tachan.app</code>. El detalle está en <a href="privacidad.html">Privacidad</a>.</p>
 
     <h2>Qué se revisó</h2>
     <p>Tachán está hecho con ayuda de inteligencia artificial. El 2 de noviembre de 2026 se hizo una revisión de seguridad con la misma IA: encontró 10 fallas, 2 graves, y todas se arreglaron en la versión 1.3.</p>
@@ -59,7 +63,7 @@
     <ul>
       <li>Alguien en tu mismo wifi puede armar un link de vínculo falso. Por eso el celu siempre pide confirmar, muestra la dirección de la compu y avisa si reemplaza a otra.</li>
       <li>Otra app de tu celu puede mandarle cosas a Tachán. Las ves llegar en el aviso, y pegar solo no pega textos de varias líneas.</li>
-      <li>La primera descarga depende de este sitio, porque el exe todavía no tiene firma de Windows.</li>
+      <li>La primera descarga depende de este sitio, porque el exe todavía no tiene firma de Windows y la app de Mac no está verificada por Apple.</li>
     </ul>
     <p>El código es abierto, con licencia GPLv3, y está en <a href="https://github.com/kvothesson/tachan">GitHub</a>: cualquiera puede leerlo y compilarlo. Las descargas de este sitio salen de las versiones publicadas ahí.</p>
 
@@ -70,7 +74,7 @@
   <section lang="en">
     <h2>How to check it, in English</h2>
     <p>You don't have to take our word for it. Cut your router's internet and keep the wifi on: sharing still works, because it goes straight from one device to the other. On the computer, <code>Get-NetTCPConnection -OwningProcess (Get-Process Tachan).Id</code> in PowerShell shows Tachán only listening on port 47810, or connected to your phone while sending. It only goes online if you tap Check for updates.</p>
-    <p>To check the Windows program, compare <code>Get-FileHash Tachan.exe</code> with <code>exe_sha256</code> in <a href="version.json">version.json</a>. Since 1.3, updates must be signed with a key that isn't on this site. The Android APK is always signed with the key whose SHA-256 fingerprint is shown above.</p>
+    <p>To check the Windows program, compare <code>Get-FileHash Tachan.exe</code> with <code>exe_sha256</code> in <a href="version.json">version.json</a>; on a Mac, <code>shasum -a 256 Tachan-mac.zip</code> with <code>mac_sha256</code>. Since 1.3, updates must be signed with a key that isn't on this site. The Android APK is always signed with the key whose SHA-256 fingerprint is shown above.</p>
     <p>Tachán is built with AI help. A security review by the same AI on November 2, 2026 found 10 issues, 2 serious, all fixed in 1.3. That isn't enough: it still needs an outside reviewer. Known limits: someone on your wifi can craft a fake link, so the phone always asks you to confirm and shows the computer's address; another app on your phone can send things through Tachán, which you'll see arrive; and the first download depends on this site. The code is open source under GPLv3 and <a href="https://github.com/kvothesson/tachan">on GitHub</a>, so anyone can read and build it. If you find an issue, <a href="https://github.com/kvothesson/tachan/security/advisories/new">report it privately on GitHub</a>: only you and Kvothesson see it until it's fixed.</p>
   </section>
   <p><a href="./">Tachán</a></p>

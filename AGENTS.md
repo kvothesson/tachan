@@ -4,7 +4,7 @@ Leé esto antes de tocar nada. `README.md` explica el producto; este archivo tie
 
 ## Qué es
 
-Compartís algo en el celu y aparece en la compu, por la red local, cifrado y sin servidores ni cuenta. Queda copiado para Ctrl+V y aparece un aviso con un ta-chán que no saca el foco.
+Compartís algo en el celu y aparece en la compu, por la red local, cifrado y sin servidores ni cuenta. Queda copiado para Ctrl+V (Cmd+V en Mac) y aparece un aviso con un ta-chán que no saca el foco.
 
 - **En producción:** versión 1.3, en https://kvothesson.com/tachan/
 - **Este repo:** `kvothesson/tachan`, público desde el 2026-11-21, con licencia GPLv3. Tiene el código, la web y las descargas.
@@ -33,6 +33,8 @@ Celu (Android, Java sin librerías)              Compu (Windows, C# sobre .NET 4
 Compartir / Principal -> EnvioServicio  TLS --> Servidor -> Descargas\Tachan
 Lector + QrLector       Cola + ReintentoJob     Portapapeles -> Aviso (no saca el foco)
 Transporte (protocolo, Java puro)               Instalador, Actualizador, Qr, Datos
+
+                                                Mac (Swift + AppKit, macOS 15+): los mismos nombres en mac/
 ```
 
 **Protocolo:** HTTPS propio en el puerto TCP 47810 (`POST /vincular`, `GET /hola`, `POST /enviar`, `POST /desvincular`) y búsqueda UDP en el 47811 (`TCHN?<huella>` y `TCHN!<puerto>`).
@@ -45,6 +47,8 @@ Transporte (protocolo, Java puro)               Instalador, Actualizador, Qr, Da
 
 **Windows:** el exe se copia solo a `%LOCALAPPDATA%\Programs\Tachan`, con acceso en Inicio, entrada en Aplicaciones y arranque con Windows. Abrir una versión distinta cierra la vieja y la reemplaza sin tocar los datos, que están en `%APPDATA%\Tachan`.
 
+**Mac:** `mac/` imita a `pc/` archivo por archivo, con el mismo protocolo: el APK no distingue una compu de la otra. La app se copia sola a `~/Applications/Tachan.app` y vive en la barra de menú (`LSUIElement`). Abrir una versión distinta cierra la vieja y la reemplaza; los datos están en `~/Library/Application Support/Tachan` y lo recibido en `~/Downloads/Tachan`, marcado en cuarentena como bajado de internet. Arranca con la sesión con `SMAppService` y el aviso es un `NSPanel` que no se activa, arriba a la derecha. `TACHAN_DATOS`, `TACHAN_PUERTO` y `TACHAN_ACTUALIZAR` valen igual; `TACHAN_NOMBRE` cambia el nombre que ve el celu, para capturas.
+
 **Marca:** `pc/MarcaColores.cs`, `pc/marca.json`, `web/marca.css` y `android/res/values*/marca.xml` se generan desde ese sistema de marca. No se editan a mano. Tachán es temperatura calor (ámbar) y siempre de noche: se ve oscuro con cualquier tema de Windows o del celu (`"modo": "noche"` en `apps.json`).
 
 **Herramientas:** Roslyn de VS 2022 BuildTools, y el SDK de Android y el JDK 17 en las rutas que figuran arriba de `android/compilar.py` (`D:\dev\android-sdk`, `D:\dev\jdk17`). Sin Gradle. El AAB usa el bundletool de la caché de Gradle de esta PC.
@@ -56,8 +60,13 @@ La versión se decide en un solo lugar: `versionCode` y `versionName` de `androi
 ```bash
 python pc/compilar.py                # genera VersionApp.cs y copia el exe a web/
 python android/compilar.py --tienda  # APK de prueba, AAB y web/tachan.apk con la llave definitiva
+python3 mac/compilar.py             # en una Mac: Tachan.app firmada ad hoc y web/Tachan-mac.zip
 python publicar_web.py "mensaje"     # escribe version.json, sube las descargas y publica web/
 ```
+
+**Mac:** se compila en una Mac y se publica desde Windows, donde están las llaves. Después de subir la versión en el manifiesto, compilar en la Mac y commitear `web/Tachan-mac.zip`: `publicar_web.py` no publica si el zip es de otra versión, porque las Mac lo bajarían una y otra vez. `version.json` lleva `mac_sha256` y `firma_mac` (la misma llave firma `codigo\nsha256` del zip); Windows y el celu leen sus campos con regex que no los tocan. La release suma `Tachan-mac.zip` y `actualizar-Tachan-mac.zip`.
+
+**Herramientas en Mac:** las Command Line Tools de Xcode (`swiftc`, `lipo`, `codesign`, `iconutil`, `ditto`) y Python 3, sin Xcode ni paquetes. Para las pruebas, JDK 17 y adb de Homebrew (`brew install openjdk@17 android-platform-tools`). `compilar.py` lee la versión del manifiesto, los colores de `pc/marca.json`, los textos de `pc/Marca.cs` y la llave pública de `pc/Actualizador.cs`: no se copian a mano. Lo que en Mac se dice distinto ("Abrir al iniciar sesión") está en `mac/Textos.swift`.
 
 **Web en inglés:** `web/en.html` se genera desde `web/index.html` con `generar_en.py`, y `publicar_web.py` lo corre solo. No se edita a mano: el texto va en los `<span lang="en">` de `index.html`, y el título y la descripción en `generar_en.py`. `index.html` queda siempre en español para que Google lo lea así; solo cambia al idioma del navegador cuando se llega por el QR.
 
@@ -79,7 +88,7 @@ Corren con datos aislados por `TACHAN_DATOS`, salvo las marcadas como reales.
 
 | Prueba | Qué cubre | Cuidado |
 |---|---|---|
-| `pruebas/prueba_e2e.py` | Protocolo y seguridad | "QR en pantalla: False" solo significa que otra ventana lo tapó. Usa un puerto libre y una carpeta nueva por corrida, y cierra su exe aunque falle: un exe viejo de prueba no la cruza |
+| `pruebas/prueba_e2e.py` | Protocolo y seguridad, en Windows y en Mac | "QR en pantalla: False" solo significa que otra ventana lo tapó. Usa un puerto libre y una carpeta nueva por corrida, y cierra su exe aunque falle: un exe viejo de prueba no la cruza |
 | `pruebas/prueba_copia.py` | Portapapeles | Restaura el texto; una imagen copiada se pierde |
 | `pruebas/prueba_demorado.py` | Lo que sale de la cola no pisa el portapapeles ni se suma a lo nuevo | Restaura el texto; una imagen copiada se pierde |
 | `pruebas/prueba_arriba.py` | Aviso sobre pantalla completa | Abre una ventana unos segundos |
@@ -90,6 +99,7 @@ Corren con datos aislados por `TACHAN_DATOS`, salvo las marcadas como reales.
 | `pruebas/prueba_pc.py` | Arrastre y pegado | **Mueve el mouse real:** solo si nadie está usando la compu |
 | `pruebas/prueba_actualizar.py` | Actualización | **Toca la instalación real** |
 | `pruebas/prueba_buscar_version.py` | Buscar actualización | **Toca la instalación real** |
+| `pruebas/prueba_actualizar_mac.py` | Actualización en Mac con una llave de prueba | **Toca la instalación real** (`~/Applications`); al final reinstala `mac/compilado` |
 | `pruebas/prueba_firma.py` | Firma de la actualización | Datos aislados; no toca la instalación |
 | `pruebas/medir_celu.py` | Arranque y lector | Celu desbloqueado y conectado; cierra y abre la app tres veces |
 | `pruebas/medir_envio.py` | Envío real por el selector de fotos | Celu desbloqueado, conectado y sin tocar; toca la pantalla y la bloquea al terminar |
@@ -107,6 +117,15 @@ Corren con datos aislados por `TACHAN_DATOS`, salvo las marcadas como reales.
 - Cada recompilación del exe cambia sus bytes, y eso alcanza para que cuente como "otra versión".
 - El emulador de Android 16 no arranca en esta PC (probado el 2026-11-08, emulador 37.2.13, imagen `android-36;default;x86_64`, WHPX): se cae con 0xC0000005 o queda colgado antes del kernel, con cualquier ajuste de gráficos o procesador. Para Android 16 hace falta un celu real o el informe previo al lanzamiento de Play.
 - La cámara de algunos celus no abre `tachan://`: por eso el QR es un link web y la app trae lector propio.
+
+**En Mac:**
+- Las Command Line Tools de Xcode 16 traen el módulo `SwiftBridging` dos veces y `swiftc` no compila nada ("redefinition of module"). `compilar.py` tapa uno con un overlay (`-vfsoverlay`) sin tocar el sistema.
+- macOS da una identidad TLS solo desde el llavero o desde un `.p12`. Con el llavero, cada versión (otra firma ad hoc) haría preguntar por la llave. Por eso el certificado lo crea `/usr/bin/openssl` la primera vez y se carga solo en memoria con `kSecImportToMemoryOnly`, que existe desde macOS 15: de ahí el mínimo.
+- El `.p12` queda protegido solo por permisos 0600 (en Windows lo cifra DPAPI). Su clave no protege nada.
+- Compilar dos veces la misma fuente da los mismos bytes, al revés que en Windows. Para probar el reemplazo de versión, volver a firmar una copia (`codesign --force -s - --options runtime`).
+- Sin cuenta de Apple Developer no hay notarización. En macOS 15 el clic derecho, Abrir, ya no saltea Gatekeeper: hay que ir a Ajustes del Sistema, Privacidad y seguridad, Abrir igual. La copia en `~/Applications` va sin cuarentena y no vuelve a preguntar.
+- Desde una terminal sin permisos de Accesibilidad y Grabación de pantalla no se puede apretar Cmd+V con `osascript` ni sacar una captura de otra ventana. En modo prueba la app deja una foto de cada aviso (`aviso_NN.png` en la carpeta de datos), sin el resto de la pantalla.
+- El celu guarda una sola compu: vincularlo con la Mac le saca el vínculo con la PC Windows.
 
 ## Decisiones tomadas
 
@@ -135,6 +154,8 @@ Corren con datos aislados por `TACHAN_DATOS`, salvo las marcadas como reales.
 - **Buscar actualización** en el celu, y una actualización real entre versiones publicadas.
 - Celus con Android 15 o más nuevo, y dos celus en la misma compu.
 - Red local en Android (revisado el 2026-11-07 en developer.android.com): con `targetSdkVersion` 35 o 36 y el permiso `INTERNET`, Tachán sigue con acceso. Recién al apuntar a 37 (Android 17) hay que pedir `ACCESS_LOCAL_NETWORK` en el momento y manejar que digan que no.
+
+- Mac: que arranque sola al iniciar sesión, Pegar solo (Accesibilidad, que con firma ad hoc puede volver a pedirse en cada versión), el aviso sobre una app a pantalla completa, y una Mac Intel.
 
 **Por hacer:**
 - Microsoft Store, para sacar el cartel de SmartScreen. Revisar las condiciones actuales antes de crear la cuenta.

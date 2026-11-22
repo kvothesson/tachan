@@ -9,9 +9,9 @@
 
 Compartís algo en el celu y aparece en la compu: fotos, videos, archivos, texto y links. Va por el wifi de tu casa, cifrado, sin cuenta y sin pasar por ningún servidor.
 
-Llega **copiado**, listo para Ctrl+V donde estabas, con un aviso chiquito que no te saca de lo que hacés. Del aviso se puede arrastrar, y se va solo en 6 segundos. También queda guardado en `Descargas\Tachan`.
+Llega **copiado**, listo para Ctrl+V (Cmd+V en Mac) donde estabas, con un aviso chiquito que no te saca de lo que hacés. Del aviso se puede arrastrar, y se va solo en 6 segundos. También queda guardado en `Descargas\Tachan` (en Mac, `~/Downloads/Tachan`).
 
-Este repo tiene el código completo de las dos apps y de la web, abierto para que cualquiera pueda comprobar qué hace. Sin servidores, sin rastreo y sin dependencias: pesa menos de 100 KB de cada lado.
+Este repo tiene el código completo de las dos apps y de la web, abierto para que cualquiera pueda comprobar qué hace. Sin servidores, sin rastreo y sin dependencias: menos de 100 KB en Windows y en Android, y unos 300 KB la app universal de Mac.
 
 ## Cómo funciona
 
@@ -24,6 +24,7 @@ Todo pasa entre tus dos equipos. La compu escucha en el puerto TCP 47810 (HTTPS 
 | Carpeta | Qué es |
 |---|---|
 | [`pc/`](pc) | El programa de Windows: un `.exe` de 98 KB en C# sobre .NET 4.8, que ya viene con Windows. Se instala solo en `%LOCALAPPDATA%\Programs\Tachan`, y abrir una versión distinta lo actualiza. |
+| [`mac/`](mac) | La app de Mac, para macOS 15 o más nuevo: Swift y AppKit, sin Xcode ni paquetes, universal (Apple Silicon e Intel). Habla el mismo protocolo, así que el APK no cambia. Se instala sola en `~/Applications` y vive en la barra de menú. |
 | [`android/`](android) | La app: 73 KB, sin Gradle ni librerías. El protocolo está en `Transporte.java`, en Java puro, para poder probarlo contra el `.exe`. `QrLector.java` y `Lector.java` son un lector de QR propio. |
 | [`web/`](web) | La página, la privacidad y cómo comprobarlo. GitHub la publica sola en [kvothesson.com/tachan](https://kvothesson.com/tachan/) cuando cambia algo de esta carpeta ([`web.yml`](.github/workflows/web.yml)). Las descargas salen de las [releases](https://github.com/kvothesson/tachan/releases) de este repo. |
 | [`tienda/`](tienda) | La ficha de Google Play en 6 idiomas. |
@@ -34,9 +35,10 @@ Los colores (`pc/MarcaColores.cs`, `pc/marca.json`, `web/marca.css` y `android/r
 
 ## Compilar
 
-Solo en Windows. No hay Gradle ni paquetes que bajar.
+No hay Gradle ni paquetes que bajar.
 
 - **Compu:** hace falta Python 3 y el compilador de C# de Visual Studio 2022 Build Tools. `python pc/compilar.py` deja el exe en `pc/compilado/`.
+- **Mac:** en una Mac, con las Command Line Tools de Xcode (`xcode-select --install`) y Python 3. `python3 mac/compilar.py` deja `mac/compilado/Tachan.app`, firmada ad hoc, y el zip en `web/`.
 - **Celu:** hace falta el SDK de Android (plataforma y build-tools 36) y un JDK 17. Las rutas están arriba de `android/compilar.py`: cambialas por las tuyas. `python android/compilar.py` deja un APK firmado con una llave de desarrollo que se crea sola; con `--tienda` también sale el AAB para Google Play.
 
 Un APK compilado por vos no se instala encima del oficial, porque la firma es otra: hay que desinstalar y volver a vincular. Las llaves de publicación no están en el repo.
@@ -48,7 +50,7 @@ Usan datos aislados con `TACHAN_DATOS`, así no tocan tu instalación.
 
 | Prueba | Qué mira |
 |---|---|
-| `prueba_e2e.py` | El protocolo y la seguridad, de punta a punta |
+| `prueba_e2e.py` | El protocolo y la seguridad, de punta a punta (en Windows y en Mac) |
 | `prueba_pc.py` | Aviso, portapapeles, arrastre y pegado (mueve el mouse de verdad) |
 | `prueba_copia.py` | El portapapeles, sin mover el mouse |
 | `prueba_demorado.py` | Lo que sale de la cola no pisa el portapapeles |
@@ -59,6 +61,7 @@ Usan datos aislados con `TACHAN_DATOS`, así no tocan tu instalación.
 | `prueba_buscar_version.py` | Buscar actualización contra una web local |
 | `prueba_firma.py` | Solo baja una actualización firmada con nuestra llave |
 | `prueba_actualizar.py` | Reemplaza la instalación real sin perder vínculos |
+| `prueba_actualizar_mac.py` | En Mac: solo instala una actualización firmada, y reemplaza la instalada sin tocar los datos |
 | `prueba_lector.py` | El QR real, deformado como lo ve una cámara |
 | `medir_envio.py` | Un envío real desde el selector de fotos, con el celu bloqueado |
 | `medir_velocidad.py` | El protocolo solo |
