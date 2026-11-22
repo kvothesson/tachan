@@ -1,6 +1,6 @@
 """Publica web/ en kvothesson.com/tachan: escribe version.json, sube las descargas y sube el commit.
 
-Se corre en Windows, donde están las llaves. El zip de Mac (web/Tachan-mac.zip) tiene que estar compilado en una Mac
+Se corre en Windows, donde están las llaves. El zip de Mac (web/Tachan-mac.zip) lo compila GitHub (.github/workflows/mac.yml)
 con la misma versión del manifiesto: si no, no publica.
 
 GitHub despliega la carpeta web/ cuando el cambio llega a main (.github/workflows/web.yml).
@@ -74,7 +74,7 @@ if not any(v == generar_novedades.version_manifiesto() and fecha for v, fecha, _
 generar_novedades.generar()
 # Si el zip de Mac es de otra versión, las Mac lo bajarían una y otra vez sin quedar nunca al día.
 if version_mac() != codigo:
-    sys.exit(f"web/Tachan-mac.zip es la versión {version_mac()} y el manifiesto dice {codigo}: compilalo en la Mac con python3 mac/compilar.py")
+    sys.exit(f"web/Tachan-mac.zip es la versión {version_mac()} y el manifiesto dice {codigo}: GitHub lo compila solo al subir la versión (gh run list -w mac.yml); cuando termine, git pull")
 sha256 = hashlib.sha256((WEB / "Tachan.exe").read_bytes()).hexdigest()
 sha256_mac = hashlib.sha256((WEB / "Tachan-mac.zip").read_bytes()).hexdigest()
 # Windows lee exe_sha256 y firma con regex que no tocan los campos de Mac; el celu solo lee codigo y nombre.

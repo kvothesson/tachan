@@ -1,0 +1,58 @@
+# Compila Tachán para Mac en una Mac de GitHub y deja web/Tachan-mac.zip en main.
+# Así no hace falta una Mac propia para sacar una versión, y cualquiera puede ver que el zip sale de este código.
+# Corre cuando cambia algo que entra en la app de Mac, o a mano desde la pestaña Actions.
+# No publica la web: el commit que hace no dispara web.yml. Eso lo sigue haciendo publicar_web.py.
+name: Compilar para Mac
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "android/AndroidManifest.xml"
+      - "mac/**"
+      - "pc/marca.json"
+      - "pc/Marca.cs"
+      - "pc/Actualizador.cs"
+      - ".github/workflows/mac.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mac
+  cancel-in-progress: true
+
+jobs:
+  compilar:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compilar
+        run: |
+          swiftc --version
+          python3 mac/compilar.py
+
+      - name: Revisar el zip
+        run: |
+          ditto -x -k web/Tachan-mac.zip "$RUNNER_TEMP/zip"
+          app="$RUNNER_TEMP/zip/Tachan.app"
+          codesign --verify --strict "$app"
+          lipo -archs "$app/Contents/MacOS/Tachan"
+          version=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$app/Contents/Info.plist")
+          esperada=$(sed -n 's/.*versionCode="\([0-9]*\)".*/\1/p' android/AndroidManifest.xml)
+          echo "zip $version, manifiesto $esperada"
+          test "$version" = "$esperada"
+          shasum -a 256 web/Tachan-mac.zip
+
+      - name: Guardar el zip en main
+        run: |
+          if git diff --quiet -- web/Tachan-mac.zip; then echo "El zip no cambió"; exit 0; fi
+          nombre=$(sed -n 's/.*versionName="\([^"]*\)".*/\1/p' android/AndroidManifest.xml)
+          git add web/Tachan-mac.zip
+          git -c user.email=46162626+kvothesson@users.noreply.github.com -c user.name=Kvothesson commit -q \
+            -m "Zip de Mac $nombre compilado en GitHub" \
+            -m "Desde $GITHUB_SHA con $(xcrun swiftc --version 2>&1 | head -1), en $ImageOS $ImageVersion. Corrida: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          git pull -q --rebase origin main
+          git push -q origin HEAD:main
