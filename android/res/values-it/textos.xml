@@ -40,4 +40,7 @@
     <string name="otra_compu">Non sembra il tuo computer. Se l\'hai reinstallato, collegalo di nuovo</string>
     <string name="escribi_texto">Scrivi o incolla un testo</string>
     <string name="mandar">Invia</string>
+    <string name="cancelar_envio">Annullare l’invio di %1$s a %2$s?</string>
+    <string name="quitar_cola">Annulla invio</string>
+    <string name="dejar_cola">Tieni</string>
 </resources>

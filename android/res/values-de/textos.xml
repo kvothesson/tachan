@@ -40,4 +40,7 @@
     <string name="otra_compu">Das scheint nicht dein Computer zu sein. Falls du ihn neu installiert hast, verbinde ihn erneut</string>
     <string name="escribi_texto">Text eingeben oder einfügen</string>
     <string name="mandar">Senden</string>
+    <string name="cancelar_envio">Senden von %1$s an %2$s abbrechen?</string>
+    <string name="quitar_cola">Senden abbrechen</string>
+    <string name="dejar_cola">Behalten</string>
 </resources>

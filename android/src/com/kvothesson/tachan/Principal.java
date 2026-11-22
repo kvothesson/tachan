@@ -199,18 +199,29 @@ public class Principal extends Activity {
         ScrollView desplazable = new ScrollView(this);
         LinearLayout lista = new LinearLayout(this);
         lista.setOrientation(LinearLayout.VERTICAL);
-        for (String reciente : Almacen.recientes(this)) {
-            View filete = new View(this);
-            filete.setBackgroundColor(getColor(R.color.kvo_line));
-            lista.addView(filete, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(1)));
-            lista.addView(filaReciente(reciente));
+        // Arriba lo que espera, con un reloj y tocable para cancelarlo; abajo lo que ya llegó, con su tilde.
+        for (final Cola.Pendiente p : Cola.pendientes(this)) {
+            View fila = fila(p.nombre, p.compu, R.drawable.espera);
+            fila.setContentDescription(p.nombre + ", " + getString(R.string.esperando));
+            fila.setBackground(conToque(redondeado(getColor(R.color.kvo_ground), 8)));
+            fila.setOnClickListener(v -> confirmarCancelar(p));
+            agregarFila(lista, fila);
         }
+        for (String[] reciente : Almacen.recientes(this)) agregarFila(lista, fila(reciente[0], reciente[1], R.drawable.ok));
         desplazable.addView(lista);
         raiz.addView(desplazable, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(170)));
         setContentView(raiz);
     }
 
-    private View filaReciente(String nombre) {
+    private void agregarFila(LinearLayout lista, View fila) {
+        View filete = new View(this);
+        filete.setBackgroundColor(getColor(R.color.kvo_line));
+        lista.addView(filete, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(1)));
+        lista.addView(fila);
+    }
+
+    /** El nombre y, al lado, a qué compu fue. */
+    private View fila(String nombre, String compu, int icono) {
         LinearLayout fila = new LinearLayout(this);
         fila.setGravity(Gravity.CENTER_VERTICAL);
         fila.setPadding(0, dp(10), 0, dp(10));
@@ -218,8 +229,27 @@ public class Principal extends Activity {
         t.setSingleLine(true);
         t.setEllipsize(TextUtils.TruncateAt.MIDDLE);
         fila.addView(t, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        fila.addView(icono(R.drawable.ok, 18, 0));
+        if (!compu.isEmpty()) {
+            TextView donde = texto(compu, 11, getColor(R.color.kvo_line_strong));
+            donde.setTypeface(Typeface.MONOSPACE);
+            donde.setSingleLine(true);
+            donde.setEllipsize(TextUtils.TruncateAt.END);
+            donde.setMaxWidth(dp(130));
+            fila.addView(donde, margenes(10, 0, 10, 0));
+        }
+        fila.addView(icono(icono, 18, 0));
         return fila;
+    }
+
+    private void confirmarCancelar(final Cola.Pendiente p) {
+        new AlertDialog.Builder(this)
+                .setMessage(getString(R.string.cancelar_envio, p.nombre, p.compu))
+                .setPositiveButton(R.string.quitar_cola, (d, w) -> {
+                    Cola.cancelar(this, p.id);
+                    dibujar();
+                })
+                .setNegativeButton(R.string.dejar_cola, null)
+                .show();
     }
 
     /** El punto se pone verde si la compu responde. Si cambió de dirección, la busca. */

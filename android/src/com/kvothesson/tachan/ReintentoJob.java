@@ -20,6 +20,10 @@ public class ReintentoJob extends JobService {
         c.getSystemService(JobScheduler.class).schedule(trabajo);
     }
 
+    static void cancelar(Context c) {
+        c.getSystemService(JobScheduler.class).cancel(ID);
+    }
+
     @Override
     public boolean onStartJob(final JobParameters parametros) {
         new Thread(() -> {

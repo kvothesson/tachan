@@ -1,5 +1,6 @@
 package com.kvothesson.tachan;
 
+import android.app.NotificationManager;
 import android.content.Context;
 
 import java.io.File;
@@ -9,7 +10,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -89,7 +92,7 @@ final class Cola {
                 try (InputStream in = new FileInputStream(datos)) {
                     enviarConBusqueda(c, compu, in, datos, nombre, partes[0]);
                 }
-                Almacen.agregarReciente(c, "texto".equals(partes[0]) ? c.getString(R.string.texto_enviado) : nombre.isEmpty() ? "…" : nombre);
+                Almacen.agregarReciente(c, etiqueta(c, partes[0], nombre), compu);
                 Almacen.usar(c, compu);
                 borrar(datos, meta, destino);
             } catch (Transporte.Rechazado e) {
@@ -100,6 +103,53 @@ final class Cola {
             }
         }
         return apagadas.isEmpty();
+    }
+
+    /** Algo que espera en la cola, para mostrarlo y poder cancelarlo. */
+    static final class Pendiente {
+        String id;
+        String nombre;
+        String compu;
+    }
+
+    /** Lo que espera, en el orden en que va a salir. */
+    static List<Pendiente> pendientes(Context c) {
+        List<Pendiente> lista = new ArrayList<>();
+        File[] metas = carpeta(c).listFiles((d, n) -> n.endsWith(".meta"));
+        if (metas == null) return lista;
+        Arrays.sort(metas);
+        for (File meta : metas) {
+            String base = meta.getPath().replaceAll("\\.meta$", "");
+            try {
+                String[] partes = new String(leerTodo(meta), StandardCharsets.UTF_8).split("\n", 2);
+                File destino = new File(base + ".compu");
+                Transporte.Compu compu = destino.exists() ? Almacen.compu(c, new String(leerTodo(destino), StandardCharsets.UTF_8)) : Almacen.compu(c);
+                if (compu == null) continue;  // se borra en la próxima vuelta: esa compu ya no está
+                Pendiente p = new Pendiente();
+                p.id = new File(base).getName();
+                p.nombre = etiqueta(c, partes[0], partes.length > 1 ? partes[1] : "");
+                p.compu = compu.nombre;
+                lista.add(p);
+            } catch (IOException e) {
+                // a medio escribir: aparece en la próxima
+            }
+        }
+        return lista;
+    }
+
+    /** Lo saca de la cola. Si no queda nada, tampoco queda el aviso de que espera. */
+    static void cancelar(Context c, String id) {
+        if (!id.matches("[0-9_-]+")) return;
+        File base = new File(carpeta(c), id);
+        borrar(new File(base.getPath() + ".meta"), new File(base.getPath() + ".dat"), new File(base.getPath() + ".compu"));
+        if (pendientes(c).isEmpty()) {
+            c.getSystemService(NotificationManager.class).cancel(EnvioServicio.NOTI_RESULTADO);
+            ReintentoJob.cancelar(c);
+        }
+    }
+
+    private static String etiqueta(Context c, String clase, String nombre) {
+        return "texto".equals(clase) ? c.getString(R.string.texto_enviado) : nombre.isEmpty() ? "…" : nombre;
     }
 
     private static void borrar(File... archivos) {

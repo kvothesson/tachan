@@ -10,6 +10,7 @@ Cómo se escribe: cada versión es un título `## 1.5` con la fecha en que se pu
 - En Compartir aparece cada compu con su nombre: tocás a cuál va.
 - Si tocás Tachán sin elegir, va a la última que usaste si está prendida; si no, a la primera que conteste.
 - Lo que espera en la cola recuerda a qué compu iba: si una está apagada, lo de la otra sale igual.
+- La lista del celu muestra arriba, con un reloj, lo que todavía espera, y se puede tocar para cancelarlo. Al lado de cada cosa dice a qué compu fue.
 
 ## 1.4 · 2026-11-21
 

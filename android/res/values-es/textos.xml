@@ -40,4 +40,7 @@
     <string name="otra_compu">No parece tu compu. Si la reinstalaste, volvé a vincular</string>
     <string name="escribi_texto">Escribí o pegá un texto</string>
     <string name="mandar">Mandar</string>
+    <string name="cancelar_envio">¿Cancelar el envío de %1$s a %2$s?</string>
+    <string name="quitar_cola">Cancelar envío</string>
+    <string name="dejar_cola">Dejarlo</string>
 </resources>

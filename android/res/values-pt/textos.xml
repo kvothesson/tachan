@@ -40,4 +40,7 @@
     <string name="otra_compu">Não parece o seu computador. Se o reinstalou, vincule de novo</string>
     <string name="escribi_texto">Escreva ou cole um texto</string>
     <string name="mandar">Enviar</string>
+    <string name="cancelar_envio">Cancelar o envio de %1$s para %2$s?</string>
+    <string name="quitar_cola">Cancelar envio</string>
+    <string name="dejar_cola">Manter</string>
 </resources>

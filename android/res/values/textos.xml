@@ -41,4 +41,7 @@
     <string name="otra_compu">This doesn\'t look like your computer. If you reinstalled it, link again</string>
     <string name="escribi_texto">Type or paste text</string>
     <string name="mandar">Send</string>
+    <string name="cancelar_envio">Cancel sending %1$s to %2$s?</string>
+    <string name="quitar_cola">Cancel sending</string>
+    <string name="dejar_cola">Keep it</string>
 </resources>

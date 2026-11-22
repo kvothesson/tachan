@@ -152,7 +152,7 @@ public class EnvioServicio extends Service {
                 p.prepararHeic(this);
                 intentar(compu, p, bytes -> mostrarAvance(orden, total, p.largo, bytes));
                 p.borrarTemporal();
-                Almacen.agregarReciente(this, p.etiqueta(this));
+                Almacen.agregarReciente(this, p.etiqueta(this), compu);
                 Almacen.usar(this, compu);
                 hechas++;
             } catch (SecurityException e) {

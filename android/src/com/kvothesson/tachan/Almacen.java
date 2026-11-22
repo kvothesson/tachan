@@ -9,7 +9,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /** Las compus vinculadas y lo último enviado. La copia de seguridad está apagada en el manifiesto: los tokens no salen del celu. */
@@ -157,15 +156,27 @@ final class Almacen {
                 .remove("token").remove("host").remove("puerto").remove("huella").remove("nombre").commit();
     }
 
-    static List<String> recientes(Context c) {
+    /** Lo último que llegó: {nombre, compu}. Lo anotado antes de la 1.5 no dice compu. */
+    static List<String[]> recientes(Context c) {
         String crudo = prefs(c).getString("recientes", "");
-        return crudo.isEmpty() ? new ArrayList<String>() : new ArrayList<>(Arrays.asList(crudo.split("\n")));
+        List<String[]> lista = new ArrayList<>();
+        if (crudo.isEmpty()) return lista;
+        for (String renglon : crudo.split("\n")) {
+            int tab = renglon.indexOf('\t');
+            lista.add(tab < 0 ? new String[]{renglon, ""} : new String[]{renglon.substring(0, tab), renglon.substring(tab + 1)});
+        }
+        return lista;
     }
 
-    static synchronized void agregarReciente(Context c, String nombre) {
-        List<String> lista = recientes(c);
-        lista.add(0, nombre.replace('\n', ' '));
+    static synchronized void agregarReciente(Context c, String nombre, Transporte.Compu compu) {
+        List<String> lista = new ArrayList<>();
+        lista.add(limpio(nombre) + "\t" + limpio(compu.nombre));
+        for (String[] r : recientes(c)) lista.add(r[0] + "\t" + r[1]);
         while (lista.size() > MAXIMO_RECIENTES) lista.remove(lista.size() - 1);
         prefs(c).edit().putString("recientes", android.text.TextUtils.join("\n", lista)).apply();
+    }
+
+    private static String limpio(String s) {
+        return s.replace('\n', ' ').replace('\t', ' ');
     }
 }

@@ -40,4 +40,7 @@
     <string name="otra_compu">Cela ne ressemble pas à votre ordinateur. Si vous l\'avez réinstallé, associez-le à nouveau</string>
     <string name="escribi_texto">Écrivez ou collez un texte</string>
     <string name="mandar">Envoyer</string>
+    <string name="cancelar_envio">Annuler l’envoi de %1$s à %2$s ?</string>
+    <string name="quitar_cola">Annuler l’envoi</string>
+    <string name="dejar_cola">Garder</string>
 </resources>
