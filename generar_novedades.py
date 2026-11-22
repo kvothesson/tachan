@@ -81,5 +81,7 @@ def generar():
 
 
 if __name__ == "__main__":
+    import sys
+    sys.stdout.reconfigure(encoding="utf-8")  # la consola de Windows no imprime el ⋯ en cp1252
     generar()
     print(notas(version_manifiesto()))
