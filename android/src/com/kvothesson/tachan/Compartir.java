@@ -21,8 +21,10 @@ public class Compartir extends Activity {
             finish();
             return;
         }
+        // Si se eligió una compu en la fila de Compartir, va a esa. Si no, el servicio busca la que esté prendida.
+        Transporte.Compu elegida = Almacen.deAtajo(this, recibido.getStringExtra(Intent.EXTRA_SHORTCUT_ID));
         try {
-            EnvioServicio.iniciar(this, adjuntos(recibido), textoDe(recibido));
+            EnvioServicio.iniciar(this, adjuntos(recibido), textoDe(recibido), elegida);
         } catch (SecurityException e) {
             // La otra app compartió algo sin darnos permiso para leerlo.
             Toast.makeText(this, R.string.fallo, Toast.LENGTH_LONG).show();

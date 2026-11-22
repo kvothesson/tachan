@@ -37,6 +37,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,8 +53,7 @@ public class Principal extends Activity {
     private static final int MAXIMO_FOTOS = 100;
 
     private Transporte.Enlace pendiente;
-    private View punto;
-    private TextView estado;
+    private int dibujo;  // cuál pantalla principal está a la vista: una respuesta tardía no pinta una vieja
     private boolean visible;
 
     @Override
@@ -122,7 +122,8 @@ public class Principal extends Activity {
         String nombre = TextUtils.isEmpty(pendiente.nombre) ? pendiente.host : pendiente.nombre;
         centro.addView(frase(getString(R.string.vincular_con, nombre)), margenes(0, 18, 0, 0));
         // El nombre lo pone quien armó el link: la dirección y el aviso de reemplazo no se pueden disfrazar.
-        Transporte.Compu actual = Almacen.compu(this);
+        // Las otras compus quedan: solo se reemplaza un vínculo viejo con esta misma.
+        Transporte.Compu actual = mismaCompu(pendiente);
         String detalle = actual == null ? pendiente.host : pendiente.host + "\n" + getString(R.string.reemplaza, actual.nombre);
         TextView direccion = texto(detalle, 13, getColor(R.color.kvo_muted));
         direccion.setGravity(Gravity.CENTER);
@@ -136,7 +137,6 @@ public class Principal extends Activity {
     }
 
     private void pantallaPrincipal() {
-        final Transporte.Compu compu = Almacen.compu(this);
         LinearLayout raiz = raiz();
 
         TextView titulo = texto(getString(R.string.app_name), 32, getColor(R.color.kvo_ink));
@@ -155,29 +155,37 @@ public class Principal extends Activity {
         separada.bottomMargin = dp(16);
         raiz.addView(cabeza, separada);
 
-        LinearLayout tarjeta = new LinearLayout(this);
-        tarjeta.setGravity(Gravity.CENTER_VERTICAL);
-        tarjeta.setPadding(dp(14), dp(12), dp(14), dp(12));
-        GradientDrawable borde = redondeado(getColor(R.color.kvo_ground), 14);
-        borde.setStroke(dp(1), getColor(R.color.kvo_line));
-        tarjeta.setBackground(conToque(borde));
-        LinearLayout datos = new LinearLayout(this);
-        datos.setOrientation(LinearLayout.VERTICAL);
-        TextView nombre = texto(compu.nombre, 15, getColor(R.color.kvo_ink));
-        nombre.setTypeface(Typeface.DEFAULT_BOLD);
-        nombre.setSingleLine(true);
-        nombre.setEllipsize(TextUtils.TruncateAt.END);
-        datos.addView(nombre);
-        estado = texto("", 12, getColor(R.color.kvo_muted));
-        estado.setTypeface(Typeface.MONOSPACE);
-        datos.addView(estado);
-        tarjeta.addView(datos, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        punto = new View(this);
-        punto.setBackground(circulo(getColor(R.color.kvo_line_strong)));
-        tarjeta.addView(punto, new LinearLayout.LayoutParams(dp(10), dp(10)));
-        tarjeta.setOnClickListener(v -> opcionesCompu());
-        raiz.addView(tarjeta);
-        revisarPunto(compu);
+        final int esteDibujo = ++dibujo;
+        List<Transporte.Compu> compus = Almacen.compus(this);
+        publicarAtajos(compus);
+        for (int i = 0; i < compus.size(); i++) {
+            final Transporte.Compu compu = compus.get(i);
+            LinearLayout tarjeta = new LinearLayout(this);
+            tarjeta.setGravity(Gravity.CENTER_VERTICAL);
+            tarjeta.setPadding(dp(14), dp(12), dp(14), dp(12));
+            GradientDrawable borde = redondeado(getColor(R.color.kvo_ground), 14);
+            borde.setStroke(dp(1), getColor(R.color.kvo_line));
+            tarjeta.setBackground(conToque(borde));
+            LinearLayout datos = new LinearLayout(this);
+            datos.setOrientation(LinearLayout.VERTICAL);
+            TextView nombre = texto(compu.nombre, 15, getColor(R.color.kvo_ink));
+            nombre.setTypeface(Typeface.DEFAULT_BOLD);
+            nombre.setSingleLine(true);
+            nombre.setEllipsize(TextUtils.TruncateAt.END);
+            datos.addView(nombre);
+            TextView estado = texto("", 12, getColor(R.color.kvo_muted));
+            estado.setTypeface(Typeface.MONOSPACE);
+            datos.addView(estado);
+            tarjeta.addView(datos, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+            View punto = new View(this);
+            punto.setBackground(circulo(getColor(R.color.kvo_line_strong)));
+            tarjeta.addView(punto, new LinearLayout.LayoutParams(dp(10), dp(10)));
+            tarjeta.setOnClickListener(v -> opcionesCompu(compu));
+            LinearLayout.LayoutParams ancho = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            ancho.topMargin = dp(i == 0 ? 0 : 8);
+            raiz.addView(tarjeta, ancho);
+            revisarPunto(compu, punto, estado, esteDibujo);
+        }
 
         LinearLayout centro = centro(raiz);
         ImageView mas = new ImageView(this);
@@ -215,8 +223,7 @@ public class Principal extends Activity {
     }
 
     /** El punto se pone verde si la compu responde. Si cambió de dirección, la busca. */
-    private void revisarPunto(final Transporte.Compu compu) {
-        final View esteP = punto;
+    private void revisarPunto(final Transporte.Compu compu, final View punto, final TextView estado, final int esteDibujo) {
         new Thread(() -> {
             int color = R.color.kvo_line_strong;
             boolean rechazado = false, otra = false;
@@ -225,7 +232,7 @@ public class Principal extends Activity {
                     Transporte.hola(compu);
                 } catch (Transporte.NoLlega e) {
                     if (Transporte.descubrir(compu, EnvioServicio.PUERTO_UDP) == null) throw e;
-                    Almacen.guardar(this, compu);
+                    Almacen.actualizar(this, compu);
                     Transporte.hola(compu);
                 }
                 color = R.color.kvo_ok;
@@ -241,10 +248,10 @@ public class Principal extends Activity {
             runOnUiThread(() -> {
                 if (!visible) return;
                 if (fueRechazado) {
-                    Almacen.olvidar(this);
+                    quitar(compu);
                     aviso(R.string.revincular);
                     dibujar();
-                } else if (esteP == punto) {
+                } else if (esteDibujo == dibujo) {
                     punto.setBackground(circulo(getColor(final_)));
                     estado.setText(final_ == R.color.kvo_ok ? R.string.en_red : fueOtra ? R.string.otra_compu : R.string.no_aparece);
                 }
@@ -291,14 +298,16 @@ public class Principal extends Activity {
 
     private void vincular() {
         final Transporte.Enlace enlace = pendiente;
-        final Transporte.Compu anterior = Almacen.compu(this);
+        final Transporte.Compu anterior = mismaCompu(enlace);
         new Thread(() -> {
             int error = 0;
             Transporte.Compu compu = null;
             try {
                 compu = Transporte.vincular(enlace, Build.MODEL);
                 Almacen.guardar(this, compu);
-                if (anterior != null) {
+                Almacen.usar(this, compu);
+                // Las otras compus siguen vinculadas. Solo se suelta el vínculo viejo con esta misma.
+                if (anterior != null && !anterior.token.equals(compu.token)) {
                     try { Transporte.desvincular(anterior); } catch (IOException e) { }  // si no está prendida, queda en su lista
                 }
             } catch (Transporte.Impostor e) {
@@ -309,27 +318,32 @@ public class Principal extends Activity {
                 error = R.string.codigo_vencido;
             }
             final int mensaje = error;
-            final Transporte.Compu vinculada = compu;
             runOnUiThread(() -> {
                 pendiente = null;
                 if (mensaje != 0) aviso(mensaje);
-                else {
-                    publicarAtajo(vinculada);
-                    pedirNotificaciones();
-                }
+                else pedirNotificaciones();
                 dibujar();
             });
         }).start();
     }
 
-    private void opcionesCompu() {
+    /** La compu del QR, si ya estaba vinculada: el QR trae el comienzo de su huella. */
+    private Transporte.Compu mismaCompu(Transporte.Enlace enlace) {
+        String prefijo = Transporte.hex(enlace.huellaParcial);
+        for (Transporte.Compu k : Almacen.compus(this)) if (k.huella.toLowerCase(java.util.Locale.ROOT).startsWith(prefijo)) return k;
+        return null;
+    }
+
+    private void opcionesCompu(final Transporte.Compu compu) {
         CharSequence[] opciones = {getString(R.string.otra), getString(R.string.desvincular)};
-        new AlertDialog.Builder(this).setItems(opciones, (d, cual) -> confirmarDesvincular()).show();
+        new AlertDialog.Builder(this).setItems(opciones, (d, cual) -> {
+            if (cual == 0) escanear();
+            else confirmarDesvincular(compu);
+        }).show();
     }
 
     /** Volver a vincular pide ir hasta la compu: un toque de más no puede costar eso. */
-    private void confirmarDesvincular() {
-        final Transporte.Compu vieja = Almacen.compu(this);
+    private void confirmarDesvincular(final Transporte.Compu vieja) {
         new AlertDialog.Builder(this)
                 .setMessage(getString(R.string.desvincular_de, vieja.nombre))
                 .setPositiveButton(R.string.desvincular, (d, w) -> {
@@ -337,12 +351,20 @@ public class Principal extends Activity {
                     new Thread(() -> {
                         try { Transporte.desvincular(vieja); } catch (IOException e) { }
                     }).start();
-                    Almacen.olvidar(this);
-                    if (Build.VERSION.SDK_INT >= 25) getSystemService(ShortcutManager.class).removeAllDynamicShortcuts();
+                    quitar(vieja);
                     dibujar();
                 })
                 .setNegativeButton(R.string.cancelar, null)
                 .show();
+    }
+
+    /** La olvida y saca su atajo de Compartir. */
+    private void quitar(Transporte.Compu compu) {
+        Almacen.olvidar(this, compu);
+        if (Build.VERSION.SDK_INT >= 30)
+            getSystemService(ShortcutManager.class).removeLongLivedShortcuts(Collections.singletonList(Almacen.idAtajo(compu)));
+        else if (Build.VERSION.SDK_INT >= 25)
+            getSystemService(ShortcutManager.class).removeDynamicShortcuts(Collections.singletonList(Almacen.idAtajo(compu)));
     }
 
     private String nombreVersion() {
@@ -486,18 +508,29 @@ public class Principal extends Activity {
             requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISO);
     }
 
-    /** La compu aparece con su nombre en la fila de Compartir. */
-    private void publicarAtajo(Transporte.Compu compu) {
-        if (Build.VERSION.SDK_INT < 30 || compu == null) return;
+    /** Cada compu aparece con su nombre en la fila de Compartir. */
+    private void publicarAtajos(List<Transporte.Compu> compus) {
+        if (Build.VERSION.SDK_INT < 30) return;
+        ShortcutManager atajos = getSystemService(ShortcutManager.class);
+        // Hasta la 1.4 había un solo atajo, "compu", que no dice a cuál va.
+        // También se van los de compus que se desvincularon mientras se mandaba algo.
+        Set<String> vigentes = new HashSet<>();
+        for (Transporte.Compu compu : compus) vigentes.add(Almacen.idAtajo(compu));
+        List<String> viejos = new ArrayList<>();
+        for (ShortcutInfo a : atajos.getDynamicShortcuts()) if (!vigentes.contains(a.getId())) viejos.add(a.getId());
+        viejos.add("compu");
+        atajos.removeLongLivedShortcuts(viejos);
         Set<String> categorias = new HashSet<>(Collections.singletonList("com.kvothesson.tachan.COMPU"));
-        ShortcutInfo atajo = new ShortcutInfo.Builder(this, "compu")
-                .setShortLabel(compu.nombre)
-                .setIcon(Icon.createWithResource(this, R.mipmap.icono))
-                .setLongLived(true)
-                .setCategories(categorias)
-                .setIntent(new Intent(this, Principal.class).setAction(Intent.ACTION_MAIN))
-                .build();
-        getSystemService(ShortcutManager.class).pushDynamicShortcut(atajo);
+        for (Transporte.Compu compu : compus) {
+            ShortcutInfo atajo = new ShortcutInfo.Builder(this, Almacen.idAtajo(compu))
+                    .setShortLabel(compu.nombre.isEmpty() ? getString(R.string.app_name) : compu.nombre)
+                    .setIcon(Icon.createWithResource(this, R.mipmap.icono))
+                    .setLongLived(true)
+                    .setCategories(categorias)
+                    .setIntent(new Intent(this, Principal.class).setAction(Intent.ACTION_MAIN))
+                    .build();
+            atajos.pushDynamicShortcut(atajo);
+        }
     }
 
     // --- Piezas de interfaz ---

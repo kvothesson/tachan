@@ -356,7 +356,7 @@ public final class Transporte {
         return m.group(1).replace("\\\"", "\"").replace("\\\\", "\\");
     }
 
-    private static String hex(byte[] d) {
+    static String hex(byte[] d) {
         StringBuilder s = new StringBuilder();
         for (byte b : d) s.append(String.format(Locale.ROOT, "%02x", b & 255));
         return s.toString();

@@ -61,9 +61,15 @@ public class EnvioServicio extends Service {
     private WifiManager.WifiLock wifi;
 
     static void iniciar(Context c, ArrayList<Uri> adjuntos, String texto) {
+        iniciar(c, adjuntos, texto, null);
+    }
+
+    /** elegida: la compu que se tocó en Compartir, o null para mandar a la que esté prendida. */
+    static void iniciar(Context c, ArrayList<Uri> adjuntos, String texto, Transporte.Compu elegida) {
         if (adjuntos.isEmpty() && (texto == null || texto.isEmpty())) return;
         Intent i = new Intent(c, EnvioServicio.class);
         i.putExtra("texto", texto);
+        if (elegida != null) i.putExtra("compu", elegida.huella);
         i.putParcelableArrayListExtra("adjuntos", adjuntos);
         if (!adjuntos.isEmpty()) {
             // Sin esto, el permiso de lectura muere cuando se cierra la pantalla que lo recibió.
@@ -91,10 +97,11 @@ public class EnvioServicio extends Service {
         }
         final ArrayList<Uri> adjuntos = intent.getParcelableArrayListExtra("adjuntos");
         final String texto = intent.getStringExtra("texto");
+        final String huella = intent.getStringExtra("compu");
         trabajos.incrementAndGet();
         mantenerDespierto();
         hilo.execute(() -> {
-            try { procesar(adjuntos, texto); }
+            try { procesar(adjuntos, texto, huella); }
             finally {
                 if (trabajos.decrementAndGet() == 0) {
                     soltarDespierto();
@@ -131,8 +138,8 @@ public class EnvioServicio extends Service {
         super.onDestroy();
     }
 
-    private void procesar(ArrayList<Uri> adjuntos, String texto) {
-        Transporte.Compu compu = Almacen.compu(this);
+    private void procesar(ArrayList<Uri> adjuntos, String texto, String huella) {
+        Transporte.Compu compu = huella != null ? Almacen.compu(this, huella) : Almacen.destino(this);
         if (compu == null) return;
         List<Pieza> piezas = new ArrayList<>();
         if (adjuntos != null) for (Uri u : adjuntos) piezas.add(Pieza.deUri(this, u));
@@ -146,6 +153,7 @@ public class EnvioServicio extends Service {
                 intentar(compu, p, bytes -> mostrarAvance(orden, total, p.largo, bytes));
                 p.borrarTemporal();
                 Almacen.agregarReciente(this, p.etiqueta(this));
+                Almacen.usar(this, compu);
                 hechas++;
             } catch (SecurityException e) {
                 // Se venció o nunca hubo permiso sobre el original: reintentar no lo va a arreglar.
@@ -153,13 +161,13 @@ public class EnvioServicio extends Service {
                 resultado(getString(R.string.fallo), true);
             } catch (Transporte.Rechazado e) {
                 for (Pieza resto : piezas) resto.borrarTemporal();
-                Almacen.olvidar(this);
+                Almacen.olvidar(this, compu);
                 resultado(getString(R.string.revincular), true);
                 return;
             } catch (IOException e) {
                 // No está la compu: lo que falta queda en cola y sale solo cuando vuelva.
                 for (Pieza resto : piezas.subList(i, piezas.size())) {
-                    try { Cola.guardar(this, resto); }
+                    try { Cola.guardar(this, resto, compu); }
                     catch (IOException | SecurityException noEntra) {
                         resultado(getString(R.string.fallo), true);
                         return;
@@ -182,7 +190,7 @@ public class EnvioServicio extends Service {
             }
         } catch (Transporte.NoLlega e) {
             if (Transporte.descubrir(compu, PUERTO_UDP) == null) throw e;
-            Almacen.guardar(this, compu);
+            Almacen.actualizar(this, compu);
             try (InputStream in = p.abrir(this)) {
                 Transporte.enviar(compu, in, p.largo, p.nombre, p.clase, avance);
             }

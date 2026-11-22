@@ -125,7 +125,7 @@ Corren con datos aislados por `TACHAN_DATOS`, salvo las marcadas como reales.
 - Compilar dos veces la misma fuente da los mismos bytes, al revés que en Windows. Para probar el reemplazo de versión, volver a firmar una copia (`codesign --force -s - --options runtime`).
 - Sin cuenta de Apple Developer no hay notarización. En macOS 15 el clic derecho, Abrir, ya no saltea Gatekeeper: hay que ir a Ajustes del Sistema, Privacidad y seguridad, Abrir igual. La copia en `~/Applications` va sin cuarentena y no vuelve a preguntar.
 - Desde una terminal sin permisos de Accesibilidad y Grabación de pantalla no se puede apretar Cmd+V con `osascript` ni sacar una captura de otra ventana. En modo prueba la app deja una foto de cada aviso (`aviso_NN.png` en la carpeta de datos), sin el resto de la pantalla.
-- El celu guarda una sola compu: vincularlo con la Mac le saca el vínculo con la PC Windows.
+- Hasta la 1.4 el celu guardaba una sola compu: vincularlo con la Mac le sacaba el vínculo con la PC. Desde la 1.5 guarda varias (`Almacen`): cada una tiene su atajo en la fila de Compartir, y tocar Tachán sin elegir manda a la última usada si está prendida o, si no, a la primera que conteste. Lo encolado recuerda a qué compu iba (`.compu` al lado de cada pieza de la cola).
 
 ## Decisiones tomadas
 
