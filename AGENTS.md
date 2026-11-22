@@ -68,6 +68,8 @@ python publicar_web.py "mensaje"     # escribe version.json, sube las descargas 
 
 **Herramientas en Mac:** las Command Line Tools de Xcode (`swiftc`, `lipo`, `codesign`, `iconutil`, `ditto`) y Python 3, sin Xcode ni paquetes. Para las pruebas, JDK 17 y adb de Homebrew (`brew install openjdk@17 android-platform-tools`). `compilar.py` lee la versión del manifiesto, los colores de `pc/marca.json`, los textos de `pc/Marca.cs` y la llave pública de `pc/Actualizador.cs`: no se copian a mano. Lo que en Mac se dice distinto ("Abrir al iniciar sesión") está en `mac/Textos.swift`.
 
+**Novedades:** cada cambio que note quien usa Tachán se anota en `NOVEDADES.md`, en la versión de arriba (`sin publicar` mientras se prepara). Al publicar, cambiar `sin publicar` por la fecha: `publicar_web.py` no publica sin eso, arma `web/novedades.html` con `generar_novedades.py` y pone esas líneas como notas de la release. No se edita `novedades.html` a mano.
+
 **Web en inglés:** `web/en.html` se genera desde `web/index.html` con `generar_en.py`, y `publicar_web.py` lo corre solo. No se edita a mano: el texto va en los `<span lang="en">` de `index.html`, y el título y la descripción en `generar_en.py`. `index.html` queda siempre en español para que Google lo lea así; solo cambia al idioma del navegador cuando se llega por el QR.
 
 **Videos:** se regeneran seguido, para que las pantallas sigan iguales a las apps. `python diseno/video/generar.py todos` arma el de la web (`web/tachan-es.mp4` y `-en.mp4`, desde `video.html`) el tutorial vertical (`diseno/video/salida/`, desde `corto.html`) y el anuncio de 15 segundos (`tachan-anuncio-*.mp4`, que remonta las escenas del tutorial con `?corte=anuncio`), unos 6 minutos.

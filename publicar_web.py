@@ -19,6 +19,7 @@ from pathlib import Path
 
 from firmar import firmar
 from generar_en import generar
+import generar_novedades
 
 RAIZ = Path(__file__).resolve().parent
 WEB = RAIZ / "web"
@@ -46,9 +47,10 @@ def release(nombre):
     hay = subprocess.run(["gh", "api", f"repos/kvothesson/tachan/releases/tags/{tag}"], capture_output=True, text=True)
     if hay.returncode:
         subprocess.run(["gh", "release", "create", tag, "-R", "kvothesson/tachan", "--title", f"Tachán {nombre}",
-                        "--notes", "Descargas de Tachán. Cómo se instala y cómo comprobarlo: https://kvothesson.com/tachan/",
-                        *map(str, archivos)], check=True)
+                        "--notes", generar_novedades.notas(nombre), *map(str, archivos)], check=True)
         return
+    # Las notas salen de NOVEDADES.md: si se corrigió algo, la release lo muestra igual.
+    subprocess.run(["gh", "release", "edit", tag, "-R", "kvothesson/tachan", "--notes", generar_novedades.notas(nombre)], check=True)
     subidos = {a["name"]: a.get("digest") for a in json.loads(hay.stdout)["assets"]}
     cambiados = [f for f in archivos if subidos.get(f.name) != "sha256:" + hashlib.sha256(f.read_bytes()).hexdigest()]
     if cambiados:
@@ -65,6 +67,11 @@ def version_mac():
 generar()
 manifiesto = (WEB.parent / "android" / "AndroidManifest.xml").read_text(encoding="utf-8")
 codigo = int(re.search(r'versionCode="(\d+)"', manifiesto)[1])
+# Cada versión se publica con sus novedades anotadas y fechadas en NOVEDADES.md.
+# Lo que todavía dice "sin publicar" y es más nuevo que el manifiesto no se muestra, así que la web se puede publicar igual.
+if not any(v == generar_novedades.version_manifiesto() and fecha for v, fecha, _ in generar_novedades.versiones()):
+    sys.exit("NOVEDADES.md: anotá la versión del manifiesto, con la fecha de hoy en vez de 'sin publicar'")
+generar_novedades.generar()
 # Si el zip de Mac es de otra versión, las Mac lo bajarían una y otra vez sin quedar nunca al día.
 if version_mac() != codigo:
     sys.exit(f"web/Tachan-mac.zip es la versión {version_mac()} y el manifiesto dice {codigo}: compilalo en la Mac con python3 mac/compilar.py")

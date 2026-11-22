@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Novedades de Tachán</title>
+<link rel="canonical" href="https://kvothesson.com/tachan/novedades.html">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="marca.css">
+<style>
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.55 var(--font-sans); }
+  body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .55;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='41.57' height='72'%3E%3Cpath d='M20.78 0 41.57 12v24L20.78 48 0 36V12zM20.78 48v24' fill='none' stroke='%2316303f'/%3E%3C/svg%3E");
+    -webkit-mask-image: radial-gradient(120% 70% at 50% 0, #000, transparent); mask-image: radial-gradient(120% 70% at 50% 0, #000, transparent); }
+  .sello { display: flex; align-items: center; gap: var(--space-2); margin: 0 0 var(--space-5); color: var(--muted); font: 400 12px/1.45 var(--font-mono); letter-spacing: .2em; text-transform: uppercase; }
+  .sello svg { width: 28px; height: 28px; flex: none; color: var(--accent); }
+  .sello a { color: var(--ink); text-decoration: none; }
+  main { max-width: 65ch; margin: 0 auto; padding: var(--space-5) max(var(--space-3), env(safe-area-inset-right)) var(--space-5) max(var(--space-3), env(safe-area-inset-left)); }
+  h1 { margin: 0 0 var(--space-3); font: 800 40px/1.05 var(--font-display); }
+  h2 { margin: var(--space-5) 0 var(--space-2); font: 800 24px/1.15 var(--font-display); }
+  a { color: inherit; }
+  p, li { color: var(--ink); }
+  small { color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+</style>
+</head>
+<body>
+<main>
+  <p class="sello"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.500 20.200 7.200v9.600L12 21.500l-8.200-4.700V7.200z"/><circle cx="12" cy="12" r="2.200" fill="currentColor" stroke="none"/></svg><span><a href="https://kvothesson.com/">Kvothesson</a> · <a href="./">Tachán</a></span></p>
+  <section lang="es">
+    <h1>Novedades</h1>
+    <p>Lo que cambia en cada versión de Tachán. Para tenerla, tocá <b>Buscar actualización</b> en la compu o en el celu.</p>
+    <h2 id="v1.4">1.4 <small>21 de noviembre de 2026</small></h2>
+    <ul>
+      <li>Tachán para Mac, desde macOS 15 (llegó el 22 de noviembre). El celu no cambia: habla igual con la PC y con la Mac.</li>
+      <li>Buscar actualización baja el programa nuevo de GitHub.</li>
+      <li>El código es abierto, con licencia GPLv3.</li>
+      <li>La app del celu apunta a Android 16, como pide Google Play.</li>
+      <li>Si otro programa ocupa el puerto de Tachán, la compu espera a que se libere y, si no, avisa en vez de cerrarse.</li>
+    </ul>
+    <h2 id="v1.3">1.3 <small>2 de noviembre de 2026</small></h2>
+    <ul>
+      <li>Arreglos de seguridad: las actualizaciones tienen que venir firmadas, y el celu solo manda lo que otra app comparte con él.</li>
+      <li>Con el + del celu también se mandan textos.</li>
+      <li>Lo que se mandó con la compu apagada llega aparte, como "Mandado antes", sin pisar lo que tenés copiado.</li>
+    </ul>
+    <h2 id="v1.1">1.1 <small>2 de noviembre de 2026</small></h2>
+    <ul>
+      <li>La versión se ve en la compu y en el celu, con un botón para buscar actualizaciones.</li>
+      <li>El aviso muestra la imagen entera, también si es larga o transparente.</li>
+    </ul>
+    <h2 id="v1.0">1.0 <small>2 de noviembre de 2026</small></h2>
+    <ul>
+      <li>Primera versión: compartís algo en el celu y aparece copiado en la compu, por tu wifi, cifrado y sin cuenta.</li>
+      <li>El aviso sale arriba de todo, sin sacarte de lo que estás haciendo.</li>
+      <li>Se vincula con un QR y el programa de Windows se instala solo.</li>
+    </ul>
+  </section>
+  <p><a href="./">Tachán</a></p>
+</main>
+</body>
+</html>
