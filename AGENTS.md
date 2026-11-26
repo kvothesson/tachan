@@ -70,7 +70,7 @@ python publicar_web.py "mensaje"     # escribe version.json, sube las descargas 
 
 **Novedades:** cada cambio que note quien usa Tachán se anota en `NOVEDADES.md`, en la versión de arriba (`sin publicar` mientras se prepara). Al publicar, cambiar `sin publicar` por la fecha: `publicar_web.py` no publica sin eso, arma `web/novedades.html` con `generar_novedades.py` y pone esas líneas como notas de la release. No se edita `novedades.html` a mano.
 
-**Web en inglés:** `web/en.html` se genera desde `web/index.html` con `generar_en.py`, y `publicar_web.py` lo corre solo. No se edita a mano: el texto va en los `<span lang="en">` de `index.html`, y el título y la descripción en `generar_en.py`. `index.html` queda siempre en español para que Google lo lea así; solo cambia al idioma del navegador cuando se llega por el QR.
+**Portada en dos idiomas:** la portada se escribe en `portada.html`, en la raíz del repo y fuera de `web/` para que no se publique, con cada texto en un `<span lang="es">` y un `<span lang="en">`. `generar_portada.py` arma `web/index.html` solo en castellano y `web/en.html` solo en inglés, y `publicar_web.py` lo corre solo. Ninguna de las dos se edita a mano: el título y la descripción en inglés están en `generar_portada.py`. Una página mezclada, aunque esconda un idioma con CSS, Google la deja sin indexar. Por el QR con el navegador en otro idioma, `index.html` manda a `en.html` con el mismo código; sin código no redirige, así que los robots se quedan en castellano. `pruebas/prueba_web.py` falla si una página trae el otro idioma o quedó vieja.
 
 **Videos:** se regeneran seguido, para que las pantallas sigan iguales a las apps. `python diseno/video/generar.py todos` arma el de la web (`web/tachan-es.mp4` y `-en.mp4`, desde `video.html`) el tutorial vertical (`diseno/video/salida/`, desde `corto.html`) y el anuncio de 15 segundos (`tachan-anuncio-*.mp4`, que remonta las escenas del tutorial con `?corte=anuncio`), unos 6 minutos.
 - Reconstruyen las pantallas, no son grabaciones. Los colores y los textos de las apps entran solos desde `pc/marca.json`, `android/res` y `pc/Marca.cs`.
@@ -97,6 +97,7 @@ Corren con datos aislados por `TACHAN_DATOS`, salvo las marcadas como reales.
 | `pruebas/prueba_aviso_imagen.py` | Imágenes altas, anchas y transparentes | Mirar `avisos.png` en la carpeta temporal |
 | `pruebas/prueba_puerto_ocupado.py` | Puerto ocupado: espera a que se libere y, si no, avisa | Abre un cartel unos segundos; `TACHAN_EXE` prueba otro exe |
 | `pruebas/prueba_memoria.py` | Memoria y recursos | Usa el portapapeles |
+| `pruebas/prueba_web.py` | Portada: un idioma por página y al día con `portada.html` | Solo lee archivos |
 | `pruebas/prueba_lector.py` | Lector de QR | Sale 17 de 18: la perspectiva extrema falla y es aceptado |
 | `pruebas/prueba_pc.py` | Arrastre y pegado | **Mueve el mouse real:** solo si nadie está usando la compu |
 | `pruebas/prueba_actualizar.py` | Actualización | **Toca la instalación real** |

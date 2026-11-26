@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tachán: pasá fotos y archivos del celular a la PC sin cable</title>
+<meta name="description" content="Pasá fotos, videos y archivos del celular Android a la PC con Windows o a la Mac, sin cable. Van cifrados por tu wifi, sin cuenta y sin servidores.">
+<link rel="canonical" href="https://kvothesson.com/tachan/">
+<meta property="og:title" content="Tachán: pasá fotos y archivos del celular a la PC sin cable">
+<meta property="og:description" content="Pasá fotos, videos y archivos del celular Android a la PC con Windows o a la Mac, sin cable.">
+<meta property="og:url" content="https://kvothesson.com/tachan/">
+<link rel="alternate" hreflang="es" href="https://kvothesson.com/tachan/">
+<link rel="alternate" hreflang="en" href="https://kvothesson.com/tachan/en.html">
+<link rel="alternate" hreflang="x-default" href="https://kvothesson.com/tachan/en.html">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Tachán", "url": "https://kvothesson.com/tachan/", "inLanguage": "es", "description": "Pasá fotos, videos, archivos y texto del celular Android a la PC con Windows o a la Mac, sin cable. Llega copiado, listo para pegar.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Windows, macOS, Android", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "author": {"@type": "Organization", "name": "Kvothesson", "url": "https://kvothesson.com/"}}
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="marca.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 400 17px/1.45 var(--font-sans); }
+  body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .55;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='41.57' height='72'%3E%3Cpath d='M20.78 0 41.57 12v24L20.78 48 0 36V12zM20.78 48v24' fill='none' stroke='%2316303f'/%3E%3C/svg%3E");
+    -webkit-mask-image: radial-gradient(120% 70% at 50% 0, #000, transparent); mask-image: radial-gradient(120% 70% at 50% 0, #000, transparent); }
+  .sello { display: flex; align-items: center; gap: var(--space-2); margin: 0; color: var(--muted); font: 400 12px/1.45 var(--font-mono); letter-spacing: .2em; text-transform: uppercase; }
+  .sello svg { width: 28px; height: 28px; flex: none; color: var(--accent); }
+  .sello a { color: var(--ink); text-decoration: none; }
+  main { max-width: 980px; margin: 0 auto; padding: var(--space-5) max(var(--space-3), env(safe-area-inset-right)) var(--space-5) max(var(--space-3), env(safe-area-inset-left)); display: grid; gap: var(--space-5); }
+  html:lang(es) [lang="en"], html:lang(en) [lang="es"] { display: none; }
+  .cabeza { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: var(--space-5); align-items: center; }
+  h1 { margin: 0; font: 800 clamp(56px, 10vw, 104px)/.95 var(--font-display); }
+  .frase { margin: var(--space-3) 0 var(--space-4); font: 700 clamp(22px, 3vw, 28px)/1.2 var(--font-display); text-wrap: balance; }
+  .acciones { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .bajar { display: inline-flex; align-items: center; min-height: 48px; padding: 0 var(--space-4); border-radius: var(--radius-m); background: var(--accent); color: var(--on-accent); font-weight: 600; text-decoration: none; }
+  .alcelu { display: flex; align-items: center; gap: var(--space-3); margin: var(--space-3) 0 0; color: var(--muted); font-size: 15px; }
+  .alcelu img { flex: none; border-radius: var(--radius-s); background: #fff; image-rendering: pixelated; }
+  .bajar.otra { background: transparent; color: var(--ink); border: 1px solid var(--line-strong); }
+  .pronto { margin: var(--space-2) 0 0; color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+  .pasos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
+  .pasos b { display: block; margin-bottom: var(--space-1); font: 700 20px/1.15 var(--font-display); }
+  .pasos { counter-reset: paso; }
+  .pasos li { counter-increment: paso; padding-top: var(--space-3); border-top: 1px solid var(--line); }
+  .pasos li::before { content: counter(paso, decimal-leading-zero); display: block; margin-bottom: var(--space-2); color: var(--accent); font: 400 12px/1.45 var(--font-mono); letter-spacing: .2em; }
+  .pasos li > span { color: var(--muted); }
+  .pasos small { display: block; margin-top: var(--space-2); color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+  .vincular { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-4); border: 1px solid var(--accent); border-radius: var(--radius-m); }
+  .vincular[hidden] { display: none; }
+  .alcelu[hidden] { display: none; }
+  .vincular h2, .vincular p { margin: 0; }
+  h2 { display: flex; align-items: center; gap: var(--space-3); margin: 0 0 var(--space-3); color: var(--muted); font: 400 12px/1.45 var(--font-mono); letter-spacing: .2em; text-transform: uppercase; }
+  h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .vincular h2 { display: block; color: var(--ink); font: 800 28px/1.1 var(--font-display); letter-spacing: 0; text-transform: none; }
+  .vincular h2::after { content: none; }
+  .demo { display: block; width: 100%; height: auto; border: 1px solid var(--line-strong); border-radius: var(--radius-m); background: var(--ground); }
+  .puntos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
+  .puntos b { display: block; margin-bottom: var(--space-1); font: 700 20px/1.15 var(--font-display); }
+  .puntos li { padding-top: var(--space-3); border-top: 1px solid var(--line); }
+  .puntos li > span { color: var(--muted); }
+  footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); padding-top: var(--space-3); border-top: 1px solid var(--line); color: var(--muted); font: 400 12px/1.45 var(--font-mono); }
+  footer a { color: inherit; }
+  .enlaces { display: flex; gap: var(--space-3); }
+  .otroidioma { margin: 0; }
+  .otroidioma[hidden] { display: none; }
+  .otroidioma a { color: var(--accent); }
+  .firma { display: inline-flex; align-items: center; gap: var(--space-2); }
+  .firma svg { width: 16px; height: 16px; }
+  .preguntas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); margin: 0; }
+  .preguntas dt { margin-bottom: var(--space-1); font: 700 18px/1.2 var(--font-display); }
+  .preguntas dd { margin: 0; color: var(--muted); }
+  .preguntas a { color: var(--accent); font: 400 13px/1.45 var(--font-mono); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 700px) { .cabeza, .puntos, .pasos, .preguntas { grid-template-columns: minmax(0, 1fr); } .alcelu { display: none; } }
+</style>
+<script>if (/(^|&)c=/.test(location.hash.slice(1)) && !/^es/i.test(navigator.language || "es")) document.documentElement.lang = "en";</script>
+</head>
+<body>
+<main>
+  <p class="otroidioma" id="otroidioma" hidden><a href="en.html" hreflang="en">Read this page in English</a></p>
+  <section class="vincular" id="vincular" hidden>
+    <h2><span lang="es">Vinculá tu celu</span><span lang="en">Link your phone</span></h2>
+    <p id="vincular-android"><span lang="es">Si todavía no tenés la app, se baja sola. Instalala y volvé acá para tocar el botón otra vez. Este código dura 5 minutos.</span><span lang="en">If you don't have the app yet, it downloads on its own. Install it and come back to tap the button again. This code lasts 5 minutes.</span></p>
+    <p id="vincular-otro" hidden><span lang="es">Abrí este QR con la cámara de un celu Android. Por ahora Tachán no está para iPhone.</span><span lang="en">Open this QR with the camera of an Android phone. Tachán isn't available for iPhone yet.</span></p>
+    <a class="bajar" id="continuar" href="https://github.com/kvothesson/tachan/releases/latest/download/tachan.apk"><span lang="es">Vincular o instalar</span><span lang="en">Link or install</span></a>
+  </section>
+  <p class="sello"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.500 20.200 7.200v9.600L12 21.500l-8.200-4.700V7.200z"/><circle cx="12" cy="12" r="2.200" fill="currentColor" stroke="none"/></svg><span><a href="https://kvothesson.com/">Kvothesson</a> · <span lang="es">del celu a la compu</span><span lang="en">phone to computer</span></span></p>
+  <section class="cabeza">
+    <div>
+      <h1>Tachán</h1>
+      <p class="frase"><span lang="es">Compartís en el celu. Aparece en la compu.</span><span lang="en">Share on your phone. It shows up on your computer.</span></p>
+      <div class="acciones">
+        <a class="bajar" id="b-primero" href="https://github.com/kvothesson/tachan/releases/latest/download/Tachan.exe"><span lang="es">Bajar para Windows</span><span lang="en">Download for Windows</span></a>
+        <a class="bajar otra" id="b-segundo" href="https://github.com/kvothesson/tachan/releases/latest/download/tachan.apk"><span lang="es">Bajar para Android</span><span lang="en">Download for Android</span></a>
+        <a class="bajar otra" id="b-tercero" href="https://github.com/kvothesson/tachan/releases/latest/download/Tachan-mac.zip"><span lang="es">Bajar para Mac</span><span lang="en">Download for Mac</span></a>
+      </div>
+      <p class="pronto"><span lang="es">Gratis, sin cuenta y de <a href="https://github.com/kvothesson/tachan">código abierto</a>. Hacen falta las dos partes.</span><span lang="en">Free, no account, <a href="https://github.com/kvothesson/tachan">open source</a>. You need both parts.</span></p>
+      <p class="alcelu" id="alcelu"><img src="qr-android.png" alt="" width="144" height="144"><span lang="es">Para el celu: apuntá la cámara y se baja la app.</span><span lang="en">For your phone: point your camera to download the app.</span></p>
+    </div>
+    <video class="demo" id="demo" src="tachan-es.mp4" poster="tachan-es.jpg" width="1280" height="800" controls muted loop playsinline preload="metadata" aria-label="Cómo funciona Tachán"></video>
+  </section>
+  <ul class="puntos">
+    <li><b><span lang="es">Listo para pegar</span><span lang="en">Ready to paste</span></b><span lang="es">Llega copiado: Ctrl+V (Cmd+V en Mac) donde estabas, o arrastralo.</span><span lang="en">It arrives copied: press Ctrl+V (Cmd+V on a Mac) where you are, or drag it.</span></li>
+    <li><b><span lang="es">Todo lo que se comparte</span><span lang="en">Anything you can share</span></b><span lang="es">Fotos, videos, archivos, texto y links.</span><span lang="en">Photos, videos, files, text and links.</span></li>
+    <li><b><span lang="es">Sin servidores</span><span lang="en">No servers</span></b><span lang="es">Va cifrado por tu wifi, de tu celu a tu compu. Sin cuenta.</span><span lang="en">Encrypted over your wifi, from your phone to your computer. No account.</span></li>
+  </ul>
+  <section>
+    <h2><span lang="es">Cómo se instala</span><span lang="en">How to install</span></h2>
+    <ol class="pasos">
+      <li><b><span lang="es">En la compu</span><span lang="en">On your computer</span></b><span lang="es">Abrí Tachan.exe: se instala solo. Permitilo en la red y aparece un QR.</span><span lang="en">Open Tachan.exe: it installs itself. Allow it on your network and a QR code appears.</span>
+        <small><span lang="es">Si Windows avisa: Más información, Ejecutar de todos modos.</span><span lang="en">If Windows warns you: More info, Run anyway.</span></small>
+        <small><span lang="es">En Mac (macOS 15 o más nuevo): abrí Tachan.app. Como no está verificada por Apple, la primera vez macOS la frena: Ajustes del Sistema, Privacidad y seguridad, Abrir igual.</span><span lang="en">On a Mac (macOS 15 or newer): open Tachan.app. Since it isn't verified by Apple, macOS stops it the first time: System Settings, Privacy &amp; Security, Open Anyway.</span></small></li>
+      <li><b><span lang="es">En el celu</span><span lang="en">On your phone</span></b><span lang="es">Apuntá la cámara al QR de la compu. Si no tenés la app, se baja sola.</span><span lang="en">Point your camera at the computer's QR. If you don't have the app, it downloads on its own.</span>
+        <small><span lang="es">Android pide permitir la instalación porque todavía no está en Google Play.</span><span lang="en">Android asks you to allow the install because it isn't on Google Play yet.</span></small></li>
+      <li><b><span lang="es">Vinculalos</span><span lang="en">Link them</span></b><span lang="es">Confirmá en el celu y listo. Los dos tienen que estar en el mismo wifi.</span><span lang="en">Confirm on your phone and you're done. Both must be on the same wifi.</span></li>
+    </ol>
+  </section>
+  <section>
+    <h2><span lang="es">Preguntas</span><span lang="en">Questions</span></h2>
+    <dl class="preguntas">
+      <div><dt><span lang="es">¿Cómo paso fotos del celular a la PC sin cable?</span><span lang="en">How do I transfer photos from my phone to my PC wirelessly?</span></dt>
+        <dd><span lang="es">En la galería, tocá Compartir y elegí Tachán. Llega a la compu por tu wifi, en su tamaño original. <a href="pasar-fotos-del-celular-a-la-pc.html">Todas las formas de hacerlo</a>.</span><span lang="en">In your gallery, tap Share and pick Tachán. It reaches your computer over your wifi, at full size. <a href="transfer-photos-android-to-pc.html">Every way to do it</a>.</span></dd></div>
+      <div><dt><span lang="es">¿Puedo copiar un texto en el celu y pegarlo en la PC?</span><span lang="en">Can I copy text on my phone and paste it on my PC?</span></dt>
+        <dd><span lang="es">Sí. Compartí el texto o el link con Tachán y en la compu ya está copiado: Ctrl+V. <a href="copiar-texto-del-celular-a-la-pc.html">Cómo y con qué otras apps</a>.</span><span lang="en">Yes. Share the text or link with Tachán and it's already copied on your computer: Ctrl+V. <a href="copy-text-phone-to-pc.html">How, and with which other apps</a>.</span></dd></div>
+      <div><dt><span lang="es">¿Necesito internet o una cuenta?</span><span lang="en">Do I need internet or an account?</span></dt>
+        <dd><span lang="es">No. El celu y la compu tienen que estar en el mismo wifi, y lo que mandás no pasa por ningún servidor.</span><span lang="en">No. Your phone and computer must be on the same wifi, and what you send goes through no server.</span></dd></div>
+      <div><dt><span lang="es">¿Anda con Mac o iPhone?</span><span lang="en">Does it work with Mac or iPhone?</span></dt>
+        <dd><span lang="es">Con Mac sí, desde macOS 15: el celu Android manda y la Mac recibe. Con iPhone todavía no. Gratis y sin publicidad.</span><span lang="en">Mac, yes, from macOS 15: your Android phone sends and your Mac receives. iPhone, not yet. Free and without ads.</span></dd></div>
+    </dl>
+  </section>
+  <footer>
+    <span class="firma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.500 20.200 7.200v9.600L12 21.500l-8.200-4.700V7.200z"/><circle cx="12" cy="12" r="2.200" fill="currentColor" stroke="none"/></svg><span lang="es">hecho por <a href="https://kvothesson.com/">Kvothesson</a></span><span lang="en">made by <a href="https://kvothesson.com/">Kvothesson</a></span></span>
+    <span class="enlaces"><a href="en.html" hreflang="en">English</a><a href="novedades.html"><span lang="es">Novedades</span><span lang="en">What's new</span></a><a href="comprobar.html"><span lang="es">Cómo comprobarlo</span><span lang="en">How to check it</span></a><a href="privacidad.html"><span lang="es">Privacidad</span><span lang="en">Privacy</span></a><a href="https://github.com/kvothesson/tachan"><span lang="es">Código</span><span lang="en">Source code</span></a></span>
+  </footer>
+</main>
+<script>
+  (function () {
+    var demo = document.getElementById("demo");
+    if (document.documentElement.lang === "en") {
+      demo.src = "tachan-en.mp4";
+      demo.poster = "tachan-en.jpg";
+      demo.setAttribute("aria-label", "How Tachán works");
+    }
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) demo.autoplay = true;
+    // Las descargas salen de la release de GitHub, que cuenta cuántas veces se baja cada archivo.
+    var exe = "https://github.com/kvothesson/tachan/releases/latest/download/Tachan.exe", apk = "https://github.com/kvothesson/tachan/releases/latest/download/tachan.apk";
+    var zip = "https://github.com/kvothesson/tachan/releases/latest/download/Tachan-mac.zip";
+    var android = /android/i.test(navigator.userAgent);
+    // En una Mac va primero el botón de Mac. Un iPad también dice Macintosh, pero tiene pantalla táctil.
+    if (/Macintosh/.test(navigator.userAgent) && !(navigator.maxTouchPoints > 1)) {
+      var m = document.getElementById("b-primero"), w = document.getElementById("b-tercero");
+      m.href = zip; w.href = exe;
+      m.innerHTML = '<span lang="es">Bajar para Mac</span><span lang="en">Download for Mac</span>';
+      w.innerHTML = '<span lang="es">Bajar para Windows</span><span lang="en">Download for Windows</span>';
+    }
+    if (android) {
+      document.getElementById("alcelu").hidden = true;
+      var a = document.getElementById("b-primero"), b = document.getElementById("b-segundo");
+      a.href = apk; b.href = exe;
+      a.innerHTML = '<span lang="es">Bajar para Android</span><span lang="en">Download for Android</span>';
+      b.innerHTML = '<span lang="es">Bajar para Windows</span><span lang="en">Download for Windows</span>';
+    }
+    var datos = location.hash.slice(1);
+    if (!/(^|&)c=/.test(datos) && !/^es/i.test(navigator.language || "es")) document.getElementById("otroidioma").hidden = false;
+    if (!/(^|&)c=[a-z2-7 -]+/i.test(datos)) return;
+    document.getElementById("vincular").hidden = false;
+    if (!android) {
+      document.getElementById("vincular-android").hidden = true;
+      document.getElementById("vincular-otro").hidden = false;
+      document.getElementById("continuar").hidden = true;
+      return;
+    }
+    // Abre la app si está. Si no, Chrome va al respaldo, que baja el APK.
+    var respaldo = apk;
+    var destino = "intent://v?" + datos + "#Intent;scheme=tachan;package=com.kvothesson.tachan;S.browser_fallback_url=" + encodeURIComponent(respaldo) + ";end";
+    var boton = document.getElementById("continuar");
+    boton.href = destino;
+    location.href = destino;
+  })();
+</script>
+</body>
+</html>

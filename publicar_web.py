@@ -18,7 +18,7 @@ import zipfile
 from pathlib import Path
 
 from firmar import firmar
-from generar_en import generar
+from generar_portada import generar
 import generar_novedades
 
 RAIZ = Path(__file__).resolve().parent
