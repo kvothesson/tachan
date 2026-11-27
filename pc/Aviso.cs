@@ -147,7 +147,7 @@ namespace Tachan
 
         bool Demorada => tanda.LastOrDefault()?.Demorado == true;
 
-        // Un texto no queda en ninguna carpeta: si llegó con la cola, espera a que pases el mouse.
+        // Un texto de la cola espera a que pases el mouse. Igual queda una copia en la carpeta de recibidos.
         public Recibido TextoDemoradoSinVer => Visible && Demorada && tanda.Last().Texto != null && !visto ? tanda.Last() : null;
 
         // Arrastrás y copiás lo que ves. La cola junta cosas que mandaste por separado: esas se agarran de a una.

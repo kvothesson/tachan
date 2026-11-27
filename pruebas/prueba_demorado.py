@@ -104,10 +104,14 @@ try:
     mandar("clave sin saltos".encode(), "", "texto", demorado=True)
     time.sleep(2)
     chequear(f"texto de la cola: no se copia ni se pega solo, {contenido()}", contenido() == ([], "otra cosa copiada"))
+    guardados = sorted((DATOS / "recibidos").glob("texto_*.txt"))
+    chequear(f"texto de la cola: queda en la carpeta, {[g.name for g in guardados]}",
+             len(guardados) == 1 and guardados[0].read_text(encoding="utf-8-sig") == "clave sin saltos")
 
     mandar("recien mandado".encode(), "", "texto")
     time.sleep(2)
     chequear(f"texto nuevo: se copia como siempre, {contenido()}", contenido() == ([], "recien mandado"))
+    chequear("texto nuevo: no se guarda en la carpeta", len(list((DATOS / "recibidos").glob("texto_*.txt"))) == 1)
     print("TODO BIEN" if fallas == 0 else f"FALLAS: {fallas}")
 finally:
     p.kill(); time.sleep(0.3)

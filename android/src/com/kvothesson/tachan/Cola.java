@@ -61,8 +61,13 @@ final class Cola {
         }
     }
 
-    /** Devuelve true si no queda nada pendiente. */
-    static boolean procesar(Context c) {
+    static boolean hayPendientes(Context c) {
+        File[] lista = carpeta(c).listFiles((d, n) -> n.endsWith(".meta"));
+        return lista != null && lista.length > 0;
+    }
+
+    /** Devuelve true si no queda nada pendiente. De a un intento por vez: si no, algo podría salir dos veces. */
+    static synchronized boolean procesar(Context c) {
         File[] lista = carpeta(c).listFiles((d, n) -> n.endsWith(".meta"));
         if (lista == null || lista.length == 0) return true;
         if (Almacen.compu(c) == null) {

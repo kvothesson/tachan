@@ -61,7 +61,7 @@ final class Aviso: NSPanel {
 
     var demorada: Bool { tanda.last?.demorado == true }
 
-    // Un texto no queda en ninguna carpeta: si llegó con la cola, espera a que pases el mouse.
+    // Un texto de la cola espera a que pases el mouse. Igual queda una copia en la carpeta de recibidos.
     var textoDemoradoSinVer: Recibido? {
         isVisible && demorada && tanda.last?.texto != nil && !visto ? tanda.last : nil
     }

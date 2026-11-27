@@ -340,8 +340,10 @@ namespace Tachan
                     if (n <= 0) throw new IOException("cortado");
                     leidos += n;
                 }
+                var texto = Encoding.UTF8.GetString(datos);
+                if (demorado) GuardarTexto(texto);
                 Responder(s, 200, "{\"ok\":true}");
-                Llegada?.Invoke(new Recibido { Texto = Encoding.UTF8.GetString(datos), Demorado = demorado });
+                Llegada?.Invoke(new Recibido { Texto = texto, Demorado = demorado });
                 return;
             }
 
@@ -378,6 +380,20 @@ namespace Tachan
             {
                 if (File.Exists(parcial)) File.Delete(parcial);
             }
+        }
+
+        // Lo de la cola no se copia: el aviso se va al pasarle el mouse y el celu ya lo borró. Queda en la carpeta,
+        // como los archivos. Si no se puede escribir, se muestra igual: no tiene sentido que el celu lo reintente.
+        static void GuardarTexto(string texto)
+        {
+            try
+            {
+                Directory.CreateDirectory(Datos.Recibidos);
+                var ruta = RutaLibre("texto_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".txt");
+                File.WriteAllText(ruta, texto, new UTF8Encoding(true));
+                MarcarDeInternet(ruta);
+            }
+            catch (Exception) { }
         }
 
         static readonly string[] Reservados = { "CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9" };

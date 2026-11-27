@@ -3,6 +3,7 @@ package com.kvothesson.tachan;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.ClipData;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -272,6 +273,15 @@ public class Principal extends Activity {
                 .show();
     }
 
+    /** Si se ve la compu prendida, lo que esperaba sale ya: no espera a que Android vuelva a probar. */
+    private void mandarCola() {
+        int antes = Cola.pendientes(this).size();
+        if (antes == 0) return;
+        if (Cola.procesar(getApplicationContext())) getSystemService(NotificationManager.class).cancel(EnvioServicio.NOTI_RESULTADO);
+        // Solo si salió algo: si no, volver a dibujar volvería a probar sin fin.
+        if (Cola.pendientes(this).size() < antes) runOnUiThread(() -> { if (visible) dibujar(); });
+    }
+
     /** El punto se pone verde si la compu responde. Si cambió de dirección, la busca. */
     private void revisarPunto(final Transporte.Compu compu, final View punto, final TextView estado, final int esteDibujo) {
         new Thread(() -> {
@@ -286,6 +296,7 @@ public class Principal extends Activity {
                     Transporte.hola(compu);
                 }
                 color = R.color.kvo_ok;
+                mandarCola();
             } catch (Transporte.Rechazado e) {
                 rechazado = true;
             } catch (Transporte.Impostor e) {

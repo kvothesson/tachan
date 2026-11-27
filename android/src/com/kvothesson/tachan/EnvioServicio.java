@@ -179,7 +179,10 @@ public class EnvioServicio extends Service {
                 return;
             }
         }
-        if (hechas > 0) avisarListo(getString(R.string.enviado_a, compu.nombre));
+        if (hechas > 0) {
+            avisarListo(getString(R.string.enviado_a, compu.nombre));
+            ReintentoJob.ahora(this);  // la compu está prendida: lo que esperaba sale ya
+        }
     }
 
     /** Si la compu cambió de dirección, la busca en la red y prueba una vez más. */

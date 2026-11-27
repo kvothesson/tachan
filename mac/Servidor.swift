@@ -418,8 +418,10 @@ final class Servidor {
             }
             var datos = Data()
             guard canal.leerCuerpo(largo: largo, esperaPorTrozo: Servidor.esperaLectura, { datos.append($0) }) else { return }
+            let texto = String(decoding: datos, as: UTF8.self)
+            if demorado { Servidor.guardarTexto(texto) }
             responder(canal, 200, "{\"ok\":true}")
-            llegada?(Recibido(texto: String(decoding: datos, as: UTF8.self), demorado: demorado))
+            llegada?(Recibido(texto: texto, demorado: demorado))
             return
         }
 
@@ -441,6 +443,18 @@ final class Servidor {
         Servidor.marcarDeInternet(final)
         responder(canal, 200, "{\"ok\":true}")
         llegada?(Recibido(ruta: final, demorado: demorado))
+    }
+
+    // Lo de la cola no se copia: el aviso se va al pasarle el mouse y el celu ya lo borró. Queda en la carpeta,
+    // como los archivos. Si no se puede escribir, se muestra igual: no tiene sentido que el celu lo reintente.
+    static func guardarTexto(_ texto: String) {
+        let carpeta = Datos.recibidos
+        try? FileManager.default.createDirectory(at: carpeta, withIntermediateDirectories: true)
+        let f = DateFormatter()
+        f.dateFormat = "yyyyMMdd_HHmmss"
+        let ruta = rutaLibre("texto_" + f.string(from: Date()) + ".txt", en: carpeta)
+        guard (try? Data(texto.utf8).write(to: ruta)) != nil else { return }
+        marcarDeInternet(ruta)
     }
 
     static let reservados: Set<String> = ["CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",

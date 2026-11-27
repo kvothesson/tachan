@@ -39,7 +39,7 @@ Transporte (protocolo, Java puro)               Instalador, Actualizador, Qr, Da
 
 **Protocolo:** HTTPS propio en el puerto TCP 47810 (`POST /vincular`, `GET /hola`, `POST /enviar`, `POST /desvincular`) y búsqueda UDP en el 47811 (`TCHN?<huella>` y `TCHN!<puerto>`).
 
-**Cola:** lo que se mandó con la compu apagada sale solo al volver, con la cabecera `X-Demorado`. La compu avisa ("Mandado antes"), pero no lo copia, no lo pega y no lo suma a lo nuevo. De ese aviso se arrastra y se copia solo lo que se ve; lo demás está en la carpeta. Un texto demorado queda en pantalla hasta pasarle el mouse, porque no se guarda en ningún archivo.
+**Cola:** lo que se mandó con la compu apagada sale solo al volver, con la cabecera `X-Demorado`. La compu avisa ("Mandado antes"), pero no lo copia, no lo pega y no lo suma a lo nuevo. De ese aviso se arrastra y se copia solo lo que se ve; lo demás está en la carpeta. Un texto demorado queda en pantalla hasta pasarle el mouse y además se guarda como `texto_<fecha>.txt` en la carpeta de recibidos, porque el celu ya lo borró de la cola. Un texto nuevo no se guarda: ya queda copiado.
 
 **Vínculo:** el QR es `https://kvothesson.com/tachan/#c=<base32>&n=<nombre>`. El código va después del `#` para que no llegue a ningún servidor. Lleva IP, puerto, secreto y huella, dura 5 minutos, sirve una vez y siempre se confirma en el celu. Si la app está, la web la abre con un `intent://`; si no, baja el APK. El lector propio acepta también `tachan://v?c=...`.
 
@@ -114,6 +114,7 @@ Corren con datos aislados por `TACHAN_DATOS`, salvo las marcadas como reales.
 - **Nunca** medir velocidad pidiendo `dumpsys meminfo` o `top` durante un envío: lo frena. Con esas lecturas, en 2,4 GHz dio 0,74 MB/s; sin ellas, en 5 GHz, 5,12 MB/s.
 - Compartir un archivo desde `adb` no sirve, porque Tachán no tiene permiso de lectura: ni con `file://` (lo rechaza desde la 1.3) ni con `content://` y `--grant-read-uri-permission` (el permiso no viaja en el extra). Usar el selector de fotos, que además le cambia el nombre al archivo.
 - Android no abre la pantalla de compartir con el celu bloqueado: primero compartir y después bloquear.
+- Hasta la 1.5, la cola del celu reintentaba con la espera doble de Android (hasta 5 horas) y abrir la app no la destrababa. Para que salga ya: `adb shell cmd jobscheduler run -f com.kvothesson.tachan 1`. La lista del celu no se redibuja sola: lo que salió puede seguir apareciendo hasta reabrirla.
 - Con el puerto ocupado, el exe se caía en silencio (código 0xE0434352). Ahora espera 10 segundos a que se libere y, si no, avisa con un cartel.
 - Un proceso lanzado con `UseShellExecute = false` hereda el puerto abierto. Por eso `Actualizador` usa el shell: si no, la versión nueva no puede escuchar y se cierra.
 - El selector de archivos de Android sale vacío ("Sin elementos") en el celu de pruebas, también abierto sin Tachán. Al `com.google.android.documentsui` actualizado por Play no le dieron `MANAGE_DOCUMENTS`, y el log dice `Permission Denial` y `ProvidersCache: Timeout`. No es Tachán. Por eso el + ofrece **Fotos y videos** aparte.
